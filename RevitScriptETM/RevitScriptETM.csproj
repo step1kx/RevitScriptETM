@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Buttons.cs" />
     <Compile Include="Function_1.cs" />
+    <Compile Include="Function_2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
