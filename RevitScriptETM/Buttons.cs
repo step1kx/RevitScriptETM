@@ -30,12 +30,12 @@ namespace RevitScriptETM
             }
             else application.CreateRibbonTab(tabName);
 
-            panel = application.CreateRibbonPanel(tabName, "Задания");
+            panel = application.CreateRibbonPanel(tabName, "123123");
 
-            panel.AddItem(new PushButtonData(nameof(Tasks), "Задания", assemblyLocation, typeof(Tasks).FullName)
+            panel.AddItem(new PushButtonData(nameof(Function_1), "123123", assemblyLocation, typeof(Function_1).FullName)
             {
                 //LargeImage = GetBitmapImage(Properties.Resources.CheckArhitects),
-                LongDescription = "Выдача заданий для смежных разделов"
+                LongDescription = "Проверка таблицы"
             });
 
             return Result.Succeeded;
