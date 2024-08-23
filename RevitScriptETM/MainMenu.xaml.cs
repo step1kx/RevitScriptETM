@@ -35,15 +35,10 @@ namespace RevitScriptETM
         public MainMenu()  
         {
             InitializeComponent();  
-            TaskItems = new ObservableCollection<TaskItem>
-            {
-                new TaskItem { TaskNumber = 1, TaskCompleted = true },
-                new TaskItem { TaskNumber = 2, TaskCompleted = true },
-                new TaskItem { TaskNumber = 3, TaskCompleted= true }
-            };
+            
             DataContext = this;
 
-            Console.WriteLine("TaskItems count: " + TaskItems.Count);
+            
         }
     }
 }

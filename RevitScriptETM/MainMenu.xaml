@@ -7,7 +7,6 @@
         Height="650" Width="1500" Title="Задания">
     <Grid>
         <DataGrid ItemsSource="{Binding TaskItems}" AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True">
-            d:ItemsSource="{d:SampleData ItemCount=3}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№ задания" Binding="{Binding TaskNumber}" Width="100"/>
                 <DataGridTextColumn Header="Раздел от кого задание" Binding="{Binding FromSection}" Width="150"/>
@@ -15,8 +14,9 @@
                 <DataGridTextColumn Header="Кто выдал задание" Binding="{Binding TaskIssuer}" Width="150"/>
                 <DataGridCheckBoxColumn Header="Чек выполнения задания" Binding="{Binding TaskCompleted}" Width="150"/>
                 <DataGridTextColumn Header="Кто отработал" Binding="{Binding TaskHandler}" Width="150"/>
-                <DataGridTextColumn Header="Скрин экрана" Binding="{Binding ScreenShot}" Width="150"/>
+                <DataGridTextColumn Header="Скриншот экрана" Binding="{Binding ScreenShot}" Width="150"/>
                 <DataGridTextColumn Header="Описание задания" Binding="{Binding TaskDescription}" Width="200"/>
+                <DataGridTextColumn Header="Вид" Binding="{Binding TaskDescription}" Width="200"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
