@@ -1,12 +1,23 @@
 ﻿<Window x:Class="RevitScriptETM.MainMenu"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RevitScriptETM"
-             mc:Ignorable="d" Height="645" Width="1112" Title="Задания">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:RevitScriptETM" 
+        Height="650" Width="1500" Title="Задания">
     <Grid>
-        <DataGrid d:ItemsSource="{d:SampleData ItemCount=5}"/>
-
+        <DataGrid ItemsSource="{Binding TaskItems}" AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True">
+            d:ItemsSource="{d:SampleData ItemCount=3}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№ задания" Binding="{Binding TaskNumber}" Width="100"/>
+                <DataGridTextColumn Header="Раздел от кого задание" Binding="{Binding FromSection}" Width="150"/>
+                <DataGridTextColumn Header="Раздел кому задание" Binding="{Binding ToSection}" Width="150"/>
+                <DataGridTextColumn Header="Кто выдал задание" Binding="{Binding TaskIssuer}" Width="150"/>
+                <DataGridCheckBoxColumn Header="Чек выполнения задания" Binding="{Binding TaskCompleted}" Width="150"/>
+                <DataGridTextColumn Header="Кто отработал" Binding="{Binding TaskHandler}" Width="150"/>
+                <DataGridTextColumn Header="Скрин экрана" Binding="{Binding ScreenShot}" Width="150"/>
+                <DataGridTextColumn Header="Описание задания" Binding="{Binding TaskDescription}" Width="200"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
