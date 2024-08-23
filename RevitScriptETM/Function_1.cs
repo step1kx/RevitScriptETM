@@ -15,8 +15,7 @@ namespace RevitScriptETM
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            //MainMenu myWindow = new MainMenu();
-            MessageBox.Show("Привет","123123");
+       
 
             return Result.Succeeded;
         }
