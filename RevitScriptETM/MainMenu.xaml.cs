@@ -15,14 +15,18 @@ using System.Windows.Shapes;
 
 namespace RevitScriptETM
 {
-    /// <summary>
-    /// Логика взаимодействия для MainMenu.xaml
-    /// </summary>
     public partial class MainMenu : UserControl
     {
+       
         public MainMenu()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+         
+            
         }
     }
 }
