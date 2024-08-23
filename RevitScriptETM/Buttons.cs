@@ -5,10 +5,13 @@ using System.Reflection;
 using System.IO;
 using System.Windows.Media.Imaging;
 
+
 namespace RevitScriptETM
 {
     internal class Buttons : IExternalApplication
     {
+        string assemblyLocation = Assembly.GetExecutingAssembly().Location;
+        string tabName = "ETM";
         public Result OnShutdown(UIControlledApplication application)
         {
             return Result.Succeeded;
@@ -16,27 +19,40 @@ namespace RevitScriptETM
 
         public Result OnStartup(UIControlledApplication application)
         {
-            string assemblyLocation = Assembly.GetExecutingAssembly().Location,
-                   iconDirectoryPath = Path.GetDirectoryName(assemblyLocation) + @"\icons\",
-                   tabName = "ETM";
+            RibbonPanel panel;
 
-            application.CreateRibbonTab(tabName);
-           
-            // Создаем панель на вкладке
-            RibbonPanel panel = application.CreateRibbonPanel(tabName, "Проверка таблицы");
-
-            // Создаем кнопку для панели
-            PushButtonData buttonData = new PushButtonData("MyButton", "Click Me", assemblyLocation, "RevitScriptETM.Command")
+            if (application.GetRibbonPanels(tabName).Count > 0)
             {
-                LargeImage = new BitmapImage(new Uri(iconDirectoryPath + "green.png"))
-            };
+                panel = application.GetRibbonPanels(tabName).First();
+            }
+            else application.CreateRibbonTab(tabName);
 
-            panel.AddItem(buttonData);
+            panel = application.CreateRibbonPanel(tabName, "Задания");
 
-         
-           
+            panel.AddItem(new PushButtonData(nameof(Tasks), "Задания", assemblyLocation, typeof(Tasks).FullName)
+            {
+                //LargeImage = GetBitmapImage(Properties.Resources.CheckArhitects),
+                LongDescription = "Выдача заданий для смежных разделов"
+            });
 
             return Result.Succeeded;
+        }
+        BitmapImage GetBitmapImage(Bitmap bitmap)
+        {
+            using (var memory = new MemoryStream())
+            {
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+
+                return bitmapImage;
+            }
         }
     }
 }

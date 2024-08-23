@@ -67,6 +67,7 @@
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainMenu.xaml">
