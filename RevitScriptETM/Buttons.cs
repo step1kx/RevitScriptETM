@@ -4,6 +4,9 @@ using System;
 using System.Reflection;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.Linq;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 
 namespace RevitScriptETM
