@@ -15,18 +15,25 @@ using System.Windows.Shapes;
 
 namespace RevitScriptETM
 {
-    public partial class MainMenu : UserControl
+    public class TaskItem
     {
-       
+        public int TaskNumber { get; set; }
+        public string FromSection { get; set; }
+        public string ToSection { get; set; }
+        public string TaskIssuer { get; set; }
+        public bool TaskCompleted { get; set; }
+        public string TaskHandler { get; set; }
+        public string ScreenShot { get; set; }
+        public string TaskDescription { get; set; }
+    }
+    public partial class MainMenu : Window
+    {
+
         public MainMenu()
         {
             InitializeComponent();
         }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-         
-            
-        }
+
     }
 }
