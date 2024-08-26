@@ -1,20 +1,19 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using MySql.Data.MySqlClient;
 using System.IO;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Markup;
+using System.Windows;
 
 namespace RevitScriptETM
 {
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
     {
+        private SqlConnection conn = null;
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
 
@@ -25,12 +24,12 @@ namespace RevitScriptETM
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
+            string documentDirectory = Path.GetDirectoryName(doc.PathName);
 
+            conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            conn.Open();
 
-
-            //string documentDirectory = Path.GetDirectoryName(doc.PathName);
-            //string dbPath = Path.Combine(documentDirectory, "MyDatabase.db");
-
+            MessageBox.Show(conn.State.ToString());
 
             return Result.Succeeded;
         }
