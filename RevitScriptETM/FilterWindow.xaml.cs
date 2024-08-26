@@ -24,7 +24,7 @@ namespace RevitScriptETM
         public string ToSection => ToSectionCheckBox.IsChecked == true ? ToSectionTextBox.Text : null;
         public string TaskIssuer => TaskIssuerCheckBox.IsChecked == true ? TaskIssuerComboBox.SelectedItem as string : null;
         public string TaskHandler => TaskHandlerCheckBox.IsChecked == true ? TaskHandlerComboBox.SelectedItem as string : null;
-        public int? TaskCompleted
+        public int TaskCompleted
         {
             get
             {
@@ -40,14 +40,14 @@ namespace RevitScriptETM
                     }
                     else
                     {
-                        return null; // Все
+                        return -1; // Все
                     }
                 }
-                return null; // Если CheckBox не выбран, игнорируем фильтр
+                return -1; // Если CheckBox не выбран, игнорируем фильтр
             }
         }
 
-        public int? TaskApproval
+        public int TaskApproval
         {
             get
             {
@@ -63,15 +63,14 @@ namespace RevitScriptETM
                     }
                     else
                     {
-                        return null; // Все
+                        return -1; // Все
                     }
                 }
-                return null; // Если CheckBox не выбран, игнорируем фильтр
+                return -1; // Если CheckBox не выбран, игнорируем фильтр
             }
         }
 
         public string WhoApproval => WhoApprovalCheckBox.IsChecked == true ? WhoApprovalComboBox.SelectedItem as string : null;
-
 
         public FilterWindow()
         {
