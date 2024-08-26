@@ -14,31 +14,49 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DataGrid = System.Windows.Controls.DataGrid;
 
 namespace RevitScriptETM
 {
-    public class TaskItem
-    {
-        public int TaskNumber { get; set; }
-        public string FromSection { get; set; }
-        public string ToSection { get; set; }
-        public string TaskIssuer { get; set; }
-        public bool TaskCompleted { get; set; }
-        public string TaskHandler { get; set; }
-        public string ScreenShot { get; set; }
-        public string TaskDescription { get; set; }
-    }
     public partial class MainMenu : Window
     {
-        public ObservableCollection<TaskItem> TaskItems { get; set; }
+        public ObservableCollection<TaskItems> TaskItems { get; set; }
 
         public MainMenu()  
         {
-            InitializeComponent();  
-            
+            InitializeComponent();
+
+            TaskItems = new ObservableCollection<TaskItems>();
+
             DataContext = this;
 
-            
+
+        }
+
+        private void FilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Создаем и отображаем окно фильтра
+            FilterWindow filterWindow = new FilterWindow();
+            if (filterWindow.ShowDialog() == true)
+            {
+                // Применяем фильтр, если пользователь нажал "Применить"
+                ApplyFilter(filterWindow.FromSection, filterWindow.ToSection, filterWindow.TaskHandler);
+            }
+        }
+
+        // Метод для применения фильтра к данным DataGrid
+        private void ApplyFilter(string fromSection, string toSection, string taskHandler)
+        {
+           
+            // Предполагается, что TaskItems - это коллекция данных, привязанная к DataGrid
+            var filteredItems = TaskItems
+                .Where(item => (string.IsNullOrEmpty(fromSection) || item.FromSection.Contains(fromSection)) &&
+                               (string.IsNullOrEmpty(toSection) || item.ToSection.Contains(toSection)) &&
+                               (string.IsNullOrEmpty(taskHandler) || item.TaskHandler.Contains(taskHandler)))
+                .ToList();
+
+            // Обновляем источник данных для DataGrid
+            tasksDataGrid.ItemsSource = filteredItems;
         }
     }
 }
