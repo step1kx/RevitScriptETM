@@ -24,38 +24,45 @@
         </Grid.ColumnDefinitions>
 
         <!-- Фильтр по Разделу от кого -->
+        <CheckBox x:Name="FromSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="0"/>
         <TextBlock Text="Фильтр по разделу от:" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
         <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="2" Width="300"/>
 
         <!-- Фильтр по Разделу кому -->
+        <CheckBox x:Name="ToSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="1"/>
         <TextBlock Text="Фильтр по разделу кому:" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
         <TextBox x:Name="ToSectionTextBox" Grid.Row="1" Grid.Column="2" Width="300"/>
 
         <!-- Фильтр по Кто выдал -->
+        <CheckBox x:Name="TaskIssuerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="2"/>
         <TextBlock Text="Кто выдал:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="TaskIssuerComboBox" Grid.Row="2" Grid.Column="2" Width="300" />
+        <ComboBox x:Name="TaskIssuerComboBox" Grid.Row="2" Grid.Column="2" Width="300"/>
 
         <!-- Фильтр по Выполнил/Не выполнил/Все -->
+        <CheckBox x:Name="TaskCompletedCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="3"/>
         <TextBlock Text="Выполнил/Не выполнил/Все:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="TaskCompletedComboBox" Grid.Row="3" Grid.Column="2" Width="300">
             <ComboBoxItem Content="Все" IsSelected="True"/>
-            <ComboBoxItem Content="Выполнил" />
-            <ComboBoxItem Content="Не выполнил" />
+            <ComboBoxItem Content="Выполнил"/>
+            <ComboBoxItem Content="Не выполнил"/>
         </ComboBox>
 
         <!-- Фильтр по Кто отработал -->
+        <CheckBox x:Name="TaskHandlerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="4"/>
         <TextBlock Text="Кто отработал:" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="TaskHandlerComboBox" Grid.Row="4" Grid.Column="2" Width="300"/>
 
         <!-- Фильтр по Согласовал/Не согласовал/Все -->
+        <CheckBox x:Name="TaskApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="5"/>
         <TextBlock Text="Согласовал/Не согласовал/Все:" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="TaskApprovalComboBox" Grid.Row="5" Grid.Column="2" Width="300">
             <ComboBoxItem Content="Все" IsSelected="True"/>
-            <ComboBoxItem Content="Согласовал" />
-            <ComboBoxItem Content="Не согласовал" />
+            <ComboBoxItem Content="Согласовал"/>
+            <ComboBoxItem Content="Не согласовал"/>
         </ComboBox>
 
         <!-- Фильтр по Кто согласовал -->
+        <CheckBox x:Name="WhoApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="6"/>
         <TextBlock Text="Кто согласовал:" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="WhoApprovalComboBox" Grid.Row="6" Grid.Column="2" Width="300"/>
 
@@ -63,6 +70,7 @@
 
         <Button Content="Применить" Click="ApplyButton_Click" Margin="0,0,10,10" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Right" Width="100" VerticalAlignment="Bottom"/>
         <Button Content="Отмена" Click="CancelButton_Click" Margin="10,0,0,10"  Height="30"  Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100"/>
+        
 
     </Grid>
 </Window>

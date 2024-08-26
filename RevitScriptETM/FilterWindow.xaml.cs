@@ -20,28 +20,80 @@ namespace RevitScriptETM
     /// </summary>
     public partial class FilterWindow : Window
     {
-        public string FromSection { get; private set; }
-        public string ToSection { get; private set; }
-        public string TaskHandler { get; private set; }
+        public string FromSection => FromSectionCheckBox.IsChecked == true ? FromSectionTextBox.Text : null;
+        public string ToSection => ToSectionCheckBox.IsChecked == true ? ToSectionTextBox.Text : null;
+        public string TaskIssuer => TaskIssuerCheckBox.IsChecked == true ? TaskIssuerComboBox.SelectedItem as string : null;
+        public string TaskHandler => TaskHandlerCheckBox.IsChecked == true ? TaskHandlerComboBox.SelectedItem as string : null;
+        public int? TaskCompleted
+        {
+            get
+            {
+                if (TaskCompletedCheckBox.IsChecked == true)
+                {
+                    if (TaskCompletedComboBox.SelectedIndex == 1)
+                    {
+                        return 1; // Выполнил
+                    }
+                    else if (TaskCompletedComboBox.SelectedIndex == 2)
+                    {
+                        return 0; // Не выполнил
+                    }
+                    else
+                    {
+                        return null; // Все
+                    }
+                }
+                return null; // Если CheckBox не выбран, игнорируем фильтр
+            }
+        }
+
+        public int? TaskApproval
+        {
+            get
+            {
+                if (TaskApprovalCheckBox.IsChecked == true)
+                {
+                    if (TaskApprovalComboBox.SelectedIndex == 1)
+                    {
+                        return 1; // Согласовал
+                    }
+                    else if (TaskApprovalComboBox.SelectedIndex == 2)
+                    {
+                        return 0; // Не согласовал
+                    }
+                    else
+                    {
+                        return null; // Все
+                    }
+                }
+                return null; // Если CheckBox не выбран, игнорируем фильтр
+            }
+        }
+
+        public string WhoApproval => WhoApprovalCheckBox.IsChecked == true ? WhoApprovalComboBox.SelectedItem as string : null;
+
 
         public FilterWindow()
         {
             InitializeComponent();
+            LoadComboBoxData();
         }
 
-        //Обработчик для кнопки "Применить"
+        private void LoadComboBoxData()
+        {
+            // Загрузка данных в ComboBox'ы из базы данных
+            // Например, TaskIssuerComboBox.ItemsSource = GetTaskIssuersFromDatabase();
+        }
+
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сохраняем введенные значения
-            //FromSection = FromSectionTextBox.Text;
-            //ToSection = ToSectionTextBox.Text;
-            //TaskHandler = TaskHandlerTextBox.Text;
-            //DialogResult = true;
+            DialogResult = true;
+            Close();
         }
 
-        // Обработчик для кнопки "Отмена"
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = false;
             Close();
         }
     }

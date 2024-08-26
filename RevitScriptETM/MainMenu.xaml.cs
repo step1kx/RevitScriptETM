@@ -22,7 +22,7 @@ namespace RevitScriptETM
     {
         public ObservableCollection<TaskItems> TaskItems { get; set; }
 
-        public MainMenu()  
+        public MainMenu()
         {
             InitializeComponent();
 
@@ -40,23 +40,37 @@ namespace RevitScriptETM
             if (filterWindow.ShowDialog() == true)
             {
                 // Применяем фильтр, если пользователь нажал "Применить"
-                ApplyFilter(filterWindow.FromSection, filterWindow.ToSection, filterWindow.TaskHandler);
+                ApplyFilter(filterWindow.FromSection,
+                            filterWindow.ToSection,
+                            filterWindow.TaskIssuer,
+                            filterWindow.TaskHandler,
+                            filterWindow.TaskCompleted,
+                            filterWindow.TaskApproval,
+                            filterWindow.WhoApproval
+                            );
             }
         }
 
-        // Метод для применения фильтра к данным DataGrid
-        private void ApplyFilter(string fromSection, string toSection, string taskHandler)
+        private void ApplyFilter(string fromSection, string toSection, string taskIssuer, string taskHandler, int? taskCompleted, int? taskApproval, string whoApproval)
         {
-           
-            // Предполагается, что TaskItems - это коллекция данных, привязанная к DataGrid
+            throw new NotImplementedException();
+        }
+
+        // Метод для применения фильтра к данным DataGrid
+        private void ApplyFilter(string fromSection, string toSection, string taskIssuer, int? taskCompleted, string taskHandler, int? taskApproval, string whoApproval)
+        {
             var filteredItems = TaskItems
                 .Where(item => (string.IsNullOrEmpty(fromSection) || item.FromSection.Contains(fromSection)) &&
                                (string.IsNullOrEmpty(toSection) || item.ToSection.Contains(toSection)) &&
-                               (string.IsNullOrEmpty(taskHandler) || item.TaskHandler.Contains(taskHandler)))
+                               (string.IsNullOrEmpty(taskIssuer) || item.TaskIssuer == taskIssuer) &&
+                               (!taskCompleted.HasValue || item.TaskCompleted == (taskCompleted.Value == 1)) && // Преобразование int в bool
+                               (string.IsNullOrEmpty(taskHandler) || item.TaskHandler == taskHandler) &&
+                               (!taskApproval.HasValue || item.TaskApproval == (taskApproval.Value == 1)) && // Преобразование int в bool
+                               (string.IsNullOrEmpty(whoApproval) || item.WhoApproval == whoApproval))
                 .ToList();
 
-            // Обновляем источник данных для DataGrid
             tasksDataGrid.ItemsSource = filteredItems;
         }
+
     }
 }
