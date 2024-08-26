@@ -27,14 +27,16 @@ namespace RevitScriptETM
 
 
 
-           
 
-          
+            string documentDirectory = Path.GetDirectoryName(doc.PathName);
+            string dbPath = Path.Combine(documentDirectory, "MyDatabase.db");
 
-            string document = Path.GetDirectoryName(doc.PathName);
-
-            string dbPath = Path.Combine("D:\\", "database.db");
-            string connectionString = $"Data Source={dbPath}";
+            // Проверяем, существует ли файл базы данных
+            if (!File.Exists(dbPath))
+            {
+                // Создание пустого файла базы данных, если его нет
+                File.Create(dbPath).Close();
+            }
 
 
 
@@ -42,7 +44,7 @@ namespace RevitScriptETM
 
             try
             {
-                using (SqliteConnection connection = new SqliteConnection(connectionString))
+                using (SqliteConnection connection = new SqliteConnection($"Data Source={dbPath}"))
                 {
                     connection.Open();
 
