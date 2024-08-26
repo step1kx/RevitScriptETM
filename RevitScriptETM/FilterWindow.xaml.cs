@@ -33,10 +33,10 @@ namespace RevitScriptETM
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             // Сохраняем введенные значения
-            FromSection = FromSectionTextBox.Text;
-            ToSection = ToSectionTextBox.Text;
-            TaskHandler = TaskHandlerTextBox.Text;
-            DialogResult = true;
+            //FromSection = FromSectionTextBox.Text;
+            //ToSection = ToSectionTextBox.Text;
+            //TaskHandler = TaskHandlerTextBox.Text;
+            //DialogResult = true;
         }
 
         // Обработчик для кнопки "Отмена"

@@ -5,18 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitScriptETM"
              mc:Ignorable="d"
-             Height="325" Width="571" Title="Фильтр задания">
-    <Grid>
-        <StackPanel Margin="10">
-            <TextBlock Text="Фильтр по разделу от:" Margin="0,0,0,10"/>
-            <TextBox x:Name="FromSectionTextBox" Width="300" Margin="0,0,0,10"/>
-            <TextBlock Text="Фильтр по разделу кому:" Margin="0,0,0,10"/>
-            <TextBox x:Name="ToSectionTextBox" Width="300" Margin="0,0,0,10"/>
-            <TextBlock Text="Фильтр по исполнителю:" Margin="0,0,0,10"/>
-            <TextBox x:Name="TaskHandlerTextBox" Width="300" Margin="0,0,0,10"/>
-            <Button Content="Применить" Width="100" Click="ApplyButton_Click" HorizontalAlignment="Right"/>
-            <Button Content="Отмена" Width="100"  Click="CancelButton_Click" HorizontalAlignment="Left" />
-        </StackPanel>
+             Height="500" Width="800" Title="Фильтр задания">
+    <Grid Width="800" Height="500">
+
+        <Button Content="Применить" Width="100" Click="ApplyButton_Click" HorizontalAlignment="Right" Height="30" Margin="0,0,10,30" VerticalAlignment="Bottom"/>
+        <Button Content="Отмена" Width="100"  Click="CancelButton_Click" HorizontalAlignment="Left" Height="30" Margin="10,0,0,30" VerticalAlignment="Bottom"/>
+
 
     </Grid>
 </Window>
