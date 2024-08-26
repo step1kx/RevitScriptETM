@@ -23,6 +23,6 @@
         
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
         FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
-        <Button Content="Создать задание" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
+        <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

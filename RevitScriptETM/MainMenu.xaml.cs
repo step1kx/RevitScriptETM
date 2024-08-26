@@ -32,6 +32,16 @@ namespace RevitScriptETM
 
         }
 
+        private void TasksCreator_Click(object sender, RoutedEventArgs e)
+        {
+            TasksCreator inputWindow = new TasksCreator();
+            if (inputWindow.ShowDialog() == true)
+            {
+                // Можно обработать введенные данные из InputWindow
+                // Пример: MessageBox.Show($"Раздел от кого: {inputWindow.FromSection}");
+            }
+        }
+
         // Обработчик нажатия кнопки фильтра
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
