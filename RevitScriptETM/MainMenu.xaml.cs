@@ -65,8 +65,8 @@ namespace RevitScriptETM
             string toSection,
             string taskIssuer,
             string taskHandler,
-            int taskCompleted,
-            int taskApproval,
+            bool? taskCompleted,
+            bool? taskApproval,
             string whoApproval,
             bool filterByFromSection,
             bool filterByToSection,
@@ -80,9 +80,9 @@ namespace RevitScriptETM
                 .Where(item => (!filterByFromSection || string.IsNullOrEmpty(fromSection) || item.FromSection.Contains(fromSection)) &&
                                (!filterByToSection || string.IsNullOrEmpty(toSection) || item.ToSection.Contains(toSection)) &&
                                (!filterByTaskIssuer || string.IsNullOrEmpty(taskIssuer) || item.TaskIssuer == taskIssuer) &&
-                               (!filterByTaskCompleted || taskCompleted == -1 || item.TaskCompleted == taskCompleted) &&
+                               (!filterByTaskCompleted || !taskCompleted.HasValue || item.TaskCompleted == taskCompleted.Value) &&
                                (!filterByTaskHandler || string.IsNullOrEmpty(taskHandler) || item.TaskHandler == taskHandler) &&
-                               (!filterByTaskApproval || taskApproval == -1 || item.TaskApproval == taskApproval) &&
+                               (!filterByTaskApproval || !taskApproval.HasValue || item.TaskApproval == taskApproval.Value) &&
                                (!filterByWhoApproval || string.IsNullOrEmpty(whoApproval) || item.WhoApproval == whoApproval))
                 .ToList();
 

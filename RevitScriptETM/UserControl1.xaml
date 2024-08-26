@@ -1,0 +1,56 @@
+﻿<Window x:Class="RevitScriptETM.UserControl1"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RevitScriptETM"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Раздел от кого -->
+        <TextBlock Text="Раздел от кого:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
+        <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="1" Width="550" Height="25"/>
+
+        <!-- Раздел кому -->
+        <TextBlock Text="Раздел кому:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
+        <TextBox x:Name="ToSectionTextBox" Grid.Row="1" Grid.Column="1" Width="550" Height="25"/>
+
+        <!-- Скриншот -->
+        <TextBlock Text="Скриншот:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Импортировать" Click="ImportImage_Click" Width="150" Height="25"/>
+            <TextBlock x:Name="ImageInfoTextBlock" Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        </Grid>
+
+        <!-- Описание -->
+        <TextBlock Text="Описание:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
+        <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Grid.Column="1" Width="550" Height="150" AcceptsReturn="True" TextWrapping="Wrap"/>
+
+        <!-- Кнопки действия -->
+        <Grid Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Применить" Click="ApplyButton_Click" Width="100" Height="25" Grid.Column="0"/>
+            <Button Content="Отмена" Click="CancelButton_Click" Width="100" Height="25" Grid.Column="1" Margin="10,0,0,0"/>
+        </Grid>
+
+    </Grid>
+</Window>

@@ -24,7 +24,7 @@ namespace RevitScriptETM
         public string ToSection => ToSectionCheckBox.IsChecked == true ? ToSectionTextBox.Text : null;
         public string TaskIssuer => TaskIssuerCheckBox.IsChecked == true ? TaskIssuerComboBox.SelectedItem as string : null;
         public string TaskHandler => TaskHandlerCheckBox.IsChecked == true ? TaskHandlerComboBox.SelectedItem as string : null;
-        public int TaskCompleted
+        public bool? TaskCompleted
         {
             get
             {
@@ -32,22 +32,18 @@ namespace RevitScriptETM
                 {
                     if (TaskCompletedComboBox.SelectedIndex == 1)
                     {
-                        return 1; // Выполнил
+                        return true; // Выполнил
                     }
                     else if (TaskCompletedComboBox.SelectedIndex == 2)
                     {
-                        return 0; // Не выполнил
-                    }
-                    else
-                    {
-                        return -1; // Все
+                        return false; // Не выполнил
                     }
                 }
-                return -1; // Если CheckBox не выбран, игнорируем фильтр
+                return null; // Все или если CheckBox не выбран
             }
         }
 
-        public int TaskApproval
+        public bool? TaskApproval
         {
             get
             {
@@ -55,18 +51,14 @@ namespace RevitScriptETM
                 {
                     if (TaskApprovalComboBox.SelectedIndex == 1)
                     {
-                        return 1; // Согласовал
+                        return true; // Согласовал
                     }
                     else if (TaskApprovalComboBox.SelectedIndex == 2)
                     {
-                        return 0; // Не согласовал
-                    }
-                    else
-                    {
-                        return -1; // Все
+                        return false; // Не согласовал
                     }
                 }
-                return -1; // Если CheckBox не выбран, игнорируем фильтр
+                return null; // Все или если CheckBox не выбран
             }
         }
 
@@ -95,5 +87,6 @@ namespace RevitScriptETM
             DialogResult = false;
             Close();
         }
+    
     }
 }
