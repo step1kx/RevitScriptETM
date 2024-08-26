@@ -24,9 +24,13 @@ namespace RevitScriptETM
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
-            string document = doc.ActiveProjectLocation.Location.ToString();
+            string document = doc.PathName;
 
-            string connectionString = $"Data Source={document};Version=3;";
+            string connectionString = $"Data Source={document}";
+
+
+
+            MessageBox.Show(document);
 
             try
             {
@@ -54,16 +58,42 @@ namespace RevitScriptETM
                         createTableCommand.ExecuteNonQuery();
                     }
 
+                    string insertQuery = @"
+                    INSERT INTO TaskTable (TaskNumber, FromSection, ToSection, TaskIssuer, TaskCompleted, TaskHandler, TaskApproval, WhoApproval, ScreenShot, TaskDescription)
+                    VALUES (@TaskNumber, @FromSection, @ToSection, @TaskIssuer, @TaskCompleted, @TaskHandler, @TaskApproval, @WhoApproval, @ScreenShot, @TaskDescription)";
 
-                    
+                    using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection))
+                    {
+                        // Пример данных для вставки
+                        insertCommand.Parameters.AddWithValue("@TaskNumber", 1);
+                        insertCommand.Parameters.AddWithValue("@FromSection", "Раздел А");
+                        insertCommand.Parameters.AddWithValue("@ToSection", "Раздел Б");
+                        insertCommand.Parameters.AddWithValue("@TaskIssuer", "Иванов");
+                        insertCommand.Parameters.AddWithValue("@TaskCompleted", 1); // 1 для true
+                        insertCommand.Parameters.AddWithValue("@TaskHandler", "Петров");
+                        insertCommand.Parameters.AddWithValue("@TaskApproval", 1); // 1 для true
+                        insertCommand.Parameters.AddWithValue("@WhoApproval", "Кузнецов");
+                        insertCommand.Parameters.AddWithValue("@ScreenShot", "Screen1.png");
+                        insertCommand.Parameters.AddWithValue("@TaskDescription", "Описание задания 1");
+
+                        insertCommand.ExecuteNonQuery();
+                    }
+
+
                 }
+                
+            
+                return Result.Succeeded;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                message = ex.Message;
+                return Result.Failed;
             }
 
-            return Result.Succeeded;
+
+
+            
         }
     }
 }
