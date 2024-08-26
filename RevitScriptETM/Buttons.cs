@@ -24,11 +24,14 @@ namespace RevitScriptETM
         {
             RibbonPanel panel;
 
-            //if (application.GetRibbonPanels(tabName).Count > 0)
-            //{
-            //    panel = application.GetRibbonPanels(tabName).First();
-            //}
-            application.CreateRibbonTab(tabName);
+            try
+            {
+                panel = application.GetRibbonPanels(tabName).First();
+            }
+            catch (Exception)
+            {
+                application.CreateRibbonTab(tabName);
+            }
 
             panel = application.CreateRibbonPanel(tabName, "Задания");
 
