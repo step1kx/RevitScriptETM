@@ -38,7 +38,7 @@ namespace RevitScriptETM
                 {
                     connection.Open();
 
-
+                    // Создание таблицы, если она не существует
                     string createTableQuery = @"
                     CREATE TABLE IF NOT EXISTS TaskTable (
                         TaskNumber INTEGER PRIMARY KEY,
@@ -58,31 +58,29 @@ namespace RevitScriptETM
                         createTableCommand.ExecuteNonQuery();
                     }
 
+                    // Вставка данных
                     string insertQuery = @"
                     INSERT INTO TaskTable (TaskNumber, FromSection, ToSection, TaskIssuer, TaskCompleted, TaskHandler, TaskApproval, WhoApproval, ScreenShot, TaskDescription)
-                    VALUES (@TaskNumber, @FromSection, @ToSection, @TaskIssuer, @TaskCompleted, @TaskHandler, @TaskApproval, @WhoApproval, @ScreenShot, @TaskDescription)";
+                    VALUES ($TaskNumber, $FromSection, $ToSection, $TaskIssuer, $TaskCompleted, $TaskHandler, $TaskApproval, $WhoApproval, $ScreenShot, $TaskDescription)";
 
                     using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection))
                     {
                         // Пример данных для вставки
-                        insertCommand.Parameters.AddWithValue("@TaskNumber", 1);
-                        insertCommand.Parameters.AddWithValue("@FromSection", "Раздел А");
-                        insertCommand.Parameters.AddWithValue("@ToSection", "Раздел Б");
-                        insertCommand.Parameters.AddWithValue("@TaskIssuer", "Иванов");
-                        insertCommand.Parameters.AddWithValue("@TaskCompleted", 1); // 1 для true
-                        insertCommand.Parameters.AddWithValue("@TaskHandler", "Петров");
-                        insertCommand.Parameters.AddWithValue("@TaskApproval", 1); // 1 для true
-                        insertCommand.Parameters.AddWithValue("@WhoApproval", "Кузнецов");
-                        insertCommand.Parameters.AddWithValue("@ScreenShot", "Screen1.png");
-                        insertCommand.Parameters.AddWithValue("@TaskDescription", "Описание задания 1");
+                        insertCommand.Parameters.AddWithValue("$TaskNumber", 1);
+                        insertCommand.Parameters.AddWithValue("$FromSection", "Раздел А");
+                        insertCommand.Parameters.AddWithValue("$ToSection", "Раздел Б");
+                        insertCommand.Parameters.AddWithValue("$TaskIssuer", "Иванов");
+                        insertCommand.Parameters.AddWithValue("$TaskCompleted", 1); // 1 для true
+                        insertCommand.Parameters.AddWithValue("$TaskHandler", "Петров");
+                        insertCommand.Parameters.AddWithValue("$TaskApproval", 1); // 1 для true
+                        insertCommand.Parameters.AddWithValue("$WhoApproval", "Кузнецов");
+                        insertCommand.Parameters.AddWithValue("$ScreenShot", "Screen1.png");
+                        insertCommand.Parameters.AddWithValue("$TaskDescription", "Описание задания 1");
 
                         insertCommand.ExecuteNonQuery();
                     }
-
-
                 }
-                
-            
+
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -93,7 +91,7 @@ namespace RevitScriptETM
 
 
 
-            
+
         }
     }
 }
