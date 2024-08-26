@@ -29,7 +29,7 @@ namespace RevitScriptETM
             InitializeComponent();
         }
 
-        // Обработчик для кнопки "Применить"
+        //Обработчик для кнопки "Применить"
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             // Сохраняем введенные значения
@@ -42,7 +42,7 @@ namespace RevitScriptETM
         // Обработчик для кнопки "Отмена"
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            Close();
         }
     }
 }
