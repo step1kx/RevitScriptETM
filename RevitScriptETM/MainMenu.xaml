@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1670" Title="Задания">
     <Grid>
-        <DataGrid x:Name="tasksDataGrid" ItemsSource="{Binding TaskItems}" AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True" FontFamily="Arial Black" FontSize="11">
+        <DataGrid x:Name="tasksDataGrid" ItemsSource="{Binding TaskItems}" AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№ задания" Binding="{Binding TaskNumber}" Width="100"/>
                 <DataGridTextColumn Header="Раздел от кого задание" Binding="{Binding FromSection}" Width="170"/>
@@ -17,7 +17,7 @@
                 <DataGridCheckBoxColumn Header="Согласование задания" Binding="{Binding TaskCompleted}" Width="200"/>
                 <DataGridTextColumn Header="Скриншот экрана" Binding="{Binding ScreenShot}" Width="150"/>
                 <DataGridTextColumn Header="Описание задания" Binding="{Binding TaskDescription}" Width="200"/>
-                <DataGridTextColumn Header="Вид" Binding="{Binding TaskDescription}" Width="200"/>
+                <DataGridTextColumn Header="Вид" Binding="{Binding TaskDescription}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         

@@ -2,11 +2,9 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using System.IO;
-using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using System.Windows.Markup;
 using System.Windows;
+using System.Reflection;
 
 namespace RevitScriptETM
 {
@@ -22,6 +20,20 @@ namespace RevitScriptETM
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
             string documentDirectory = Path.GetDirectoryName(doc.PathName);
+            string BDTamplatePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            try
+            {
+                if (!File.Exists(documentDirectory + @"\Tasks.mdf"))
+                {
+                    File.Copy(Path.Combine(BDTamplatePath, "Tasks.mdf"), Path.Combine(documentDirectory, "Tasks.mdf"), false);
+                    File.Copy(Path.Combine(BDTamplatePath, "Tasks_log.ldf"), Path.Combine(documentDirectory, "Tasks_log.ldf"), false);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
             conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
             conn.Open();
@@ -30,6 +42,7 @@ namespace RevitScriptETM
 
             MainMenu myWindow = new MainMenu();
             myWindow.ShowDialog();
+
 
             return Result.Succeeded;
         }
