@@ -24,13 +24,19 @@ namespace RevitScriptETM
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
-            string document = doc.PathName;
-
-            string connectionString = $"Data Source={document}";
 
 
+            string document = doc.ProjectInformation.Name;
 
-            MessageBox.Show(document);
+            string documentPath = doc.PathName;
+
+            documentPath = documentPath.Replace(document, "");
+
+            string connectionString = $"Data Source={documentPath}";
+
+
+
+            MessageBox.Show($"{document}\n{documentPath}");
 
             try
             {
