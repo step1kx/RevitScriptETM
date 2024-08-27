@@ -7,13 +7,19 @@ using System.Windows;
 using System.Reflection;
 using System.Data;
 using System.Collections.Generic;
+using System.Drawing;
+using System;
+using Org.BouncyCastle.Crypto;
 
 namespace RevitScriptETM
 {
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
     {
+        public static List<TaskItems> taskItems = new List<TaskItems>();
         private SqlConnection conn = null;
+        string output = "";
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
 
@@ -40,23 +46,43 @@ namespace RevitScriptETM
             conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
             conn.Open();
 
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(
-                "SELECT * FROM Table", conn);
-            DataSet dataSet = new DataSet();
-            dataAdapter.Fill(dataSet);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM [Table]", conn);
+            SqlDataReader reader = cmd.ExecuteReader();
 
-            //MainMenu myWindow = new MainMenu();
-            //myWindow.ShowDialog();
-            DataTable dt = dataSet.Tables[0];
-            foreach (DataRow dr in dt.Rows)
-            {
-                var cells = dr.ItemArray;
-                foreach (var cell in cells)
-                {
-                    List<TaskItems>
-                }
-            }
+            //SqlDataAdapter dataAdapter = new SqlDataAdapter(
+            //    "SELECT * FROM [Table]", conn);
+            //DataSet dataSet = new DataSet();
+            //dataAdapter.Fill(dataSet);
+            //while (reader.Read()) // Перемещение к первой строке и далее
+            //{
+            //   output = String.Format("TaskNumber: {0}, FromSection {1}, ToSection {2}, " +
+            //       "TaskIssure {3}, TaskComplited: {4}, TaskHandler {5}, TaskApproval {6}, WhoApproval {7}, Screenshot {7}, TaskDescription {7}",
+            //        reader.GetInt32(reader.GetOrdinal("TaskNumber")),
+            //        reader.GetString(reader.GetOrdinal("FromSection")),
+            //        reader.GetString(reader.GetOrdinal("ToSection")),
+            //        reader.GetString(reader.GetOrdinal("TaskIssure")),
+            //        reader.GetInt32(reader.GetOrdinal("TaskComplited")),
+            //        reader.GetString(reader.GetOrdinal("TaskHandler")),
+            //        reader.GetInt32(reader.GetOrdinal("TaskApproval")),
+            //        reader.GetString(reader.GetOrdinal("WhoApproval")),
+            //        "", // ScreenShot
+            //        reader.GetString(reader.GetOrdinal("TaskDescription"))
+            //    );
 
+            //}
+
+            
+
+
+
+
+
+            MainMenu myWindow = new MainMenu();
+            myWindow.ShowDialog();
+
+            myWindow.tasksDataGrid.ItemsSource = taskItems;
+
+            MessageBox.Show(output);
             return Result.Succeeded;
         }
     }

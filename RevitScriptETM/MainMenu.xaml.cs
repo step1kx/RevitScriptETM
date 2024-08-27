@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Windows;
 
@@ -14,10 +15,12 @@ namespace RevitScriptETM
 
             TaskItems = new ObservableCollection<TaskItems>();
             tasksDataGrid.CanUserAddRows = false;
-            
+
+            // tasksDataGrid.ItemsSource = 
             
 
-            DataContext = this;
+
+            // DataContext = this;
 
 
         }

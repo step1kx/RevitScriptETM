@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1670" Title="Задания">
     <Grid>
-        <DataGrid x:Name="tasksDataGrid" ItemsSource="{Binding TaskItems}" AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False">
+        <DataGrid x:Name="tasksDataGrid"  AutoGenerateColumns="False" HeadersVisibility="Column" IsReadOnly="True" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№ задания" Binding="{Binding TaskNumber}" Width="100"/>
                 <DataGridTextColumn Header="Раздел от кого задание" Binding="{Binding FromSection}" Width="170"/>
