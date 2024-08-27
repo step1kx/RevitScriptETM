@@ -8,35 +8,34 @@ namespace RevitScriptETM
 {
     public class TaskItems
     {
-        public int taskNumber { get; set; }
-        public string fromSection { get; set; }
-        public string toSection { get; set; }
-        public string taskIssuer { get; set; }
-        public int taskCompleted { get; set; }
-        public string taskHandler { get; set; }
-        public int taskApproval { get; set; }
-        public string whoApproval { get; set; }
-        public string screenShot { get; set; }
-        public string taskDescription { get; set; }
+        public int TaskNumber { get; set; }
+        public string FromSection { get; set; }
+        public string ToSection { get; set; }
+        public string TaskIssuer { get; set; }
+        public int TaskCompleted { get; set; }
+        public string TaskHandler { get; set; }
+        public int TaskApproval { get; set; }
+        public string WhoApproval { get; set; }
+        public string ScreenShot { get; set; }
+        public string TaskDescription { get; set; }
 
-        public TaskItems(int TaskNumber, string FromSection, string ToSection,
-        string TaskIssuer, int TaskCompleted, string TaskHandler,
-        int TaskApproval, string WhoApproval, string ScreenShot, string TaskDecription)
+        public TaskItems(int taskNumber, string fromSection, string toSection,
+                         string taskIssuer, int taskCompleted, string taskHandler,
+                         int taskApproval, string whoApproval, string screenShot, string taskDescription)
         {
-            taskNumber = TaskNumber;
-            fromSection = FromSection;
-            toSection = ToSection;
-            taskIssuer = TaskIssuer;
-            taskCompleted = TaskCompleted;
-            taskHandler = TaskHandler;
-            taskApproval = TaskApproval;
-            whoApproval = WhoApproval;
-            screenShot = ScreenShot;
-            taskDescription = TaskDecription;
-                
-
+            TaskNumber = taskNumber;
+            FromSection = fromSection;
+            ToSection = toSection;
+            TaskIssuer = taskIssuer;
+            TaskCompleted = taskCompleted;
+            TaskHandler = taskHandler;
+            TaskApproval = taskApproval;
+            WhoApproval = whoApproval;
+            ScreenShot = screenShot;
+            TaskDescription = taskDescription;
         }
     }
 
-    
+
+
 }

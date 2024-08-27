@@ -17,6 +17,7 @@ namespace RevitScriptETM
             DataContext = this; // Устанавливаем DataContext
             TaskItems = new ObservableCollection<TaskItems>();
             tasksDataGrid.CanUserAddRows = false;
+            tasksDataGrid.ItemsSource = Function_1.collview.View;
 
             // tasksDataGrid.ItemsSource = 
 
@@ -42,6 +43,7 @@ namespace RevitScriptETM
         {
             // Создаем и отображаем окно фильтра
             FilterWindow filterWindow = new FilterWindow();
+            filterWindow.ShowDialog();
             
         }
 

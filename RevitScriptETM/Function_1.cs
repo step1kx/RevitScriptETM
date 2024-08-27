@@ -18,7 +18,7 @@ namespace RevitScriptETM
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
     {
-        CollectionViewSource collview = new CollectionViewSource();
+        public static CollectionViewSource collview = new CollectionViewSource();
         public static List<TaskItems> taskItems = new List<TaskItems>();
         private SqlConnection conn = null;
        
@@ -47,27 +47,48 @@ namespace RevitScriptETM
             }
 
             conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
-            conn.Open();
+            //conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM [Table]", conn);
-            SqlDataReader reader = cmd.ExecuteReader();
+            //SqlCommand cmd = new SqlCommand("SELECT * FROM [Table]", conn);
+            //SqlDataReader reader = cmd.ExecuteReader();
 
             //SqlDataAdapter dataAdapter = new SqlDataAdapter(
             //    "SELECT * FROM [Table]", conn);
             //DataSet dataSet = new DataSet();
             //dataAdapter.Fill(dataSet);
-            
-                taskItems.Add(new TaskItems(
-                     1,"fdgdg","gdfgdfg","f234",1,"sdgs",0,"fdsf","","gfdgdgdfgdfg" 
-                 ));
-
-            
-
             MainMenu myWindow = new MainMenu();
-            myWindow.ShowDialog();
+
+            string sqlQuery = "SELECT * FROM [Table]";
+
+            using (conn)
+            {
+                conn.Open();
+                string cmd = sqlQuery; // Из какой таблицы нужен вывод 
+                SqlCommand createCommand = new SqlCommand(cmd, conn);
+                createCommand.ExecuteNonQuery();
+                SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
+                DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+                dataAdp.Fill(dt);
+                // Вывод на грид
+                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView; // Сам вывод 
+                
+            }
+
+
+
+
+            //taskItems.Add(new TaskItems(
+            //         1,"fdgdg","gdfgdfg","f234",0,"sdgs",1,"Я","","gfdgdgdfgdfg" 
+            //     ));
 
             collview.Source = taskItems;
             collview.View.Refresh();
+
+
+            
+            myWindow.ShowDialog();
+
+
             myWindow.tasksDataGrid.ItemsSource = collview.View;
             myWindow.tasksDataGrid.Items.Refresh();
 
