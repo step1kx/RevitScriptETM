@@ -21,14 +21,20 @@
                 <DataGridTextColumn   IsReadOnly="True" Header="Кто отработал" Binding="{Binding  TaskHandler}" Width="150"/>
                 <DataGridCheckBoxColumn IsReadOnly="False" Header="Согласование задания" Binding="{Binding TaskApproval}" Width="200" />
                 <DataGridTextColumn  IsReadOnly="True" Header="Кто согласовал" Binding="{Binding  WhoApproval}" Width="200"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="Скриншот экрана" Binding="{Binding  ScreenShot}" Width="150"/>
+                <DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ScreenShot}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="200" />
                 <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskDescription}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
-        FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom" Background="#FF85D4DE"/>
+        FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom" Background="#FF85D4DE" />
         <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

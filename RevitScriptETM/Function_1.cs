@@ -20,7 +20,7 @@ namespace RevitScriptETM
     {
         public static CollectionViewSource collview = new CollectionViewSource();
         public static List<TaskItems> taskItems = new List<TaskItems>();
-        private SqlConnection conn = null;
+        public static SqlConnection conn = null;
        
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
@@ -58,13 +58,11 @@ namespace RevitScriptETM
             //dataAdapter.Fill(dataSet);
             MainMenu myWindow = new MainMenu();
 
-            string sqlQuery = "SELECT * FROM [Table]";
-
+            
             using (conn)
             {
                 conn.Open();
-                string cmd = sqlQuery; // Из какой таблицы нужен вывод 
-                SqlCommand createCommand = new SqlCommand(cmd, conn);
+                SqlCommand createCommand = new SqlCommand("SELECT * FROM [Table]", conn);
                 createCommand.ExecuteNonQuery();
                 SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                 DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы

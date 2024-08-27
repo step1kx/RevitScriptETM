@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
+
 
 namespace RevitScriptETM
 {
@@ -28,10 +34,21 @@ namespace RevitScriptETM
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
         public string Description => DescriptionTextBox.Text;
 
+        public static List<View> elem;
+
         public TasksCreator()
         {
             InitializeComponent();
+            // GetTaskView();
+            //foreach (View view in elem)
+            //{
+            //    TaskViewComboBox.Items.Add(view.Name);
+            //}
+            //MessageBox.Show(elem.Count.ToString());
+
         }
+
+
 
         private void ImportImage_Click(object sender, RoutedEventArgs e)
         {
@@ -48,8 +65,29 @@ namespace RevitScriptETM
             }
         }
 
+        private string InsertNameFromRevit()
+        {
+            return string.Empty;
+        }
+
+        
+
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
+            DataFromRevit_Event eventHandler = new DataFromRevit_Event();
+            ExternalEvent view = ExternalEvent.Create(eventHandler);
+            view.Raise();
+            using (Function_1.conn)
+            {
+
+                Function_1.conn.Open();
+                SqlCommand createCommand = new SqlCommand($"INSERT INTO (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView) VALUES ({FromSectionTextBox.Text}, {ToSectionTextBox.Text},{eventHandler.username},  ) ", Function_1.conn);
+                createCommand.ExecuteNonQuery();
+                SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
+                DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+                
+
+            }
             DialogResult = true;
             Close();
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Autodesk.Revit.UI;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
@@ -13,7 +14,6 @@ namespace RevitScriptETM
         {
             InitializeComponent();
 
-            InitializeComponent();
             DataContext = this; // Устанавливаем DataContext
             TaskItems = new ObservableCollection<TaskItems>();
             tasksDataGrid.CanUserAddRows = false;
@@ -31,11 +31,13 @@ namespace RevitScriptETM
         private void TasksCreator_Click(object sender, RoutedEventArgs e)
         {
             TasksCreator inputWindow = new TasksCreator();
-            if (inputWindow.ShowDialog() == true)
-            {
-                // Можно обработать введенные данные из InputWindow
-                // Пример: MessageBox.Show($"Раздел от кого: {inputWindow.FromSection}");
-            }
+            DataFromRevit_Event eventHandler = new DataFromRevit_Event();
+            ExternalEvent tskview = ExternalEvent.Create(eventHandler);
+            tskview.Raise();
+            TasksCreator.elem = eventHandler.elements;
+            inputWindow.ShowDialog();
+                //MessageBox.Show(elem.Count.ToString() + "это elem");
+            
         }
 
         // Обработчик нажатия кнопки фильтра
