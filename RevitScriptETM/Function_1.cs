@@ -10,15 +10,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System;
 using Org.BouncyCastle.Crypto;
+using System.Linq;
+using System.Windows.Data;
 
 namespace RevitScriptETM
 {
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
     {
+        CollectionViewSource collview = new CollectionViewSource();
         public static List<TaskItems> taskItems = new List<TaskItems>();
         private SqlConnection conn = null;
-        string output = "";
+       
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -53,36 +56,22 @@ namespace RevitScriptETM
             //    "SELECT * FROM [Table]", conn);
             //DataSet dataSet = new DataSet();
             //dataAdapter.Fill(dataSet);
-            //while (reader.Read()) // Перемещение к первой строке и далее
-            //{
-            //   output = String.Format("TaskNumber: {0}, FromSection {1}, ToSection {2}, " +
-            //       "TaskIssure {3}, TaskComplited: {4}, TaskHandler {5}, TaskApproval {6}, WhoApproval {7}, Screenshot {7}, TaskDescription {7}",
-            //        reader.GetInt32(reader.GetOrdinal("TaskNumber")),
-            //        reader.GetString(reader.GetOrdinal("FromSection")),
-            //        reader.GetString(reader.GetOrdinal("ToSection")),
-            //        reader.GetString(reader.GetOrdinal("TaskIssure")),
-            //        reader.GetInt32(reader.GetOrdinal("TaskComplited")),
-            //        reader.GetString(reader.GetOrdinal("TaskHandler")),
-            //        reader.GetInt32(reader.GetOrdinal("TaskApproval")),
-            //        reader.GetString(reader.GetOrdinal("WhoApproval")),
-            //        "", // ScreenShot
-            //        reader.GetString(reader.GetOrdinal("TaskDescription"))
-            //    );
-
-            //}
+            
+                taskItems.Add(new TaskItems(
+                     1,"fdgdg","gdfgdfg","f234",1,"sdgs",0,"fdsf","","gfdgdgdfgdfg" 
+                 ));
 
             
-
-
-
-
 
             MainMenu myWindow = new MainMenu();
             myWindow.ShowDialog();
 
-            myWindow.tasksDataGrid.ItemsSource = taskItems;
+            collview.Source = taskItems;
+            collview.View.Refresh();
+            myWindow.tasksDataGrid.ItemsSource = collview.View;
+            myWindow.tasksDataGrid.Items.Refresh();
 
-            MessageBox.Show(output);
+            
             return Result.Succeeded;
         }
     }

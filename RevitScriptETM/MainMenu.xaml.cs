@@ -13,11 +13,13 @@ namespace RevitScriptETM
         {
             InitializeComponent();
 
+            InitializeComponent();
+            DataContext = this; // Устанавливаем DataContext
             TaskItems = new ObservableCollection<TaskItems>();
             tasksDataGrid.CanUserAddRows = false;
 
             // tasksDataGrid.ItemsSource = 
-            
+
 
 
             // DataContext = this;
