@@ -37,56 +37,10 @@ namespace RevitScriptETM
         {
             // Создаем и отображаем окно фильтра
             FilterWindow filterWindow = new FilterWindow();
-            if (filterWindow.ShowDialog() == true)
-            {
-                // Применяем фильтр, если пользователь нажал "Применить"
-                ApplyFilter(
-                    filterWindow.FromSection,
-                    filterWindow.ToSection,
-                    filterWindow.TaskIssuer,
-                    filterWindow.TaskHandler,
-                    filterWindow.TaskCompleted,
-                    filterWindow.TaskApproval,
-                    filterWindow.WhoApproval,
-                    filterWindow.FromSectionCheckBox.IsChecked ?? false,
-                    filterWindow.ToSectionCheckBox.IsChecked ?? false,
-                    filterWindow.TaskIssuerCheckBox.IsChecked ?? false,
-                    filterWindow.TaskCompletedCheckBox.IsChecked ?? false,
-                    filterWindow.TaskHandlerCheckBox.IsChecked ?? false,
-                    filterWindow.TaskApprovalCheckBox.IsChecked ?? false,
-                    filterWindow.WhoApprovalCheckBox.IsChecked ?? false
-                );
-            }
+            
         }
 
         // Метод для применения фильтра к данным DataGrid
-        private void ApplyFilter(
-            string fromSection,
-            string toSection,
-            string taskIssuer,
-            string taskHandler,
-            bool? taskCompleted,
-            bool? taskApproval,
-            string whoApproval,
-            bool filterByFromSection,
-            bool filterByToSection,
-            bool filterByTaskIssuer,
-            bool filterByTaskCompleted,
-            bool filterByTaskHandler,
-            bool filterByTaskApproval,
-            bool filterByWhoApproval)
-        {
-            var filteredItems = TaskItems
-                .Where(item => (!filterByFromSection || string.IsNullOrEmpty(fromSection) || item.FromSection.Contains(fromSection)) &&
-                               (!filterByToSection || string.IsNullOrEmpty(toSection) || item.ToSection.Contains(toSection)) &&
-                               (!filterByTaskIssuer || string.IsNullOrEmpty(taskIssuer) || item.TaskIssuer == taskIssuer) &&
-                               (!filterByTaskCompleted || !taskCompleted.HasValue || item.TaskCompleted == taskCompleted.Value) &&
-                               (!filterByTaskHandler || string.IsNullOrEmpty(taskHandler) || item.TaskHandler == taskHandler) &&
-                               (!filterByTaskApproval || !taskApproval.HasValue || item.TaskApproval == taskApproval.Value) &&
-                               (!filterByWhoApproval || string.IsNullOrEmpty(whoApproval) || item.WhoApproval == whoApproval))
-                .ToList();
-
-            tasksDataGrid.ItemsSource = filteredItems;
-        }
+        
     }
 }
