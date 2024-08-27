@@ -5,6 +5,8 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Reflection;
+using System.Data;
+using System.Collections.Generic;
 
 namespace RevitScriptETM
 {
@@ -38,11 +40,22 @@ namespace RevitScriptETM
             conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
             conn.Open();
 
-            MessageBox.Show(conn.State.ToString());
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(
+                "SELECT * FROM Table", conn);
+            DataSet dataSet = new DataSet();
+            dataAdapter.Fill(dataSet);
 
-            MainMenu myWindow = new MainMenu();
-            myWindow.ShowDialog();
-
+            //MainMenu myWindow = new MainMenu();
+            //myWindow.ShowDialog();
+            DataTable dt = dataSet.Tables[0];
+            foreach (DataRow dr in dt.Rows)
+            {
+                var cells = dr.ItemArray;
+                foreach (var cell in cells)
+                {
+                    List<TaskItems>
+                }
+            }
 
             return Result.Succeeded;
         }
