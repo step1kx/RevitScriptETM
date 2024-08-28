@@ -31,10 +31,6 @@ namespace RevitScriptETM
         private void TasksCreator_Click(object sender, RoutedEventArgs e)
         {
             TasksCreator inputWindow = new TasksCreator();
-            DataFromRevit_Event eventHandler = new DataFromRevit_Event();
-            ExternalEvent tskview = ExternalEvent.Create(eventHandler);
-            tskview.Raise();
-            TasksCreator.elem = eventHandler.elements;
             inputWindow.ShowDialog();
                 //MessageBox.Show(elem.Count.ToString() + "это elem");
             

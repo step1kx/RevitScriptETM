@@ -45,6 +45,8 @@ namespace RevitScriptETM
             //    TaskViewComboBox.Items.Add(view.Name);
             //}
             //MessageBox.Show(elem.Count.ToString());
+            
+            
 
         }
 
@@ -79,7 +81,7 @@ namespace RevitScriptETM
             view.Raise();
             using (Function_1.conn)
             {
-
+                
                 Function_1.conn.Open();
                 SqlCommand createCommand = new SqlCommand($"INSERT INTO (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView) VALUES ({FromSectionTextBox.Text}, {ToSectionTextBox.Text},{eventHandler.username},  ) ", Function_1.conn);
                 createCommand.ExecuteNonQuery();
