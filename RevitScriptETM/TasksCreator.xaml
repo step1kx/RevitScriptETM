@@ -23,7 +23,7 @@
 
         <!-- Раздел от кого -->
         <TextBlock Text="Раздел от кого:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
-        <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="1" Width="550" Height="25"/>
+        <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="1" Width="550" Height="25" />
 
         <!-- Раздел кому -->
         <TextBlock Text="Раздел кому:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -42,7 +42,7 @@
 
         <!-- Описание -->
         <TextBlock Text="Описание:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
-        <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Grid.Column="1" Width="550" Height="150" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <TextBox x:Name="DescriptionTextBox" Grid.Row="3" Grid.Column="1" Width="550" Height="150" AcceptsReturn="True" TextWrapping="Wrap" />
 
         <TextBlock Text="Вид" Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Margin="0,0,5,0"/>
         <ComboBox x:Name="TaskViewComboBox" Grid.Row="5" Grid.Column="1" Margin="206,0,226,25" Grid.RowSpan="2"/>

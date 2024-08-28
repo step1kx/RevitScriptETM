@@ -39,18 +39,14 @@ namespace RevitScriptETM
         public TasksCreator()
         {
             InitializeComponent();
-            // GetTaskView();
-            //foreach (View view in elem)
-            //{
-            //    TaskViewComboBox.Items.Add(view.Name);
-            //}
-            //MessageBox.Show(elem.Count.ToString());
-            
-            
+            foreach (View view in Function_1.views)
+            {
+                TaskViewComboBox.Items.Add(view.Name);
+            }
+
+
 
         }
-
-
 
         private void ImportImage_Click(object sender, RoutedEventArgs e)
         {
@@ -67,23 +63,19 @@ namespace RevitScriptETM
             }
         }
 
-        private string InsertNameFromRevit()
-        {
-            return string.Empty;
-        }
-
-        
-
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            DataFromRevit_Event eventHandler = new DataFromRevit_Event();
-            ExternalEvent view = ExternalEvent.Create(eventHandler);
-            view.Raise();
-            using (Function_1.conn)
+            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            using (conn)
             {
                 
-                Function_1.conn.Open();
-                SqlCommand createCommand = new SqlCommand($"INSERT INTO (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView) VALUES ({FromSectionTextBox.Text}, {ToSectionTextBox.Text},{eventHandler.username},  ) ", Function_1.conn);
+                conn.Open();
+                //SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, TaskCompleted, TaskHandler, TaskApproval, Screenshot, TaskDescription, TaskView, ) " +
+                //    $"VALUES ('{FromSectionTextBox.Text}', '{ToSectionTextBox.Text}', '{Function_1.username}', 'DBNull.Value', '{DescriptionTextBox.Text}', '{Function_1.views}', 0, 0)", conn);
+                SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] " +
+    $"(FromSection, ToSection, TaskIssuer, TaskCompleted, TaskHandler, TaskApproval, WhoApproval, Screenshot, TaskDescription, TaskView) " +
+    $"VALUES ('{FromSection}', '{ToSection}', '{Function_1.username}', 0, null, 0, null, null, '{Description}', '{Function_1.views}')", conn);
+                MessageBox.Show(Function_1.username.ToString());
                 createCommand.ExecuteNonQuery();
                 SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                 DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
@@ -99,5 +91,6 @@ namespace RevitScriptETM
             DialogResult = false;
             Close();
         }
+
     }
 }

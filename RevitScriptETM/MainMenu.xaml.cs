@@ -13,39 +13,21 @@ namespace RevitScriptETM
         public MainMenu()
         {
             InitializeComponent();
-
-            DataContext = this; // Устанавливаем DataContext
-            TaskItems = new ObservableCollection<TaskItems>();
             tasksDataGrid.CanUserAddRows = false;
-            tasksDataGrid.ItemsSource = Function_1.collview.View;
-
-            // tasksDataGrid.ItemsSource = 
-
-
-
-            // DataContext = this;
-
-
         }
 
         private void TasksCreator_Click(object sender, RoutedEventArgs e)
         {
             TasksCreator inputWindow = new TasksCreator();
             inputWindow.ShowDialog();
-                //MessageBox.Show(elem.Count.ToString() + "это elem");
-            
         }
 
         // Обработчик нажатия кнопки фильтра
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
-            // Создаем и отображаем окно фильтра
             FilterWindow filterWindow = new FilterWindow();
             filterWindow.ShowDialog();
-            
         }
-
-        // Метод для применения фильтра к данным DataGrid
         
     }
 }

@@ -18,22 +18,23 @@ namespace RevitScriptETM
 {
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
-    {
-        public static CollectionViewSource collview = new CollectionViewSource();
-        public static List<TaskItems> taskItems = new List<TaskItems>();
-        public static SqlConnection conn = null;
+    {     
         public static string username;
-        public static List<View> elem;
-       
+        public static List<View> views;
+        public static string documentDirectory;
+
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
-            string documentDirectory = Path.GetDirectoryName(doc.PathName);
+            username = uidoc.Application.Application.Username;
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            views = collector.OfClass(typeof(View)).Cast<View>().ToList();
+
+            documentDirectory = Path.GetDirectoryName(doc.PathName);
             string BDTamplatePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             try
@@ -49,7 +50,7 @@ namespace RevitScriptETM
                 MessageBox.Show(ex.Message);
             }
 
-            conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
             MainMenu myWindow = new MainMenu();
 
             using (conn)
@@ -64,18 +65,15 @@ namespace RevitScriptETM
                 myWindow.tasksDataGrid.ItemsSource = dt.DefaultView; // Сам вывод 
 
             }
-
-            
-            FilteredElementCollector collector = new FilteredElementCollector(doc);
-            elements = collector;
-
-            collview.Source = taskItems;
-            collview.View.Refresh();     
             myWindow.ShowDialog();
-            myWindow.tasksDataGrid.ItemsSource = collview.View;
-            myWindow.tasksDataGrid.Items.Refresh();
+            
 
             return Result.Succeeded;
         }
+
     }
+
+    
+
+
 }
