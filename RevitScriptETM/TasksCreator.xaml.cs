@@ -21,22 +21,14 @@ namespace RevitScriptETM
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
         public string Description => DescriptionTextBox.Text;
 
-        public static List<View> elem;
-
         public TasksCreator()
         {
             InitializeComponent();
-            //foreach (View view in elem)
-            //{
-            //    TaskViewComboBox.Items.Add(view.Name);
-            //}
-            //MessageBox.Show(elem.Count.ToString());
-            
-            
-
+            foreach (View view in Function_1.views)
+            {
+                TaskViewComboBox.Items.Add(view.Name);
+            }
         }
-
-
 
         private void ImportImage_Click(object sender, RoutedEventArgs e)
         {
@@ -62,19 +54,15 @@ namespace RevitScriptETM
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            DataFromRevit_Event eventHandler = new DataFromRevit_Event();
-            ExternalEvent view = ExternalEvent.Create(eventHandler);
-            view.Raise();
-            using (Function_1.conn)
+            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            using (conn)
             {
-                
-                Function_1.conn.Open();
-                SqlCommand createCommand = new SqlCommand($"INSERT INTO (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView) VALUES ({FromSectionTextBox.Text}, {ToSectionTextBox.Text},{eventHandler.username},  ) ", Function_1.conn);
+                conn.Open();
+                SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval) " +
+                    $"VALUES ('{FromSectionTextBox.Text}', '{ToSectionTextBox.Text}', '{Function_1.username}', NULL, '{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0)", conn);
                 createCommand.ExecuteNonQuery();
                 SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                 DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
-                
-
             }
             DialogResult = true;
             Close();

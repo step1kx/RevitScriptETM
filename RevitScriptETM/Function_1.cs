@@ -7,12 +7,7 @@ using System.Windows;
 using System.Reflection;
 using System.Data;
 using System.Collections.Generic;
-using System.Drawing;
-using System;
-using Org.BouncyCastle.Crypto;
 using System.Linq;
-using System.Windows.Data;
-using Google.Protobuf.WellKnownTypes;
 
 namespace RevitScriptETM
 {
@@ -67,13 +62,7 @@ namespace RevitScriptETM
             }
             myWindow.ShowDialog();
             
-
             return Result.Succeeded;
         }
-
     }
-
-    
-
-
 }
