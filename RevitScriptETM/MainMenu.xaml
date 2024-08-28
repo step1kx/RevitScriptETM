@@ -29,7 +29,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="200" />
-                <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskDescription}" Width="*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         
