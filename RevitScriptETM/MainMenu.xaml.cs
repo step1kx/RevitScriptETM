@@ -21,6 +21,10 @@ namespace RevitScriptETM
         private void TasksCreator_Click(object sender, RoutedEventArgs e)
         {
             TasksCreator inputWindow = new TasksCreator();
+            inputWindow.TaskCreated += (s, args) =>
+            {
+                RefreshItems(); // Обновление данных в DataGrid после создания задачи
+            };
             inputWindow.ShowDialog();
         }
 

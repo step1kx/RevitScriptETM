@@ -7,6 +7,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Security.Principal;
 
 
 namespace RevitScriptETM
@@ -19,7 +21,8 @@ namespace RevitScriptETM
         public string ImagePath { get; private set; }
         public string ImageName => ImagePath != null ? System.IO.Path.GetFileName(ImagePath) : string.Empty;
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
-        
+
+        public event EventHandler TaskCreated;
 
         public TasksCreator()
         {
@@ -62,25 +65,25 @@ namespace RevitScriptETM
                     conn.Open();
                     SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval) " +
                         $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', NULL, N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0)", conn);
-                    createCommand.ExecuteNonQuery();
+                    int rowsAffected = createCommand.ExecuteNonQuery();
+                    if (rowsAffected == 0)
+                    {
+                        MessageBox.Show("Запись не была добавлена в базу данных.");
+                    }
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+
                 }
+                TaskCreated?.Invoke(this, EventArgs.Empty);
                 DialogResult = true;
             }
             else MessageBox.Show("Зполните все обязательные поля");
-            
- 
-            foreach (Window window in Application.Current.Windows)
-            {
-                MainMenu win;
-                if (window is MainMenu)
-                {
-                    win = window as MainMenu;
-                    win.RefreshItems();
-                }
-            }
-            Close();
+
+
+
+             Close();
+
+
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
