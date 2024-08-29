@@ -45,10 +45,10 @@ namespace RevitScriptETM
             }
         }
 
-        private string InsertNameFromRevit()
-        {
-            return string.Empty;
-        }
+        //private string InsertNameFromRevit()
+        //{
+        //    return string.Empty;
+        //}
 
         
 
@@ -70,7 +70,7 @@ namespace RevitScriptETM
             //}
             //else MessageBox.Show("Зполните все обязательные поля");
             
-
+ 
             foreach (Window window in Application.Current.Windows)
             {
                 MainMenu win;
