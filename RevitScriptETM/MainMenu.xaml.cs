@@ -1,6 +1,8 @@
-﻿using Autodesk.Revit.UI;
+﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 
@@ -28,6 +30,31 @@ namespace RevitScriptETM
             FilterWindow filterWindow = new FilterWindow();
             filterWindow.ShowDialog();
         }
+
         
+
+        private void tasksDataGrid_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e)
+        {
+            tasksDataGrid.Items.Refresh();
+        }
+
+        public void RefreshItems()
+        {
+            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            using (conn)
+            {
+                conn.Open();
+                SqlCommand createCommand = new SqlCommand("SELECT * FROM [Table]", conn);
+                createCommand.ExecuteNonQuery();
+                SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
+                DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+                dataAdp.Fill(dt);
+                // Вывод на грид
+                tasksDataGrid.ItemsSource = dt.DefaultView;
+
+            }
+            InitializeComponent();
+            tasksDataGrid.Items.Refresh();
+        }
     }
 }

@@ -5,6 +5,8 @@ using System.Windows;
 using Microsoft.Win32;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
+using System;
+using System.Linq;
 
 
 namespace RevitScriptETM
@@ -54,17 +56,32 @@ namespace RevitScriptETM
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
-            using (conn)
+            if (FromSectionTextBox.Text)
             {
-                conn.Open();
-                SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval) " +
-                    $"VALUES ('{FromSectionTextBox.Text}', '{ToSectionTextBox.Text}', '{Function_1.username}', NULL, '{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0)", conn);
-                createCommand.ExecuteNonQuery();
-                SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
-                DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+                SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+                using (conn)
+                {
+                    conn.Open();
+                    SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval) " +
+                        $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', NULL, N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0)", conn);
+                    createCommand.ExecuteNonQuery();
+                    SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
+                    DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
+                }
+                DialogResult = true;
             }
-            DialogResult = true;
+            else MessageBox.Show("Зполните все обязательные поля");
+            
+
+            foreach (Window window in Application.Current.Windows)
+            {
+                MainMenu win;
+                if (window is MainMenu)
+                {
+                    win = window as MainMenu;
+                    win.RefreshItems();
+                }
+            }
             Close();
         }
 
