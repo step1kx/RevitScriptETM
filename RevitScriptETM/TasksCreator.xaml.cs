@@ -16,12 +16,10 @@ namespace RevitScriptETM
     /// </summary>
     public partial class TasksCreator : Window
     {
-        public string FromSection => FromSectionTextBox.Text;
-        public string ToSection => ToSectionTextBox.Text;
         public string ImagePath { get; private set; }
         public string ImageName => ImagePath != null ? System.IO.Path.GetFileName(ImagePath) : string.Empty;
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
-        public string Description => DescriptionTextBox.Text;
+        
 
         public TasksCreator()
         {

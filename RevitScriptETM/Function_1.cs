@@ -56,7 +56,6 @@ namespace RevitScriptETM
                 SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                 DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
                 dataAdp.Fill(dt);
-                // Вывод на грид
                 myWindow.tasksDataGrid.ItemsSource = dt.DefaultView; // Сам вывод 
 
             }
