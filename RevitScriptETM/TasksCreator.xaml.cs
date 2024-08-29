@@ -54,8 +54,8 @@ namespace RevitScriptETM
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            //if (FromSectionTextBox.Text)
-            //{
+            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "")
+            {
                 SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
                 using (conn)
                 {
@@ -67,8 +67,8 @@ namespace RevitScriptETM
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
                 }
                 DialogResult = true;
-            //}
-            //else MessageBox.Show("Зполните все обязательные поля");
+            }
+            else MessageBox.Show("Зполните все обязательные поля");
             
  
             foreach (Window window in Application.Current.Windows)
