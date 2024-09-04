@@ -68,7 +68,7 @@
 
         <!-- Кнопки -->
 
-        <Button Content="Применить" Click="ApplyButton_Click" Margin="0,0,10,10" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Right" Width="100" VerticalAlignment="Bottom"/>
+        <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="0,0,10,10" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Right" Width="100" VerticalAlignment="Bottom"/>
         <Button Content="Отмена" Click="CancelButton_Click" Margin="10,0,0,10"  Height="30"  Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100"/>
         
 

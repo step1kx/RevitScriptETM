@@ -152,30 +152,30 @@ namespace RevitScriptETM
         //    // Теперь у вас есть отфильтрованный список
         //    List<TaskItems> result = filteredItems.ToList();
         //}
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
             string query = "SELECT * FROM [Table] WHERE 1=1";
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
             {
-                query += $" AND FromSection = '{FromSectionTextBox.Text}'";
+                query += $" AND FromSection = N'{FromSectionTextBox.Text}'";
             }
             // Фильтр по ToSection
             if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
             {
-                query += $" AND ToSection = '{ToSectionTextBox.Text}'";
+                query += $" AND ToSection = N'{ToSectionTextBox.Text}'";
             }
 
             // Фильтр по TaskIssuer
             if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
             {
-                query += $" AND TaskIssuer = '{TaskIssuerComboBox.SelectedItem.ToString()}'";
+                query += $" AND TaskIssuer = N'{TaskIssuerComboBox.SelectedItem}'";
             }
 
             // Фильтр по TaskHandler
             if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
             {
-                query += $" AND TaskHandler = '{TaskHandlerComboBox.SelectedItem.ToString()}'";
+                query += $" AND TaskHandler = N'{TaskHandlerComboBox.SelectedItem}'";
             }
 
             // Фильтр по TaskCompleted
@@ -197,7 +197,7 @@ namespace RevitScriptETM
             // Фильтр по WhoApproval
             if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
             {
-                query += $" AND WhoApproval = '{WhoApprovalComboBox.SelectedItem.ToString()}'";
+                query += $" AND WhoApproval = '{WhoApprovalComboBox.SelectedItem}'";
             }
 
             // ... добавьте другие фильтры, если необходимо ...
