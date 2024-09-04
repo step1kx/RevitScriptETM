@@ -42,7 +42,31 @@ namespace RevitScriptETM
             tasksDataGrid.ItemsSource = e.DefaultView;
         }
 
-        
+        //public void TaskCompleted_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    if (tasksDataGrid.SelectedItem is DataRowView rowView)
+        //    {
+        //        rowView["TaskHandler"] = Function_1.username;
+        //        UpdateDatabase(rowView, "TaskHandler", Function_1.username);
+        //    }
+        //}
+
+        //private void UpdateDatabase(DataRowView rowView, string columnName, object value)
+        //{
+        //    string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+        //    string updateQuery = $"UPDATE [Table] SET {columnName} = @Value WHERE TaskNumber = @TaskNumber";
+
+        //    using (SqlConnection conn = new SqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+        //        {
+        //            cmd.Parameters.AddWithValue("@Value", value ?? DBNull.Value);
+        //            cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+        //            cmd.ExecuteNonQuery();
+        //        }
+        //    }
+        //}
 
         public void RefreshItems()
         {
