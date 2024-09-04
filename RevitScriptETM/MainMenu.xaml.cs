@@ -42,48 +42,7 @@ namespace RevitScriptETM
             tasksDataGrid.ItemsSource = e.DefaultView;
         }
 
-        private void TaskCompletedCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateTaskField("TaskCompleted", "TaskHandler");
-        }
-
-        private void TaskApprovalCheckBox_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateTaskField("TaskApproval", "WhoApproval");
-        }
-
-        private void UpdateTaskField(string checkBoxField, string userField)
-        {
-            // Получаем выбранную строку из DataGrid
-            if (tasksDataGrid.SelectedItem is DataRowView row)
-            {
-                int taskNumber = Convert.ToInt32(row["TaskNumber"]);
-                bool isChecked = Convert.ToBoolean(row[checkBoxField]);
-
-                // Определяем имя пользователя
-                string userName = Environment.UserName;
-
-                // Обновляем данные в базе данных
-                string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
-                string query = isChecked
-                    ? $"UPDATE [Table] SET {userField} = @UserName WHERE TaskNumber = @TaskNumber"
-                    : $"UPDATE [Table] SET {userField} = NULL WHERE TaskNumber = @TaskNumber";
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@UserName", isChecked ? userName : (object)DBNull.Value);
-                        cmd.Parameters.AddWithValue("@TaskNumber", taskNumber);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                // Обновляем DataGrid
-                RefreshItems();
-            }
-        }
+        
 
         public void RefreshItems()
         {
