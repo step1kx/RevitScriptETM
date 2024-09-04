@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1930" Title="Задания">
     <Grid>
-        <DataGrid SelectionMode="Single" SelectionUnit="Cell" x:Name="tasksDataGrid"  AutoGenerateColumns="False"  HeadersVisibility="Column" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False" Margin="0,0,0,60">
+        <DataGrid SelectionMode="Single" SelectionUnit="Cell" x:Name="tasksDataGrid"  AutoGenerateColumns="False"  HeadersVisibility="Column" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False" Margin="0,0,0,74">
             <DataGrid.Columns>
                 <DataGridTextColumn  IsReadOnly="True" Header="№ задания" Binding="{Binding Path=TaskNumber}" Width="100"/>
                 <DataGridTextColumn  IsReadOnly="True" Header="Раздел от кого задание" Binding="{Binding  FromSection}" Width="170"/>
@@ -34,7 +34,7 @@
         </DataGrid>
         
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
-        FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom" Background="#FF85D4DE" />
+        FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"  />
         <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
