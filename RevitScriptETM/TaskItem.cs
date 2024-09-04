@@ -18,10 +18,11 @@ namespace RevitScriptETM
         public string WhoApproval { get; set; }
         public string ScreenShot { get; set; }
         public string TaskDescription { get; set; }
+        public string TaskView { get; set; }
 
         public TaskItems(int taskNumber, string fromSection, string toSection,
                          string taskIssuer, int taskCompleted, string taskHandler,
-                         int taskApproval, string whoApproval, string screenShot, string taskDescription)
+                         int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView)
         {
             TaskNumber = taskNumber;
             FromSection = fromSection;
@@ -33,6 +34,7 @@ namespace RevitScriptETM
             WhoApproval = whoApproval;
             ScreenShot = screenShot;
             TaskDescription = taskDescription;
+            TaskView = taskView;
         }
     }
 

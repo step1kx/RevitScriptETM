@@ -18,11 +18,12 @@ namespace RevitScriptETM
     /// </summary>
     public partial class TasksCreator : Window
     {
+        public event EventHandler<DataTable> TaskCreated;
         public string ImagePath { get; private set; }
         public string ImageName => ImagePath != null ? System.IO.Path.GetFileName(ImagePath) : string.Empty;
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
 
-        public event EventHandler TaskCreated;
+        
 
         public TasksCreator()
         {
@@ -46,18 +47,11 @@ namespace RevitScriptETM
                 ImagePath = openFileDialog.FileName;
                 ImageInfoTextBlock.Text = $"{System.IO.Path.GetFileName(ImagePath)} ({System.IO.Path.GetExtension(ImagePath)})";
             }
-        }
-
-        //private string InsertNameFromRevit()
-        //{
-        //    return string.Empty;
-        //}
-
-        
+        }    
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "")
+            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
                 SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
                 using (conn)
@@ -72,18 +66,17 @@ namespace RevitScriptETM
                     }
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
-
+                    dataAdp.Fill(dt);
+                    TaskCreated?.Invoke(this, dt);
+                    DialogResult = true;
+                    Close();
                 }
-                TaskCreated?.Invoke(this, EventArgs.Empty);
-                DialogResult = true;
+                
             }
-            else MessageBox.Show("Зполните все обязательные поля");
-
-
-
-             Close();
-
-
+            else
+            {
+                MessageBox.Show("Вы не заполнили одно/несколько следующих полей:\nРаздел от кого\nРаздел кому\nВид");
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
