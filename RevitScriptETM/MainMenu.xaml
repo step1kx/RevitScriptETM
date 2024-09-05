@@ -19,11 +19,12 @@
                         </Style>
                     </DataGridCheckBoxColumn.CellStyle>
                 </DataGridCheckBoxColumn>-->
-                <DataGridTemplateColumn Header="Чек выполнения задания" Width="150" IsReadOnly="False">
+                <DataGridTemplateColumn Header="Чек выполнения задания" Width="200" IsReadOnly="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Path=IsSelected, UpdateSourceTrigger=PropertyChanged}" />
-                            <!--Checked="TaskCompleted_Checked"-->
+                            <CheckBox IsChecked="{Binding TaskCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            Checked="TaskCompleted_Checked" 
+                            Unchecked="TaskCompleted_Unchecked" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

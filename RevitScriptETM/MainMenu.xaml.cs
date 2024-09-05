@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace RevitScriptETM
 {
@@ -42,31 +43,54 @@ namespace RevitScriptETM
             tasksDataGrid.ItemsSource = e.DefaultView;
         }
 
-        //public void TaskCompleted_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    if (tasksDataGrid.SelectedItem is DataRowView rowView)
-        //    {
-        //        rowView["TaskHandler"] = Function_1.username;
-        //        UpdateDatabase(rowView, "TaskHandler", Function_1.username);
-        //    }
-        //}
+        private void TaskCompleted_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
+            {
+                // Устанавливаем имя пользователя
+                rowView["TaskHandler"] = Function_1.username;
+                rowView["TaskCompleted"] = 1;
 
-        //private void UpdateDatabase(DataRowView rowView, string columnName, object value)
-        //{
-        //    string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
-        //    string updateQuery = $"UPDATE [Table] SET {columnName} = @Value WHERE TaskNumber = @TaskNumber";
+                // Обновляем базу данных
+                UpdateDatabase(rowView, Function_1.username, 1);
+            }
+        }
 
-        //    using (SqlConnection conn = new SqlConnection(connectionString))
-        //    {
-        //        conn.Open();
-        //        using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@Value", value ?? DBNull.Value);
-        //            cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
-        //            cmd.ExecuteNonQuery();
-        //        }
-        //    }
-        //}
+
+        private void TaskCompleted_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
+            {
+                // Убираем имя пользователя
+                rowView["TaskHandler"] = DBNull.Value;
+                rowView["TaskCompleted"] = 0;
+
+                // Обновляем базу данных
+                UpdateDatabase(rowView, null, 0);
+            }
+        }
+
+        private void UpdateDatabase(DataRowView rowView, string taskHandler, int taskCompleted)
+        {
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string query = "UPDATE [Table] SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
+                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
+            // Обновляем DataGrid
+            RefreshItems();
+        }
 
         public void RefreshItems()
         {
