@@ -103,6 +103,7 @@ namespace RevitScriptETM
                     cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
 
                     cmd.ExecuteNonQuery();
+                    
                 }
             }
         }
@@ -130,7 +131,6 @@ namespace RevitScriptETM
         {
             DataTable updatedData = GetUpdatedDataTable();
             DataUpdated?.Invoke(this, updatedData);
-
         }
 
         private DataTable GetUpdatedDataTable()
