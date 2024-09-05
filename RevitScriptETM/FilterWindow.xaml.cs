@@ -91,13 +91,13 @@ namespace RevitScriptETM
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT TaskView FROM [Table] WHERE TaskView IS NOT NULL";
+                string query = "SELECT DISTINCT WhoApproval FROM [Table] WHERE WhoApproval IS NOT NULL";
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        whoApprovals.Add(reader["TaskView"].ToString());
+                        whoApprovals.Add(reader["WhoApproval"].ToString());
                     }
                 }
             }
@@ -105,53 +105,6 @@ namespace RevitScriptETM
             return whoApprovals;
         }
 
-
-        //private void ApplyButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    var filteredItems = taskItems.AsQueryable();
-
-        //    if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
-        //    {
-        //        filteredItems = filteredItems.Where(item => item.FromSection == FromSectionTextBox.Text);
-        //    }
-
-        //    if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
-        //    {
-        //        filteredItems = filteredItems.Where(item => item.ToSection == ToSectionTextBox.Text);
-        //    }
-
-        //    if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
-        //    {
-        //        filteredItems = filteredItems.Where(item => item.TaskIssuer == TaskIssuerComboBox.SelectedItem.ToString());
-        //    }
-
-        //    if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
-        //    {
-        //        filteredItems = filteredItems.Where(item => item.TaskHandler == TaskHandlerComboBox.SelectedItem.ToString());
-        //    }
-
-        //    if (TaskCompletedCheckBox.IsChecked == true)
-        //    {
-        //        string taskCompletedValue = (TaskCompletedComboBox.SelectedItem as ComboBoxItem).Content.ToString();
-        //        bool completed = taskCompletedValue == "Выполнил";
-        //        filteredItems = filteredItems.Where(item => item.TaskCompleted == 1);
-        //    }
-
-        //    if (TaskApprovalCheckBox.IsChecked == true)
-        //    {
-        //        string taskApprovalValue = (TaskApprovalComboBox.SelectedItem as ComboBoxItem).Content.ToString();
-        //        bool approved = taskApprovalValue == "Согласовал";
-        //        filteredItems = filteredItems.Where(item => item.TaskApproval == 1);
-        //    }
-
-        //    if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
-        //    {
-        //        filteredItems = filteredItems.Where(item => item.WhoApproval == WhoApprovalComboBox.SelectedItem.ToString());
-        //    }
-
-        //    // Теперь у вас есть отфильтрованный список
-        //    List<TaskItems> result = filteredItems.ToList();
-        //}
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
             string query = "SELECT * FROM [Table] WHERE 1=1";

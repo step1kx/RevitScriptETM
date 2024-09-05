@@ -19,18 +19,27 @@
                         </Style>
                     </DataGridCheckBoxColumn.CellStyle>
                 </DataGridCheckBoxColumn>-->
-                <DataGridTemplateColumn Header="Чек выполнения задания" Width="200" IsReadOnly="False">
+
+                <DataGridTemplateColumn IsReadOnly="False" Header="Чек выполнения задания" Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding TaskCompleted, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            <CheckBox IsChecked="{Binding TaskCompleted}" 
                             Checked="TaskCompleted_Checked" 
-                            Unchecked="TaskCompleted_Unchecked" />
+                            Unchecked="TaskCompleted_Unchecked"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn   IsReadOnly="True" Header="Кто отработал" Binding="{Binding  TaskHandler}" Width="150"/>
-                <DataGridCheckBoxColumn IsReadOnly="False" Header="Согласование задания" Binding="{Binding TaskApproval}" Width="200" />
-                <DataGridTextColumn  IsReadOnly="True" Header="Кто согласовал" Binding="{Binding  WhoApproval}" Width="200"/>
+                <DataGridTemplateColumn IsReadOnly="False" Header="Согласование задания"  Width="200">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding TaskApproval}" 
+                                Checked="TaskApproval_Checked" 
+                                Unchecked="TaskApproval_Unchecked"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn  IsReadOnly="False" Header="Кто согласовал" Binding="{Binding  WhoApproval}" Width="200"/>
                 <DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

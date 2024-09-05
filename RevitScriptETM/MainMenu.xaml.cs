@@ -12,7 +12,7 @@ namespace RevitScriptETM
 {
     public partial class MainMenu : Window
     {
-
+        public event EventHandler<DataTable> DataUpdated;
         public MainMenu()
         {
             InitializeComponent();
@@ -24,7 +24,7 @@ namespace RevitScriptETM
             TasksCreator inputWindow = new TasksCreator();
             inputWindow.TaskCreated += (s, args) =>
             {
-                RefreshItems(); 
+                RefreshItems();
             };
             inputWindow.ShowDialog();
         }
@@ -43,34 +43,52 @@ namespace RevitScriptETM
             tasksDataGrid.ItemsSource = e.DefaultView;
         }
 
+        #region Чекбоксы. Кто выполнил задание
         private void TaskCompleted_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
-                // Устанавливаем имя пользователя
                 rowView["TaskHandler"] = Function_1.username;
-                rowView["TaskCompleted"] = 1;
 
-                // Обновляем базу данных
-                UpdateDatabase(rowView, Function_1.username, 1);
+                UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
+                RefreshItems_CheckBox();
             }
         }
-
 
         private void TaskCompleted_Unchecked(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
-                // Убираем имя пользователя
                 rowView["TaskHandler"] = DBNull.Value;
-                rowView["TaskCompleted"] = 0;
 
-                // Обновляем базу данных
-                UpdateDatabase(rowView, null, 0);
+                UpdateDatabaseForHandlers(rowView, null, 0);
+                RefreshItems_CheckBox();
             }
         }
 
-        private void UpdateDatabase(DataRowView rowView, string taskHandler, int taskCompleted)
+        private void TaskApproval_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
+            {
+                rowView["WhoApproval"] = Function_1.username;
+
+                UpdateDatabaseForApprovals(rowView, Function_1.username, 1);
+                RefreshItems_CheckBox();
+            }
+        }
+
+        private void TaskApproval_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
+            {
+                rowView["WhoApproval"] = DBNull.Value;
+
+                UpdateDatabaseForApprovals(rowView, null, 0);
+                RefreshItems_CheckBox();
+            }
+        }
+
+        private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
             string query = "UPDATE [Table] SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
@@ -87,10 +105,52 @@ namespace RevitScriptETM
                     cmd.ExecuteNonQuery();
                 }
             }
-
-            // Обновляем DataGrid
-            RefreshItems();
         }
+
+        private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
+        {
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string query = "UPDATE [Table] SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
+                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void RefreshItems_CheckBox()
+        {
+            DataTable updatedData = GetUpdatedDataTable();
+            DataUpdated?.Invoke(this, updatedData);
+
+        }
+
+        private DataTable GetUpdatedDataTable()
+        {
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string query = "SELECT * FROM [Table]";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+                    return dataTable;
+                }
+            }
+        }
+        #endregion
 
         public void RefreshItems()
         {
@@ -105,11 +165,12 @@ namespace RevitScriptETM
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
                     dataAdapter.Fill(dataTable);
-
                     // Обновляем DataGrid
                     tasksDataGrid.ItemsSource = dataTable.DefaultView;
                 }
             }
         }
+
+        
     }
 }
