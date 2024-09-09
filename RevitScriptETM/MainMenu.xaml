@@ -5,9 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1930" Title="Задания">
-    <Window.Resources>
-        <local:IntToBoolConverter x:Key="IntToBoolConverter"/>
-    </Window.Resources>
     <Grid>
         <DataGrid SelectionMode="Single" SelectionUnit="Cell" x:Name="tasksDataGrid"  AutoGenerateColumns="False"  HeadersVisibility="Column" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False" Margin="0,0,0,74">
             <DataGrid.Columns>

@@ -59,11 +59,6 @@ namespace RevitScriptETM
                     conn.Open();
                     SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
                         $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', NULL, N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
-                    //int rowsAffected = createCommand.ExecuteNonQuery();
-                    //if (rowsAffected == 0)
-                    //{
-                    //    MessageBox.Show("Запись не была добавлена в базу данных.");
-                    //}
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
                     dataAdp.Fill(dt);

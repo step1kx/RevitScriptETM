@@ -37,7 +37,4 @@ namespace RevitScriptETM
             TaskView = taskView;
         }
     }
-
-
-
 }
