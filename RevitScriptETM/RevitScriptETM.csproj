@@ -226,6 +226,9 @@
     <Compile Include="TasksCreator.xaml.cs">
       <DependentUpon>TasksCreator.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageFullSize.xaml.cs">
+      <DependentUpon>ImageFullSize.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="FilterWindow.xaml">
@@ -237,6 +240,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TasksCreator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImageFullSize.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

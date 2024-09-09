@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace RevitScriptETM
 {
@@ -171,7 +173,26 @@ namespace RevitScriptETM
                 }
             }
         }
+        // Попытка сделать открытие картинки FullSize
+        //private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        //{
+        //    var image = sender as Image;
+        //    if (image != null)
+        //    {
+        //        var imageSource = image.Source as BitmapImage;
+        //        if (imageSource != null)
+        //        {
+        //            ShowImageInNewWindow(imageSource);
+        //        }
+        //    }
+        //}
 
-        
+        //private void ShowImageInNewWindow(BitmapImage imageSource)
+        //{
+        //    var imageWindow = new ImageFullSize();
+        //    imageWindow.SetImageSource(imageSource);
+        //    imageWindow.ShowDialog();
+        //}
+
     }
 }
