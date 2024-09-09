@@ -48,10 +48,16 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
-                rowView["TaskHandler"] = Function_1.username;
-
-                UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
-                RefreshItems_CheckBox();
+                if (rowView != null)
+                {
+                    rowView["TaskHandler"] = Function_1.username;
+                    UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
+                    RefreshItems_CheckBox();
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка: DataRowView не установлен.");
+                }
             }
         }
 
