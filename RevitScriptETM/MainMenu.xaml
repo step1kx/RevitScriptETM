@@ -5,6 +5,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1930" Title="Задания">
+    <Window.Resources>
+        <!-- Кнопка стиль -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Content" Value="Button"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
     <Grid>
         <DataGrid SelectionMode="Single" SelectionUnit="Cell" x:Name="tasksDataGrid"  AutoGenerateColumns="False"  HeadersVisibility="Column" FontFamily="Arial Black" FontSize="11" CanUserReorderColumns="False" Margin="0,0,0,74">
             <DataGrid.Columns>
@@ -15,7 +39,9 @@
                 <!--<DataGridCheckBoxColumn  IsReadOnly="False" Header="Чек выполнения задания" Binding="{Binding  TaskCompleted}" Width="200">
                     <DataGridCheckBoxColumn.CellStyle>
                         <Style TargetType="DataGridCell">
-                            --><!--<EventSetter Event="CheckBox.Checked" Handler="TaskApproval_Checked"/>--><!--
+                            -->
+                <!--<EventSetter Event="CheckBox.Checked" Handler="TaskApproval_Checked"/>-->
+                <!--
                         </Style>
                     </DataGridCheckBoxColumn.CellStyle>
                 </DataGridCheckBoxColumn>-->
@@ -57,9 +83,10 @@
                 <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        
+
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
         FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"  />
         <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
+        <Image Width="100" Height="50" Margin="915,569,915,0" VerticalAlignment="Top" ></Image>
     </Grid>
 </Window>
