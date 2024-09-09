@@ -39,6 +39,13 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn  IsReadOnly="False" Header="Кто согласовал" Binding="{Binding  WhoApproval}" Width="200"/>
+                <!--<DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ScreenShot}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>-->
                 <DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

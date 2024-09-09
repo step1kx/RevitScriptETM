@@ -34,31 +34,88 @@ namespace RevitScriptETM
             }
         }
 
-        private void ImportImage_Click(object sender, RoutedEventArgs e)
+        private void PasteImageFromClipboard_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog
+            try
             {
-                Filter = "Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*",
-                Title = "Выберите изображение"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                ImagePath = openFileDialog.FileName;
-                ImageInfoTextBlock.Text = $"{System.IO.Path.GetFileName(ImagePath)} ({System.IO.Path.GetExtension(ImagePath)})";
+                if (Clipboard.ContainsImage())
+                {
+                    // Извлечение изображения из буфера обмена
+                    var image = Clipboard.GetImage();
+                    if (image != null)
+                    {
+                        // Сохранение изображения и получение пути
+                        ImagePath = SaveImageToTempFile(image);
+                        ImageInfoTextBlock.Text = $"{System.IO.Path.GetFileName(ImagePath)} ({System.IO.Path.GetExtension(ImagePath)})";
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Буфер обмена не содержит изображения.");
+                }
             }
-        }    
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при вставке изображения: {ex.Message}");
+            }
+        }
+
+        private string SaveImageToTempFile(System.Windows.Media.Imaging.BitmapSource image)
+        {
+            string tempFilePath = System.IO.Path.GetTempFileName();
+            tempFilePath = System.IO.Path.ChangeExtension(tempFilePath, ".png");
+
+            using (var fileStream = new System.IO.FileStream(tempFilePath, System.IO.FileMode.Create))
+            {
+                var pngEncoder = new System.Windows.Media.Imaging.PngBitmapEncoder();
+                pngEncoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(image));
+                pngEncoder.Save(fileStream);
+            }
+
+            return tempFilePath;
+        }
+
+        private byte[] ConvertImageToBytes(string imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath))
+                return null;
+
+            return System.IO.File.ReadAllBytes(imagePath);
+        }
+
+        private void RemoveImage_Click(object sender, RoutedEventArgs e)
+        {
+            // Очистить путь к изображению
+            ImagePath = null;
+
+            // Очистить информацию о изображении
+            ImageInfoTextBlock.Text = "Изображение удалено";
+        }
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
+            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null && ImagePath != null)
             {
                 SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
                 using (conn)
                 {
                     conn.Open();
-                    SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
-                        $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', NULL, N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
+                    byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
+                    //SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
+                    //    $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', N'{imageBytes}', N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
+
+                    SqlCommand createCommand = new SqlCommand(
+                        "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
+                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL)", conn);
+
+                    // Добавляем параметры
+                    createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+                    createCommand.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
+                    createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
+                    createCommand.Parameters.AddWithValue("@Screenshot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
+                    createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
+                    createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
+
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
                     dataAdp.Fill(dt);
@@ -66,11 +123,11 @@ namespace RevitScriptETM
                     DialogResult = true;
                     Close();
                 }
-                
+
             }
             else
             {
-                MessageBox.Show("Вы не заполнили одно/несколько следующих полей:\nРаздел от кого\nРаздел кому\nВид");
+                MessageBox.Show("Вы не заполнили одно/несколько следующих полей:\nРаздел от кого\nРаздел кому\nИзображение\nВид");
             }
         }
 
