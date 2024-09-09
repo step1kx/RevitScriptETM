@@ -11,15 +11,13 @@
             <Setter Property="Background" Value="Black"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontFamily" Value="Roboto Mono"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderBrush" Value="Gray"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="Width" Value="200"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="Content" Value="Button"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -35,22 +33,13 @@
                 <DataGridTextColumn  IsReadOnly="True" Header="№ задания" Binding="{Binding Path=TaskNumber}" Width="100"/>
                 <DataGridTextColumn  IsReadOnly="True" Header="Раздел от кого задание" Binding="{Binding  FromSection}" Width="170"/>
                 <DataGridTextColumn  IsReadOnly="True" Header="Раздел кому задание" Binding="{Binding  ToSection}" Width="150"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="Кто выдал задание" Binding="{Binding   TaskIssuer}" Width="150"/>
-                <!--<DataGridCheckBoxColumn  IsReadOnly="False" Header="Чек выполнения задания" Binding="{Binding  TaskCompleted}" Width="200">
-                    <DataGridCheckBoxColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            -->
-                <!--<EventSetter Event="CheckBox.Checked" Handler="TaskApproval_Checked"/>-->
-                <!--
-                        </Style>
-                    </DataGridCheckBoxColumn.CellStyle>
-                </DataGridCheckBoxColumn>-->
-                <DataGridTemplateColumn IsReadOnly="False" Header="Чек выполнения задания" Width="200">
+                <DataGridTextColumn  IsReadOnly="True" Header="Кто выдал задание" Binding="{Binding  TaskIssuer}" Width="150"/>
+                <DataGridTemplateColumn IsReadOnly="False" Header="Выполнение задания"  Width="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding TaskCompleted}"  
-                                Checked="TaskCompleted_Checked" 
-                                Unchecked="TaskCompleted_Unchecked"/>
+                            <CheckBox IsChecked="{Binding TaskCompleted}"
+                            Checked="TaskCompleted_Checked" 
+                            Unchecked="TaskCompleted_Unchecked"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -72,14 +61,29 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>-->
-                <DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
+                <DataGridTemplateColumn Header="Скриншот экрана"  IsReadOnly="True" MaxWidth="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding ScreenShot}" />
+                            <Image Source="{Binding ScreenShot}"
+                                   Stretch="Uniform"
+                                   MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="200" />
+                <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
@@ -87,6 +91,6 @@
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
         FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"  />
         <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
-        <Image Width="100" Height="50" Margin="915,569,915,0" VerticalAlignment="Top" ></Image>
+        <Label Width="100" Height="50" FontFamily="Roboto Mono" FontSize="40" Margin="915,0,915,15" VerticalAlignment="Bottom">ETM</Label>
     </Grid>
 </Window>
