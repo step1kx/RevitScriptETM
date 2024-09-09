@@ -40,10 +40,9 @@
 
         <!-- Фильтр по Выполнил/Не выполнил/Все -->
         <CheckBox x:Name="TaskCompletedCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="3"/>
-        <TextBlock Text="Выполнил/Не выполнил/Все:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+        <TextBlock Text="Выполнил/Не выполнил:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="TaskCompletedComboBox" Grid.Row="3" Grid.Column="2" Width="300">
-            <ComboBoxItem Content="Все" IsSelected="True"/>
-            <ComboBoxItem Content="Выполнил"/>
+            <ComboBoxItem Content="Выполнил" IsSelected="True"/>
             <ComboBoxItem Content="Не выполнил"/>
         </ComboBox>
 
@@ -54,10 +53,9 @@
 
         <!-- Фильтр по Согласовал/Не согласовал/Все -->
         <CheckBox x:Name="TaskApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="5"/>
-        <TextBlock Text="Согласовал/Не согласовал/Все:" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
+        <TextBlock Text="Согласовал/Не согласовал:" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
         <ComboBox x:Name="TaskApprovalComboBox" Grid.Row="5" Grid.Column="2" Width="300">
-            <ComboBoxItem Content="Все" IsSelected="True"/>
-            <ComboBoxItem Content="Согласовал"/>
+            <ComboBoxItem Content="Согласовал" IsSelected="True"/>
             <ComboBoxItem Content="Не согласовал"/>
         </ComboBox>
 
