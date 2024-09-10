@@ -195,5 +195,10 @@ namespace RevitScriptETM
             imageWindow.ShowDialog();
         }
 
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            Close();
+        }
     }
 }

@@ -5,70 +5,228 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:RevitScriptETM"
         mc:Ignorable="d"
-        Height="500" Width="800" Title="Фильтр задания" ResizeMode="NoResize">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="350"/>
-            <ColumnDefinition Width="350"/>
-        </Grid.ColumnDefinitions>
+        Height="500" 
+        Width="800" 
+        Title="Фильтр задания" 
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        AllowsTransparency="True" 
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent">
+    <Window.Resources>
+        <!-- Стиль для кнопок (такой же, как в MainMenu) -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#fff"/>
+            <Setter Property="Foreground" Value="#000"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Arial Black"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" Opacity="0.5" ShadowDepth="5" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#000"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="15" ShadowDepth="7" Opacity="0.7" Color="Black"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <EventTrigger RoutedEvent="Button.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        From="#fff" To="#000" Duration="0:0:0.3"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.BlurRadius)"
+                                         From="10" To="20" Duration="0:0:0.5"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.Opacity)"
+                                         From="0.5" To="0.8" Duration="0:0:0.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
 
-        <!-- Фильтр по Разделу от кого -->
-        <CheckBox x:Name="FromSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="0"/>
-        <TextBlock Text="Фильтр по разделу от:" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
-        <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="2" Width="300"/>
+                            <EventTrigger RoutedEvent="Button.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        From="#000" To="#fff" Duration="0:0:0.3"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.BlurRadius)"
+                                         From="20" To="10" Duration="0:0:0.2"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.Effect).(DropShadowEffect.Opacity)"
+                                         From="0.8" To="0.5" Duration="0:0:0.3"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <!-- Фильтр по Разделу кому -->
-        <CheckBox x:Name="ToSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <TextBlock Text="Фильтр по разделу кому:" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
-        <TextBox x:Name="ToSectionTextBox" Grid.Row="1" Grid.Column="2" Width="300"/>
+        <!-- Стиль для текстовых полей (как в MainMenu) -->
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#bdc3c7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Color="Gray"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#000"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="7" ShadowDepth="2" Color="#000"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <!-- Фильтр по Кто выдал -->
-        <CheckBox x:Name="TaskIssuerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="2"/>
-        <TextBlock Text="Кто выдал:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="TaskIssuerComboBox" Grid.Row="2" Grid.Column="2" Width="300"/>
+        <!-- Стиль для ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" ShadowDepth="1" Color="Gray"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#fff"/>
+                    <Setter Property="Foreground" Value="#000"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-        <!-- Фильтр по Выполнил/Не выполнил/Все -->
-        <CheckBox x:Name="TaskCompletedCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="3"/>
-        <TextBlock Text="Выполнил/Не выполнил:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="TaskCompletedComboBox" Grid.Row="3" Grid.Column="2" Width="300">
-            <ComboBoxItem Content="Выполнил" IsSelected="True"/>
-            <ComboBoxItem Content="Не выполнил"/>
-        </ComboBox>
+        <!-- Стиль для TextBlock -->
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
+    <Border Background="#ecf0f1" CornerRadius="15" BorderBrush="Gray" BorderThickness="1">
+        <Grid Background="Transparent">
+            <!-- Верхняя панель с кнопкой закрытия -->
+            <Grid Background="Transparent" VerticalAlignment="Top" Height="40">
+                <Grid.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.112"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Grid.RenderTransform>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- Фильтр по Кто отработал -->
-        <CheckBox x:Name="TaskHandlerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="4"/>
-        <TextBlock Text="Кто отработал:" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="TaskHandlerComboBox" Grid.Row="4" Grid.Column="2" Width="300"/>
+                <!-- Название окна -->
+                <TextBlock Text="Фильтрация заданий" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
 
-        <!-- Фильтр по Согласовал/Не согласовал/Все -->
-        <CheckBox x:Name="TaskApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="5"/>
-        <TextBlock Text="Согласовал/Не согласовал:" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="TaskApprovalComboBox" Grid.Row="5" Grid.Column="2" Width="300">
-            <ComboBoxItem Content="Согласовал" IsSelected="True"/>
-            <ComboBoxItem Content="Не согласовал"/>
-        </ComboBox>
+                <!-- Кнопка закрытия -->
+                <Button Content="X" Grid.Column="1" Click="CloseButton_Click" 
+                 HorizontalAlignment="Center" VerticalAlignment="Center" 
+                 FontWeight="Bold" 
+                 Width="30" Height="30" BorderBrush="Transparent" 
+                 FontSize="14" Cursor="Hand"/>
+            </Grid>
+            <Grid Margin="0,36,0,59" Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="350"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- Фильтр по Кто согласовал -->
-        <CheckBox x:Name="WhoApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Grid.Row="6"/>
-        <TextBlock Text="Кто согласовал:" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"/>
-        <ComboBox x:Name="WhoApprovalComboBox" Grid.Row="6" Grid.Column="2" Width="300"/>
+                <!-- Фильтр по Разделу от кого -->
+                <CheckBox x:Name="FromSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="0"/>
+                <TextBlock Text="Фильтр по разделу от:" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="2" Width="300" Margin="25,5,25,5"/>
 
-        <!-- Кнопки -->
+                <!-- Фильтр по Разделу кому -->
+                <CheckBox x:Name="ToSectionCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="1"/>
+                <TextBlock Text="Фильтр по разделу кому:" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBox x:Name="ToSectionTextBox" Grid.Row="1" Grid.Column="2" Width="300"/>
 
-        <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="0,0,10,10" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Right" Width="100" VerticalAlignment="Bottom"/>
-        <Button Content="Отмена" Click="CancelButton_Click" Margin="10,0,0,10"  Height="30"  Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="100"/>
-        
+                <!-- Фильтр по Кто выдал -->
+                <CheckBox x:Name="TaskIssuerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="2"/>
+                <TextBlock Text="Кто выдал:" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TaskIssuerComboBox" Grid.Row="2" Grid.Column="2" Width="300"/>
 
-    </Grid>
+                <!-- Фильтр по Выполнил/Не выполнил/Все -->
+                <CheckBox x:Name="TaskCompletedCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="3"/>
+                <TextBlock Text="Выполнил/Не выполнил:" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TaskCompletedComboBox" Grid.Row="3" Grid.Column="2" Width="300">
+                    <ComboBoxItem Content="Выполнил" IsSelected="True"/>
+                    <ComboBoxItem Content="Не выполнил"/>
+                </ComboBox>
+
+                <!-- Фильтр по Кто отработал -->
+                <CheckBox x:Name="TaskHandlerCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="4"/>
+                <TextBlock Text="Кто отработал:" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TaskHandlerComboBox" Grid.Row="4" Grid.Column="2" Width="300"/>
+
+                <!-- Фильтр по Согласовал/Не согласовал/Все -->
+                <CheckBox x:Name="TaskApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="5"/>
+                <TextBlock Text="Согласовал/Не согласовал:" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center"/>
+                <ComboBox x:Name="TaskApprovalComboBox" Grid.Row="5" Grid.Column="2" Width="300">
+                    <ComboBoxItem Content="Согласовал" IsSelected="True"/>
+                    <ComboBoxItem Content="Не согласовал"/>
+                </ComboBox>
+
+                <!-- Фильтр по Кто согласовал -->
+                <CheckBox x:Name="WhoApprovalCheckBox" Content="" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Center" Grid.Row="6"/>
+                <TextBlock Text="Кто согласовал:" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"/>
+                <ComboBox x:Name="WhoApprovalComboBox" Grid.Row="6" Grid.Column="2" Width="300"/>
+
+                <!-- Кнопки -->
+
+                <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="240,5,0,0" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top" Cursor="Hand"/>
+                <Button Content="Отмена" Click="CloseButton_Click" Margin="10,5,0,0"  Height="30"  Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Cursor="Hand"/>
+
+            </Grid>
+        </Grid>
+    </Border>
 </Window>

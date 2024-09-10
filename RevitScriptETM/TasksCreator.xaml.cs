@@ -25,7 +25,7 @@ namespace RevitScriptETM
         public string ImageName => ImagePath != null ? System.IO.Path.GetFileName(ImagePath) : string.Empty;
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
 
-        
+
 
         public TasksCreator()
         {
@@ -138,6 +138,11 @@ namespace RevitScriptETM
         {
             DialogResult = false;
             Close();
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
