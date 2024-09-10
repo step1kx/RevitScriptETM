@@ -74,7 +74,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-<Border Background="#ecf0f1" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+<Border Background="#FFE4E4E4" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
     <Grid>
         <Grid Background="Transparent" VerticalAlignment="Top" Height="40">
             <Grid.RenderTransform>
@@ -91,7 +91,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Название окна -->
-            <TextBlock Text="ETM Выдача заданий" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
+            <TextBlock Text="ETM Выдача заданий смежным разделам" VerticalAlignment="Center" Margin="10,0,1048,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
 
             <!-- Кнопка закрытия -->
             <Button Content="X" Grid.Column="1" Click="CancelButton_Click" 
