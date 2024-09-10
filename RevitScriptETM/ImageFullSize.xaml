@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RevitScriptETM"
              mc:Ignorable="d" 
-             Title="Image Viewer" Height="600" Width="800">
+             Title="Image Viewer" Height="600" Width="1000">
     <Grid>
         <Image x:Name="DisplayedImage" Stretch="Uniform"/>
     </Grid>

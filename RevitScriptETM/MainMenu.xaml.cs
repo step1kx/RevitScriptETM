@@ -173,26 +173,27 @@ namespace RevitScriptETM
                 }
             }
         }
-        // Попытка сделать открытие картинки FullSize
-        //private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        //{
-        //    var image = sender as Image;
-        //    if (image != null)
-        //    {
-        //        var imageSource = image.Source as BitmapImage;
-        //        if (imageSource != null)
-        //        {
-        //            ShowImageInNewWindow(imageSource);
-        //        }
-        //    }
-        //}
 
-        //private void ShowImageInNewWindow(BitmapImage imageSource)
-        //{
-        //    var imageWindow = new ImageFullSize();
-        //    imageWindow.SetImageSource(imageSource);
-        //    imageWindow.ShowDialog();
-        //}
+        //Попытка сделать открытие картинки FullSize
+        private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var image = sender as Image;
+            if (image != null)
+            {
+                var imageSource = image.Source as BitmapImage;
+                if (imageSource != null)
+                {
+                    ShowImageInNewWindow(imageSource);
+                }
+            }
+        }
+
+        private void ShowImageInNewWindow(BitmapImage imageSource)
+        {
+            var imageWindow = new ImageFullSize();
+            imageWindow.SetImageSource(imageSource);
+            imageWindow.ShowDialog();
+        }
 
     }
 }

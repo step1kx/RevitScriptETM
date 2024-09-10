@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="650" Width="1930" Title="Задания">
     <Window.Resources>
+        <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
         <!-- Кнопка стиль -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="Black"/>
@@ -64,9 +65,10 @@
                 <DataGridTemplateColumn Header="Скриншот экрана"  IsReadOnly="True" MaxWidth="250">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding ScreenShot}"
+                            <Image Source="{Binding ScreenShot, Converter={StaticResource ByteArrayToImageConverter}}"
                                    Stretch="Uniform"
-                                   MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}}"/>
+                                   MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}}"
+                                   MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

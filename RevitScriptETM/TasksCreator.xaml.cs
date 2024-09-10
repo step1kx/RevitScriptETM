@@ -9,6 +9,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Principal;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 
 namespace RevitScriptETM
@@ -91,6 +93,7 @@ namespace RevitScriptETM
             // Очистить информацию о изображении
             ImageInfoTextBlock.Text = "Изображение удалено";
         }
+
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
