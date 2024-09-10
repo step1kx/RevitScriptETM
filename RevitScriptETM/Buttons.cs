@@ -37,7 +37,7 @@ namespace RevitScriptETM
                 application.CreateRibbonTab(tabName);
             }
 
-            panel = application.CreateRibbonPanel(tabName, "Задания");
+            panel = application.CreateRibbonPanel(tabName, "Задания для смежных разделов");
 
             panel.AddItem(new PushButtonData(nameof(Function_1), "Задания", assemblyLocation, typeof(Function_1).FullName)
             {
