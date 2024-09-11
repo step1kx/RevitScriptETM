@@ -19,8 +19,7 @@ namespace RevitScriptETM
         public string ScreenShot { get; set; }
         public string TaskDescription { get; set; }
         public string TaskView { get; set; }
-        public DateTime TaskDate { get; set; }
-
+       
         public TaskItems(int taskNumber, string fromSection, string toSection,
                          string taskIssuer, int taskCompleted, string taskHandler,
                          int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView)
@@ -36,7 +35,6 @@ namespace RevitScriptETM
             ScreenShot = screenShot;
             TaskDescription = taskDescription;
             TaskView = taskView;
-            TaskDate = DateTime.Now;
         }
     }
 }

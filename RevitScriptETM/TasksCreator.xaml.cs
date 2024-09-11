@@ -114,7 +114,7 @@ namespace RevitScriptETM
 
                     SqlCommand createCommand = new SqlCommand(
                         "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval, TaskDate) " +
-                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL)", conn);
+                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL,@TaskDate)", conn);
 
                     // Добавляем параметры
                     createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
