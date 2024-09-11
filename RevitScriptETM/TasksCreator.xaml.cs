@@ -123,7 +123,7 @@ namespace RevitScriptETM
                     createCommand.Parameters.AddWithValue("@Screenshot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
                     createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
                     createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
-                    createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now);
+                    createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("d"));
 
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
