@@ -224,7 +224,7 @@
                 <!-- Кнопки -->
 
                 <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="240,5,0,0" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top" Cursor="Hand"/>
-                <Button Content="Отмена" Click="CloseButton_Click" Margin="10,5,0,0"  Height="30"  Grid.Row="7" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Cursor="Hand"/>
+               
 
             </Grid>
         </Grid>
