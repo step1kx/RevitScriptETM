@@ -222,7 +222,7 @@
                 <ComboBox x:Name="WhoApprovalComboBox" Grid.Row="6" Grid.Column="2" Width="300"/>
 
                 <!-- Кнопки -->
-
+                <Button Name="ResetFiltersButton" Content="Сброс всех фильтров" Click="ResetFiltersButton_Click" Grid.Column="2" Grid.Row="7" Height="30" Margin="25,5,125,5"/>
                 <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="240,5,0,0" Grid.Row="7" Height="30" Grid.Column="2" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top" Cursor="Hand"/>
                
 

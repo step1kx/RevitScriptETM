@@ -19,6 +19,9 @@ namespace RevitScriptETM
         {
             InitializeComponent();
             tasksDataGrid.CanUserAddRows = false;
+
+            Properties.Settings.Default.Reset();
+            Properties.Settings.Default.Save();
         }
 
         private void TasksCreator_Click(object sender, RoutedEventArgs e)

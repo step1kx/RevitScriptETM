@@ -217,7 +217,6 @@
   <ItemGroup>
     <Compile Include="Buttons.cs" />
     <Compile Include="ByteArrayToImageConverter.cs" />
-    <Compile Include="FilterItems.cs" />
     <Compile Include="FilterWindow.xaml.cs">
       <DependentUpon>FilterWindow.xaml</DependentUpon>
     </Compile>

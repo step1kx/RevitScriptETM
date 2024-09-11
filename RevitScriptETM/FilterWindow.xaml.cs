@@ -233,11 +233,36 @@ namespace RevitScriptETM
             }
         }
 
+        private void ResetFiltersButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Сброс состояния всех фильтров
+            FromSectionCheckBox.IsChecked = false;
+            FromSectionTextBox.Text = string.Empty;
+
+            ToSectionCheckBox.IsChecked = false;
+            ToSectionTextBox.Text = string.Empty;
+
+            TaskIssuerCheckBox.IsChecked = false;
+            TaskIssuerComboBox.SelectedItem = null;
+
+            TaskHandlerCheckBox.IsChecked = false;
+            TaskHandlerComboBox.SelectedItem = null;
+
+            TaskCompletedCheckBox.IsChecked = false;
+            TaskCompletedComboBox.SelectedItem = null;
+
+            TaskApprovalCheckBox.IsChecked = false;
+            TaskApprovalComboBox.SelectedItem = null;
+
+            WhoApprovalCheckBox.IsChecked = false;
+            WhoApprovalComboBox.SelectedItem = null;
+        }
 
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+            SaveFilterSettings();
             Close();
         }
 
