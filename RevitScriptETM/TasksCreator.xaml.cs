@@ -113,7 +113,7 @@ namespace RevitScriptETM
                     //    $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', N'{imageBytes}', N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
 
                     SqlCommand createCommand = new SqlCommand(
-                        "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
+                        "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval, TaskDate) " +
                         "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL)", conn);
 
                     // Добавляем параметры
@@ -123,6 +123,7 @@ namespace RevitScriptETM
                     createCommand.Parameters.AddWithValue("@Screenshot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
                     createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
                     createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
+                    createCommand.Parameters.AddWithValue("@CreationDate", DateTime.Now);
 
                     SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
                     DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
