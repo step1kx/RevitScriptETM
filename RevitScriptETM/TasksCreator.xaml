@@ -207,7 +207,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Button Content="Применить" Click="ApplyButton_Click" Width="100" Height="25" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand"/>
-                    <Button Content="Отмена" Click="CancelButton_Click" Width="100" Height="25" Grid.Column="1" Margin="10,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Center" Cursor="Hand"/>
+                    
                 </Grid>
             </Grid>
         </Grid>

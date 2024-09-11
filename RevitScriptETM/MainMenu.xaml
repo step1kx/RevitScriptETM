@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:RevitScriptETM" 
-        Height="800" Width="1800" Title="Задания" WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
+        Height="800" Width="1900" Title="Задания" WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
         <!-- Кнопка стиль -->
@@ -151,15 +151,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="90"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding }" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
         <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
         FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"  />
         <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
-        <Label Width="100" Height="50" FontFamily="Roboto Mono" FontSize="40" Margin="915,0,915,15" VerticalAlignment="Bottom">ETM</Label>
-    </Grid>
+        </Grid>
   </Grid>
 </Border>
 </Window>

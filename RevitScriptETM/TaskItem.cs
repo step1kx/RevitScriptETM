@@ -19,6 +19,7 @@ namespace RevitScriptETM
         public string ScreenShot { get; set; }
         public string TaskDescription { get; set; }
         public string TaskView { get; set; }
+        public DateTime TaskDate { get; set; }
 
         public TaskItems(int taskNumber, string fromSection, string toSection,
                          string taskIssuer, int taskCompleted, string taskHandler,

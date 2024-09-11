@@ -87,11 +87,16 @@ namespace RevitScriptETM
 
         private void RemoveImage_Click(object sender, RoutedEventArgs e)
         {
-            // Очистить путь к изображению
-            ImagePath = null;
-
-            // Очистить информацию о изображении
-            ImageInfoTextBlock.Text = "Изображение удалено";
+            if(ImagePath == null)
+            {
+                ImageInfoTextBlock.Text = null;
+                MessageBox.Show("Изображение еще не добавлено");
+            }
+            else{
+                ImagePath = null;
+                ImageInfoTextBlock.Text = "Изображение удалено";
+            }
+            
         }
 
 
