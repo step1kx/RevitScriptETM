@@ -152,7 +152,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="90"/>
-                <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding }" Width="*"/>
+                <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding TaskDate}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 

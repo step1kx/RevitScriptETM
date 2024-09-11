@@ -23,7 +23,7 @@ namespace RevitScriptETM
 
         public TaskItems(int taskNumber, string fromSection, string toSection,
                          string taskIssuer, int taskCompleted, string taskHandler,
-                         int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView)
+                         int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView, DateTime taskDate)
         {
             TaskNumber = taskNumber;
             FromSection = fromSection;
@@ -36,6 +36,7 @@ namespace RevitScriptETM
             ScreenShot = screenShot;
             TaskDescription = taskDescription;
             TaskView = taskView;
+            TaskDate = taskDate;
         }
     }
 }
