@@ -160,7 +160,7 @@ namespace RevitScriptETM
 
         public void RefreshItems()
         {
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
             string query = "SELECT * FROM [Table]"; // Загрузка всех данных из таблицы
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -174,6 +174,7 @@ namespace RevitScriptETM
                     // Обновляем DataGrid
                     tasksDataGrid.ItemsSource = dataTable.DefaultView;
                 }
+                conn.Close();
             }
         }
 

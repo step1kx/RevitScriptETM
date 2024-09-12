@@ -16,8 +16,8 @@ namespace RevitScriptETM
     {     
         public static string username;
         public static List<View> views;
-        public static string documentDirectory;
-
+        public static string documentDirectory = @"\\192.168.53.190\bim\01-Объекты\DataBaseTasks\";
+        public static string dbName;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -29,15 +29,15 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            documentDirectory = Path.GetDirectoryName(doc.PathName);
             string BDTamplatePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            dbName = DBName(doc);
 
             try
             {
-                if (!File.Exists(documentDirectory + @"\Tasks.mdf"))
+                if (!File.Exists(documentDirectory + dbName))
                 {
-                    File.Copy(Path.Combine(BDTamplatePath, "Tasks.mdf"), Path.Combine(documentDirectory, "Tasks.mdf"), false);
-                    File.Copy(Path.Combine(BDTamplatePath, "Tasks_log.ldf"), Path.Combine(documentDirectory, "Tasks_log.ldf"), false);
+                    File.Copy(Path.Combine(BDTamplatePath, "Tasks.mdf"), Path.Combine(documentDirectory, $"{dbName}.mdf"), false);
+                    File.Copy(Path.Combine(BDTamplatePath, "Tasks_log.ldf"), Path.Combine(documentDirectory, $"{dbName}_log.ldf"), false);
                 }
             }
             catch (System.Exception ex)
@@ -45,7 +45,7 @@ namespace RevitScriptETM
                 MessageBox.Show(ex.Message);
             }
 
-            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+            SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {documentDirectory}\{DBName(doc)}.mdf; Integrated Security = True", null);
             MainMenu myWindow = new MainMenu();
 
             using (conn)
@@ -59,10 +59,20 @@ namespace RevitScriptETM
                 myWindow.tasksDataGrid.ItemsSource = dt.DefaultView; // Сам вывод 
 
             }
+            conn.Close();
             myWindow.ShowDialog();
             myWindow.RefreshItems();
 
             return Result.Succeeded; 
+        }
+        string DBName(Document doc)
+        {
+            string pathName = doc.PathName;
+            int lastIndexSlash = pathName.LastIndexOf('\\');
+            int lastIndexDot = pathName.LastIndexOf(".");
+            string projectName = pathName.Substring(lastIndexSlash + 1, lastIndexDot - lastIndexSlash - 1);
+            string dbName = projectName.Substring(0, projectName.IndexOf("-"));
+            return dbName;
         }
     }
 }

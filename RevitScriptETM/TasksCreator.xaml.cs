@@ -102,9 +102,9 @@ namespace RevitScriptETM
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null && ImagePath != null)
+            if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
-                SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}\Tasks.mdf; Integrated Security = True", null);
+                SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security = True", null);
                 using (conn)
                 {
                     conn.Open();
@@ -130,6 +130,7 @@ namespace RevitScriptETM
                     dataAdp.Fill(dt);
                     TaskCreated?.Invoke(this, dt);
                     DialogResult = true;
+                    conn.Close();
                     Close();
                 }
 

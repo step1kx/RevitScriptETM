@@ -105,7 +105,7 @@ namespace RevitScriptETM
         private List<string> GetTaskIssuersFromDatabase()
         {
             List<string> issuers = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -119,8 +119,9 @@ namespace RevitScriptETM
                         issuers.Add(reader["TaskIssuer"].ToString());
                     }
                 }
+                conn.Close();
             }
-
+            
             return issuers;
         }
 
@@ -128,7 +129,7 @@ namespace RevitScriptETM
         {
             // Пример аналогичного метода для TaskHandler
             List<string> handlers = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -151,7 +152,7 @@ namespace RevitScriptETM
         {
             // Пример аналогичного метода для WhoApproval
             List<string> whoApprovals = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -165,6 +166,7 @@ namespace RevitScriptETM
                         whoApprovals.Add(reader["WhoApproval"].ToString());
                     }
                 }
+                conn.Close();
             }
 
             return whoApprovals;
@@ -211,7 +213,7 @@ namespace RevitScriptETM
                 query += $" AND WhoApproval = '{WhoApprovalComboBox.SelectedItem}'";
             }
 
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -230,6 +232,7 @@ namespace RevitScriptETM
 
                     Close();
                 }
+                conn.Close();
             }
         }
 
