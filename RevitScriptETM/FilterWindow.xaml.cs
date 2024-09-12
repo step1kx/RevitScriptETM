@@ -107,7 +107,7 @@ namespace RevitScriptETM
             List<string> issuers = new List<string>();
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "SELECT DISTINCT TaskIssuer FROM [Table] WHERE TaskIssuer IS NOT NULL";
@@ -131,7 +131,7 @@ namespace RevitScriptETM
             List<string> handlers = new List<string>();
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "SELECT DISTINCT TaskHandler FROM [Table] WHERE TaskHandler IS NOT NULL";
@@ -154,7 +154,7 @@ namespace RevitScriptETM
             List<string> whoApprovals = new List<string>();
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = "SELECT DISTINCT WhoApproval FROM [Table] WHERE WhoApproval IS NOT NULL";
@@ -215,7 +215,7 @@ namespace RevitScriptETM
 
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))

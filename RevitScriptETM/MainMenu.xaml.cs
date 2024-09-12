@@ -99,7 +99,7 @@ namespace RevitScriptETM
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
             string query = "UPDATE [Table] SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -121,7 +121,7 @@ namespace RevitScriptETM
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
             string query = "UPDATE [Table] SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -147,7 +147,7 @@ namespace RevitScriptETM
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
             string query = "SELECT * FROM [Table]";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -169,7 +169,7 @@ namespace RevitScriptETM
             string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
             string query = "SELECT * FROM [Table]"; // Загрузка всех данных из таблицы
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))

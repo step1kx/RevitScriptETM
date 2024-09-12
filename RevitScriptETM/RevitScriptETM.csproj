@@ -231,6 +231,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="dbSqlConnection.cs" />
     <Compile Include="TaskItem.cs" />
     <Compile Include="TasksCreator.xaml.cs">
       <DependentUpon>TasksCreator.xaml</DependentUpon>
