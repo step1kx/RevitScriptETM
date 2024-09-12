@@ -111,6 +111,8 @@ namespace RevitScriptETM
                     cmd.ExecuteNonQuery();
                     
                 }
+                conn.Close();
+                
             }
         }
 
@@ -130,6 +132,7 @@ namespace RevitScriptETM
 
                     cmd.ExecuteNonQuery();
                 }
+                conn.Close();
             }
         }
 
@@ -154,7 +157,10 @@ namespace RevitScriptETM
                     dataAdapter.Fill(dataTable);
                     return dataTable;
                 }
+                
+                
             }
+           
         }
         #endregion
 
