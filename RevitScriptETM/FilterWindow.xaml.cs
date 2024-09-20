@@ -105,13 +105,13 @@ namespace RevitScriptETM
         private List<string> GetTaskIssuersFromDatabase()
         {
             List<string> issuers = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
+           
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
+                dbSqlConnection.conn.Open();
                 string query = "SELECT DISTINCT TaskIssuer FROM [Table] WHERE TaskIssuer IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -119,7 +119,7 @@ namespace RevitScriptETM
                         issuers.Add(reader["TaskIssuer"].ToString());
                     }
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
             }
             
             return issuers;
@@ -129,13 +129,12 @@ namespace RevitScriptETM
         {
             // Пример аналогичного метода для TaskHandler
             List<string> handlers = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
-
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+           
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
+                dbSqlConnection.conn.Open();
                 string query = "SELECT DISTINCT TaskHandler FROM [Table] WHERE TaskHandler IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -152,13 +151,13 @@ namespace RevitScriptETM
         {
             // Пример аналогичного метода для WhoApproval
             List<string> whoApprovals = new List<string>();
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
+            
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
+                dbSqlConnection.conn.Open();
                 string query = "SELECT DISTINCT WhoApproval FROM [Table] WHERE WhoApproval IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -166,7 +165,7 @@ namespace RevitScriptETM
                         whoApprovals.Add(reader["WhoApproval"].ToString());
                     }
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
             }
 
             return whoApprovals;
@@ -213,12 +212,12 @@ namespace RevitScriptETM
                 query += $" AND WhoApproval = '{WhoApprovalComboBox.SelectedItem}'";
             }
 
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
+           
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dbSqlConnection.conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                     DataTable resultTable = new DataTable();
@@ -232,7 +231,7 @@ namespace RevitScriptETM
 
                     Close();
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
             }
         }
 
