@@ -104,17 +104,17 @@ namespace RevitScriptETM
         {
             if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
-                SqlConnection conn = new SqlConnection($@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = {Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security = True", null);
-                using (conn)
+                
+                using (dbSqlConnection.conn)
                 {
-                    conn.Open();
+                    dbSqlConnection.conn.Open();
                     byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
                     //SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
                     //    $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', N'{imageBytes}', N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
 
                     SqlCommand createCommand = new SqlCommand(
                         "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval, TaskDate) " +
-                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL,@TaskDate)", conn);
+                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL,@TaskDate)", dbSqlConnection.conn);
 
                     // Добавляем параметры
                     createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
@@ -130,7 +130,7 @@ namespace RevitScriptETM
                     dataAdp.Fill(dt);
                     TaskCreated?.Invoke(this, dt);
                     DialogResult = true;
-                    conn.Close();
+                    dbSqlConnection.conn.Close();
                     Close();
                 }
 

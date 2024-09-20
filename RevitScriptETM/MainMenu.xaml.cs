@@ -96,13 +96,12 @@ namespace RevitScriptETM
 
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
             string query = "UPDATE [Table] SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dbSqlConnection.conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
@@ -111,20 +110,20 @@ namespace RevitScriptETM
                     cmd.ExecuteNonQuery();
                     
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
                 
             }
         }
 
         private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
         {
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+           
             string query = "UPDATE [Table] SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dbSqlConnection.conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
@@ -132,7 +131,7 @@ namespace RevitScriptETM
 
                     cmd.ExecuteNonQuery();
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
             }
         }
 
@@ -144,13 +143,13 @@ namespace RevitScriptETM
 
         private DataTable GetUpdatedDataTable()
         {
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}\Tasks.mdf; Integrated Security=True";
+           
             string query = "SELECT * FROM [Table]";
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dbSqlConnection.conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
@@ -166,13 +165,12 @@ namespace RevitScriptETM
 
         public void RefreshItems()
         {
-            string connectionString = $@"Data Source=(LocalDB)\MSSQLLocalDB; AttachDbFilename={Function_1.documentDirectory}{Function_1.dbName}.mdf; Integrated Security=True";
             string query = "SELECT * FROM [Table]"; // Загрузка всех данных из таблицы
 
-            using (dbSqlConnection conn = new SqlConnection(connectionString))
+            using (dbSqlConnection.conn)
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, conn))
+                dbSqlConnection.conn.Open();
+                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
                 {
                     SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
@@ -180,7 +178,7 @@ namespace RevitScriptETM
                     // Обновляем DataGrid
                     tasksDataGrid.ItemsSource = dataTable.DefaultView;
                 }
-                conn.Close();
+                dbSqlConnection.conn.Close();
             }
         }
 
