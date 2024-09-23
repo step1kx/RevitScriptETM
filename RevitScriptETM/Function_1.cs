@@ -32,7 +32,6 @@ namespace RevitScriptETM
 
             MainMenu myWindow = new MainMenu();
 
-            // Настраиваем строку подключения для PostgreSQL
 
             // Используем NpgsqlConnection для подключения к PostgreSQL
             using (var conn = dbSqlConnection.connString)
