@@ -40,12 +40,12 @@ namespace RevitScriptETM
                 conn.Open();  // Открываем соединение
 
                 // Выполняем SQL-запрос
-                string query = "SELECT * FROM \"Table\"";
+                string query = "SELECT * FROM public.\"Table\"";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
 
                 // Получаем данные
                 NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable("\"Table\""); // Указываем название таблицы
+                DataTable dt = new DataTable("public.\"Table\""); // Указываем название таблицы
                 dataAdp.Fill(dt);
 
                 // Отображаем данные в DataGrid

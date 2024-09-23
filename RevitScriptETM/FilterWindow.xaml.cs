@@ -109,7 +109,7 @@ namespace RevitScriptETM
             using (var conn = dbSqlConnection.connString)
             {
                 conn.Open();
-                string query = "SELECT DISTINCT TaskIssuer FROM \"Table\" WHERE TaskIssuer IS NOT NULL";
+                string query = "SELECT DISTINCT TaskIssuer FROM public.\"Table\" WHERE TaskIssuer IS NOT NULL";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -132,7 +132,7 @@ namespace RevitScriptETM
             using (var conn = dbSqlConnection.connString)
             {
                 conn.Open();
-                string query = "SELECT DISTINCT TaskHandler FROM \"Table\" WHERE TaskHandler IS NOT NULL";
+                string query = "SELECT DISTINCT TaskHandler FROM public.\"Table\" WHERE TaskHandler IS NOT NULL";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -155,7 +155,7 @@ namespace RevitScriptETM
             using (var conn = dbSqlConnection.connString)
             {
                 conn.Open();
-                string query = "SELECT DISTINCT WhoApproval FROM \"Table\" WHERE WhoApproval IS NOT NULL";
+                string query = "SELECT DISTINCT WhoApproval FROM public.\"Table\" WHERE WhoApproval IS NOT NULL";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -173,7 +173,7 @@ namespace RevitScriptETM
 
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
-            string query = "SELECT * FROM \"Table\" WHERE 1=1";
+            string query = "SELECT * FROM public.\"Table\" WHERE 1=1";
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
             {
