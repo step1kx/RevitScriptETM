@@ -298,13 +298,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logoETM.png" />
-    <Content Include="Tasks.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Tasks_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>Tasks.mdf</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
