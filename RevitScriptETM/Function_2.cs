@@ -21,13 +21,9 @@ namespace RevitScriptETM
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Autodesk.Revit.DB.Document doc = uidoc.Document;
 
-            string pathName = doc.PathName;
-            int lastIndexSlash = pathName.LastIndexOf('\\');
-            int lastIndexDot = pathName.LastIndexOf(".");
-            string projectName = pathName.Substring(lastIndexSlash+1, lastIndexDot - lastIndexSlash-1);
-            string dbName = projectName.Substring(0, projectName.IndexOf("-"));
+            
 
-            MessageBox.Show(dbName);
+            
 
             return Result.Succeeded; 
         }
