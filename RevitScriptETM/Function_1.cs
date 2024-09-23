@@ -28,7 +28,7 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            string BDTamplatePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            
 
             MainMenu myWindow = new MainMenu();
 
@@ -40,12 +40,12 @@ namespace RevitScriptETM
                 conn.Open();  // Открываем соединение
 
                 // Выполняем SQL-запрос
-                string query = "SELECT * FROM public.\"Table\"";
+                string query = "SELECT * FROM Table";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
 
                 // Получаем данные
                 NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable("public.\"Table\""); // Указываем название таблицы
+                DataTable dt = new DataTable("Table"); // Указываем название таблицы
                 dataAdp.Fill(dt);
 
                 // Отображаем данные в DataGrid
