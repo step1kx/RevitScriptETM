@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Security.Principal;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using Npgsql;
 
 
 namespace RevitScriptETM
@@ -104,17 +105,15 @@ namespace RevitScriptETM
         {
             if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
-                
-                using (dbSqlConnection.conn)
+                using (var conn = dbSqlConnection.connString)
                 {
-                    dbSqlConnection.conn.Open();
+                    dbSqlConnection.connString.Open();
                     byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
-                    //SqlCommand createCommand = new SqlCommand($"INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval) " +
-                    //    $"VALUES (N'{FromSectionTextBox.Text}', N'{ToSectionTextBox.Text}', N'{Function_1.username}', N'{imageBytes}', N'{DescriptionTextBox.Text}', N'{TaskViewComboBox.SelectedItem}', 0, 0, NULL, NULL)", conn);
 
-                    SqlCommand createCommand = new SqlCommand(
-                        "INSERT INTO [Table] (FromSection, ToSection, TaskIssuer, Screenshot, TaskDescription, TaskView, TaskCompleted, TaskApproval, TaskHandler, WhoApproval, TaskDate) " +
-                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL,@TaskDate)", dbSqlConnection.conn);
+                    // Используем NpgsqlCommand для выполнения запроса
+                    NpgsqlCommand createCommand = new NpgsqlCommand(
+                        "INSERT INTO \"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"Screenshot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\") " +
+                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @Screenshot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate)", dbSqlConnection.connString);
 
                     // Добавляем параметры
                     createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
@@ -123,17 +122,19 @@ namespace RevitScriptETM
                     createCommand.Parameters.AddWithValue("@Screenshot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
                     createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
                     createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
-                    createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("d"));
+                    createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("yyyy-MM-dd")); // Формат для PostgreSQL
 
-                    SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
-                    DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
-                    dataAdp.Fill(dt);
+                    // Выполняем команду
+                    createCommand.ExecuteNonQuery();
+
+                    // Оповещаем, что задание создано
+                    DataTable dt = new DataTable("Table");
                     TaskCreated?.Invoke(this, dt);
                     DialogResult = true;
-                    dbSqlConnection.conn.Close();
+
+                    dbSqlConnection.connString.Close();
                     Close();
                 }
-
             }
             else
             {

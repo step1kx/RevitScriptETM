@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Configuration;
+using Npgsql;
 
 namespace RevitScriptETM
 {
@@ -60,7 +61,6 @@ namespace RevitScriptETM
 
         private void LoadFilterSettings()
         {
-            // Проверяем наличие значения перед установкой
             FromSectionCheckBox.IsChecked = Properties.Settings.Default.FromSectionCheckBox;
             FromSectionTextBox.Text = Properties.Settings.Default.FromSectionTextBox;
 
@@ -105,41 +105,42 @@ namespace RevitScriptETM
         private List<string> GetTaskIssuersFromDatabase()
         {
             List<string> issuers = new List<string>();
-           
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                string query = "SELECT DISTINCT TaskIssuer FROM [Table] WHERE TaskIssuer IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                string query = "SELECT DISTINCT TaskIssuer FROM \"Table\" WHERE TaskIssuer IS NOT NULL";
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        issuers.Add(reader["TaskIssuer"].ToString());
+                        while (reader.Read())
+                        {
+                            issuers.Add(reader["TaskIssuer"].ToString());
+                        }
                     }
                 }
-                dbSqlConnection.conn.Close();
             }
-            
+
             return issuers;
         }
 
         private List<string> GetTaskHandlersFromDatabase()
         {
-            // Пример аналогичного метода для TaskHandler
             List<string> handlers = new List<string>();
-           
-            using (dbSqlConnection.conn)
+
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                string query = "SELECT DISTINCT TaskHandler FROM [Table] WHERE TaskHandler IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                string query = "SELECT DISTINCT TaskHandler FROM \"Table\" WHERE TaskHandler IS NOT NULL";
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        handlers.Add(reader["TaskHandler"].ToString());
+                        while (reader.Read())
+                        {
+                            handlers.Add(reader["TaskHandler"].ToString());
+                        }
                     }
                 }
             }
@@ -149,23 +150,22 @@ namespace RevitScriptETM
 
         private List<string> GetWhoApprovalsFromDatabase()
         {
-            // Пример аналогичного метода для WhoApproval
             List<string> whoApprovals = new List<string>();
-            
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                string query = "SELECT DISTINCT WhoApproval FROM [Table] WHERE WhoApproval IS NOT NULL";
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                string query = "SELECT DISTINCT WhoApproval FROM \"Table\" WHERE WhoApproval IS NOT NULL";
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        whoApprovals.Add(reader["WhoApproval"].ToString());
+                        while (reader.Read())
+                        {
+                            whoApprovals.Add(reader["WhoApproval"].ToString());
+                        }
                     }
                 }
-                dbSqlConnection.conn.Close();
             }
 
             return whoApprovals;
@@ -173,71 +173,86 @@ namespace RevitScriptETM
 
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
-            // Сохранение состояния фильтров
-            
-
-            // Построение запроса с учетом фильтров
-            string query = "SELECT * FROM [Table] WHERE 1=1";
+            string query = "SELECT * FROM \"Table\" WHERE 1=1";
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
             {
-                query += $" AND FromSection = N'{FromSectionTextBox.Text}'";
+                query += $" AND \"FromSection\" = @FromSection";
             }
             if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
             {
-                query += $" AND ToSection = N'{ToSectionTextBox.Text}'";
+                query += $" AND \"ToSection\" = @ToSection";
             }
             if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
             {
-                query += $" AND TaskIssuer = N'{TaskIssuerComboBox.SelectedItem}'";
+                query += $" AND \"TaskIssuer\" = @TaskIssuer";
             }
             if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
             {
-                query += $" AND TaskHandler = N'{TaskHandlerComboBox.SelectedItem}'";
+                query += $" AND \"TaskHandler\" = @TaskHandler";
             }
             if (TaskCompletedCheckBox.IsChecked == true)
             {
                 string taskCompletedValue = (TaskCompletedComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 int completed = taskCompletedValue == "Выполнил" ? 1 : 0;
-                query += $" AND TaskCompleted = {completed}";
+                query += $" AND \"TaskCompleted\" = {completed}";
             }
             if (TaskApprovalCheckBox.IsChecked == true)
             {
                 string taskApprovalValue = (TaskApprovalComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 int approved = taskApprovalValue == "Согласовал" ? 1 : 0;
-                query += $" AND TaskApproval = {approved}";
+                query += $" AND \"TaskApproval\" = {approved}";
             }
             if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
             {
-                query += $" AND WhoApproval = '{WhoApprovalComboBox.SelectedItem}'";
+                query += $" AND \"WhoApproval\" = @WhoApproval";
             }
 
-           
-
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-                    DataTable resultTable = new DataTable();
-                    dataAdapter.Fill(resultTable);
+                    // Добавляем параметры
+                    if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+                    }
+                    if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
+                    {
+                        cmd.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
+                    }
+                    if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
+                    {
+                        cmd.Parameters.AddWithValue("@TaskIssuer", TaskIssuerComboBox.SelectedItem.ToString());
+                    }
+                    if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
+                    {
+                        cmd.Parameters.AddWithValue("@TaskHandler", TaskHandlerComboBox.SelectedItem.ToString());
+                    }
+                    if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
+                    {
+                        cmd.Parameters.AddWithValue("@WhoApproval", WhoApprovalComboBox.SelectedItem.ToString());
+                    }
 
-                    SaveFilterSettings();
+                    using (var dataAdapter = new NpgsqlDataAdapter(cmd))
+                    {
+                        DataTable resultTable = new DataTable();
+                        dataAdapter.Fill(resultTable);
 
-                    // Вызовите событие с отфильтрованными данными
-                    FilterDone?.Invoke(this, resultTable);
-                    DialogResult = true;
+                        SaveFilterSettings();
 
-                    Close();
+                        FilterDone?.Invoke(this, resultTable);
+                        DialogResult = true;
+
+                        Close();
+                    }
                 }
-                dbSqlConnection.conn.Close();
             }
         }
 
         private void ResetFiltersButton_Click(object sender, RoutedEventArgs e)
         {
-            // Сброс состояния всех фильтров
             FromSectionCheckBox.IsChecked = false;
             FromSectionTextBox.Text = string.Empty;
 
@@ -260,13 +275,11 @@ namespace RevitScriptETM
             WhoApprovalComboBox.SelectedItem = null;
         }
 
-
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             SaveFilterSettings();
             Close();
         }
-
     }
 }

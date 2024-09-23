@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Npgsql;
 
 namespace RevitScriptETM
 {
@@ -33,13 +34,13 @@ namespace RevitScriptETM
             };
             inputWindow.ShowDialog();
         }
+
         // Обработчик нажатия кнопки фильтра
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             FilterWindow filterWindow = new FilterWindow();
             filterWindow.FilterDone += FilterRefresh;
             filterWindow.ShowDialog();
-
         }
 
         private void FilterRefresh(object sender, DataTable e)
@@ -54,10 +55,8 @@ namespace RevitScriptETM
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
                 rowView["TaskHandler"] = Function_1.username;
-
                 UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
                 RefreshItems_CheckBox();
-                
             }
         }
 
@@ -66,7 +65,6 @@ namespace RevitScriptETM
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
                 rowView["TaskHandler"] = DBNull.Value;
-
                 UpdateDatabaseForHandlers(rowView, null, 0);
                 RefreshItems_CheckBox();
             }
@@ -77,7 +75,6 @@ namespace RevitScriptETM
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
                 rowView["WhoApproval"] = Function_1.username;
-
                 UpdateDatabaseForApprovals(rowView, Function_1.username, 1);
                 RefreshItems_CheckBox();
             }
@@ -88,7 +85,6 @@ namespace RevitScriptETM
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
                 rowView["WhoApproval"] = DBNull.Value;
-
                 UpdateDatabaseForApprovals(rowView, null, 0);
                 RefreshItems_CheckBox();
             }
@@ -96,42 +92,37 @@ namespace RevitScriptETM
 
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
-            string query = "UPDATE [Table] SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
+            string query = "UPDATE \"Table\" SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
                     cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
-
                     cmd.ExecuteNonQuery();
-                    
                 }
-                dbSqlConnection.conn.Close();
-                
+                conn.Close();
             }
         }
 
         private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
         {
-           
-            string query = "UPDATE [Table] SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
+            string query = "UPDATE \"Table\" SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
                     cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
-
                     cmd.ExecuteNonQuery();
                 }
-                dbSqlConnection.conn.Close();
+                conn.Close();
             }
         }
 
@@ -143,46 +134,42 @@ namespace RevitScriptETM
 
         private DataTable GetUpdatedDataTable()
         {
-           
-            string query = "SELECT * FROM [Table]";
+            string query = "SELECT * FROM \"Table\"";
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
                     dataAdapter.Fill(dataTable);
                     return dataTable;
                 }
-                
-                
             }
-           
         }
         #endregion
 
         public void RefreshItems()
         {
-            string query = "SELECT * FROM [Table]"; // Загрузка всех данных из таблицы
+            string query = "SELECT * FROM \"Table\""; // Загрузка всех данных из таблицы
 
-            using (dbSqlConnection.conn)
+            using (var conn = dbSqlConnection.connString)
             {
-                dbSqlConnection.conn.Open();
-                using (SqlCommand cmd = new SqlCommand(query, dbSqlConnection.conn))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
+                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
                     dataAdapter.Fill(dataTable);
                     // Обновляем DataGrid
                     tasksDataGrid.ItemsSource = dataTable.DefaultView;
                 }
-                dbSqlConnection.conn.Close();
+                conn.Close();
             }
         }
 
-        //Попытка сделать открытие картинки FullSize
+        // Открытие картинки в полном размере
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var image = sender as Image;

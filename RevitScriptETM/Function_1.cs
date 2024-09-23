@@ -8,15 +8,15 @@ using System.Reflection;
 using System.Data;
 using System.Collections.Generic;
 using System.Linq;
+using Npgsql;
 
 namespace RevitScriptETM
 {
     [Transaction(TransactionMode.Manual)]
     public class Function_1 : IExternalCommand
-    {     
+    {
         public static string username;
         public static List<View> views;
-       
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -30,27 +30,32 @@ namespace RevitScriptETM
 
             string BDTamplatePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
-
-
             MainMenu myWindow = new MainMenu();
 
-            using (dbSqlConnection.conn)
-            {
-                dbSqlConnection.conn.Open();
-                SqlCommand createCommand = new SqlCommand("SELECT * FROM [Table]", dbSqlConnection.conn);
-                createCommand.ExecuteNonQuery();
-                SqlDataAdapter dataAdp = new SqlDataAdapter(createCommand);
-                DataTable dt = new DataTable("Table"); // В скобках указываем название таблицы
-                dataAdp.Fill(dt);
-                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView; // Сам вывод 
+            // Настраиваем строку подключения для PostgreSQL
 
+            // Используем NpgsqlConnection для подключения к PostgreSQL
+            using (var conn = dbSqlConnection.connString)
+            {
+                conn.Open();  // Открываем соединение
+
+                // Выполняем SQL-запрос
+                string query = "SELECT * FROM \"Table\"";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+
+                // Получаем данные
+                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
+                DataTable dt = new DataTable("\"Table\""); // Указываем название таблицы
+                dataAdp.Fill(dt);
+
+                // Отображаем данные в DataGrid
+                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
             }
-            dbSqlConnection.conn.Close();
+
             myWindow.ShowDialog();
             myWindow.RefreshItems();
 
-            return Result.Succeeded; 
+            return Result.Succeeded;
         }
-        
     }
 }
