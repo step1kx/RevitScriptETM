@@ -20,7 +20,7 @@ namespace RevitScriptETM
         {
             InitializeComponent();
             tasksDataGrid.CanUserAddRows = false;
-            MessageBox.Show(dbSqlConnection.conn, "Строка подключения", MessageBoxButton.OK, MessageBoxImage.Information);
+            
 
             Properties.Settings.Default.Reset();
             Properties.Settings.Default.Save();
@@ -111,7 +111,7 @@ namespace RevitScriptETM
 
         private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
         {
-            string query = "UPDATE Table SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
+            string query = "UPDATE public.\"Table\" SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
 
             using (var conn = dbSqlConnection.connString)
             {
@@ -135,7 +135,7 @@ namespace RevitScriptETM
 
         private DataTable GetUpdatedDataTable()
         {
-            string query = "SELECT * FROM Table";
+            string query = "SELECT * FROM public.\"Table\"";
 
             using (var conn = dbSqlConnection.connString)
             {
@@ -153,7 +153,7 @@ namespace RevitScriptETM
 
         public void RefreshItems()
         {
-            string query = "SELECT * FROM Table"; // Загрузка всех данных из таблицы
+            string query = "SELECT * FROM public.\"Table\""; // Загрузка всех данных из таблицы
 
             using (var conn = dbSqlConnection.connString)
             {

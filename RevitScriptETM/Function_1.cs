@@ -9,6 +9,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using Npgsql;
+using System;
 
 namespace RevitScriptETM
 {
@@ -28,29 +29,60 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            
 
             MainMenu myWindow = new MainMenu();
-            
-
-
             // Используем NpgsqlConnection для подключения к PostgreSQL
+            //using (var conn = dbSqlConnection.connString)
+            //{
+
+            //    conn.Open();  // Открываем соединение
+
+
+
+            //    // Выполняем SQL-запрос
+            //    string query = "SELECT * FROM public.\"Table\"";
+            //    NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+
+            //    // Получаем данные
+            //    NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
+            //    DataTable dt = new DataTable("public.\"Table\""); // Указываем название таблицы
+            //    dataAdp.Fill(dt);
+
+            //    // Отображаем данные в DataGrid
+            //    myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+            //}
+
             using (var conn = dbSqlConnection.connString)
             {
-                conn.Open();  // Открываем соединение
+                try
+                {
+                    conn.Open();  // Открываем соединение
 
-                // Выполняем SQL-запрос
-                string query = "SELECT * FROM Table";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+                    // Выполняем SQL-запрос
+                    string query = "SELECT * FROM public.\"Table\"";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
 
-                // Получаем данные
-                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable("Table"); // Указываем название таблицы
-                dataAdp.Fill(dt);
+                    // Получаем данные
+                    NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
+                    DataTable dt = new DataTable("public.\"Table\""); // Указываем название таблицы
+                    dataAdp.Fill(dt);
 
-                // Отображаем данные в DataGrid
-                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+                    // Отображаем данные в DataGrid
+                    myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+                }
+                catch (NpgsqlException ex)
+                {
+                    // Обработка ошибок, связанных с PostgreSQL
+                    MessageBox.Show($"Ошибка подключения или выполнения запроса: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    // Обработка других ошибок
+                    MessageBox.Show($"Произошла ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+
+
 
             myWindow.ShowDialog();
             myWindow.RefreshItems();
