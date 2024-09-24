@@ -20,7 +20,7 @@ namespace RevitScriptETM
     {
         public static string username;
         public static List<View> views;
-        
+        public static int key;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -46,18 +46,21 @@ namespace RevitScriptETM
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();  // Открываем соединение
-                int key = 0;
-                string selectKey = "SELECT ProjectNumber FROM public.\"Projects\"";
-                string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"={filename}";
+                
+                string selectKey = "SELECT \"ProjectNumber\" FROM public.\"Projects\"";
+                string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"='{filename}'";
                 NpgsqlCommand cmd = new NpgsqlCommand(queryForDB, conn);
                 int UserCount = Convert.ToString(cmd.ExecuteScalar()).Length;
-                if(UserCount == 0)
+                MessageBox.Show($"{UserCount}");
+                if (UserCount == 0)
                 {
-                    queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUE ({filename})";
+                    queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUES ('{filename}')";
                     NpgsqlCommand cmd1 = new NpgsqlCommand(queryForDB,conn);
+                    cmd1.ExecuteNonQuery();
                 }
                 NpgsqlCommand cmd2 = new NpgsqlCommand(selectKey,conn);
-                key = Convert.ToInt32(cmd2.ExecuteReader());
+                key = Convert.ToInt32(cmd2.ExecuteScalar());
+
                 string query = $"SELECT * FROM public.\"Table\" WHERE \"PK_ProjectNumber\" = {key}";
 
                 NpgsqlCommand cmd3 = new NpgsqlCommand(query, conn);

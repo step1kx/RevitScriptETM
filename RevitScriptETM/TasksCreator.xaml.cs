@@ -112,8 +112,8 @@ namespace RevitScriptETM
 
                     // Используем NpgsqlCommand для выполнения запроса
                     NpgsqlCommand createCommand = new NpgsqlCommand(
-                        "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\") " +
-                        "VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate)", conn);
+                        "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
+                        $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {Function_1.key} )", conn);
 
                     // Добавляем параметры
                     createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
