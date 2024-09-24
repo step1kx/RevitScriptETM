@@ -155,7 +155,9 @@ namespace RevitScriptETM
 
         public void RefreshItems()
         {
-            string query = "SELECT * FROM public.\"Table\""; // Загрузка всех данных из таблицы
+            string query = $"SELECT t.* " +
+                    $"FROM public.\"Table\" t " +
+                    $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
 
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {

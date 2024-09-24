@@ -20,7 +20,6 @@ namespace RevitScriptETM
     {
         public static string username;
         public static List<View> views;
-        public static int key;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -34,11 +33,6 @@ namespace RevitScriptETM
 
             string filename = Path.GetFileName(doc.PathName).Substring(0, Path.GetFileName(doc.PathName).IndexOf("-"));
 
-            
-            
-
-            MessageBox.Show($"Имя: {filename}");
-
             MainMenu myWindow = new MainMenu();
 
             
@@ -47,27 +41,25 @@ namespace RevitScriptETM
             {
                 conn.Open();  // Открываем соединение
                 
-                string selectKey = "SELECT \"ProjectNumber\" FROM public.\"Projects\"";
                 string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"='{filename}'";
                 NpgsqlCommand cmd = new NpgsqlCommand(queryForDB, conn);
                 int UserCount = Convert.ToString(cmd.ExecuteScalar()).Length;
-                MessageBox.Show($"{UserCount}");
                 if (UserCount == 0)
                 {
                     queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUES ('{filename}')";
                     NpgsqlCommand cmd1 = new NpgsqlCommand(queryForDB,conn);
                     cmd1.ExecuteNonQuery();
                 }
-                NpgsqlCommand cmd2 = new NpgsqlCommand(selectKey,conn);
-                key = Convert.ToInt32(cmd2.ExecuteScalar());
 
-                string query = $"SELECT * FROM public.\"Table\" WHERE \"PK_ProjectNumber\" = {key}";
+                string query = $"SELECT t.* " +
+                    $"FROM public.\"Table\" t " +
+                    $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\"";
 
-                NpgsqlCommand cmd3 = new NpgsqlCommand(query, conn);
-                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd3);
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query, conn);
+                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd2);
                 DataTable dt = new DataTable("Project");
-                //dataAdp.Fill(dt);
-                //myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+                dataAdp.Fill(dt);
+                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
                 conn.Close();
             }
             

@@ -111,9 +111,12 @@ namespace RevitScriptETM
                     byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
 
                     // Используем NpgsqlCommand для выполнения запроса
+                    NpgsqlCommand keyCommand = new NpgsqlCommand("SELECT \"ProjectNumber\" FROM public.\"Projects\"", conn);
+                    int key = Convert.ToInt32(keyCommand.ExecuteScalar());
+
                     NpgsqlCommand createCommand = new NpgsqlCommand(
                         "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
-                        $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {Function_1.key} )", conn);
+                        $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
 
                     // Добавляем параметры
                     createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
