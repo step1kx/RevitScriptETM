@@ -20,6 +20,7 @@ namespace RevitScriptETM
     {
         public static string username;
         public static List<View> views;
+        public static string filename;
 
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
@@ -31,66 +32,48 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            string filename = Path.GetFileName(doc.PathName).Substring(0, Path.GetFileName(doc.PathName).IndexOf("-"));
-
             MainMenu myWindow = new MainMenu();
+            dbSqlConnection dbSqlConnection = new dbSqlConnection();
 
-            
-            
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            try
             {
-                conn.Open();  // Открываем соединение
-                
-                string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"='{filename}'";
-                NpgsqlCommand cmd = new NpgsqlCommand(queryForDB, conn);
-                int UserCount = Convert.ToString(cmd.ExecuteScalar()).Length;
-                if (UserCount == 0)
+                filename = Path.GetFileName(doc.PathName).Substring(0, Path.GetFileName(doc.PathName).IndexOf("-"));
+
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {
-                    queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUES ('{filename}')";
-                    NpgsqlCommand cmd1 = new NpgsqlCommand(queryForDB,conn);
-                    cmd1.ExecuteNonQuery();
+                    conn.Open();  // Открываем соединение
+
+                    string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"='{filename}'";
+                    NpgsqlCommand cmd = new NpgsqlCommand(queryForDB, conn);
+                    int UserCount = Convert.ToString(cmd.ExecuteScalar()).Length;
+                    if (UserCount == 0)
+                    {
+                        queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUES ('{filename}')";
+                        NpgsqlCommand cmd1 = new NpgsqlCommand(queryForDB, conn);
+                        cmd1.ExecuteNonQuery();
+                    }
+
+                    string query = $"SELECT t.* " +
+                        $"FROM public.\"Table\" t " +
+                        $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                        $"WHERE p.\"ProjectName\" = '{filename}'";
+
+                    NpgsqlCommand cmd2 = new NpgsqlCommand(query, conn);
+                    NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd2);
+                    DataTable dt = new DataTable("Project");
+                    dataAdp.Fill(dt);
+                    myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
                 }
 
-                string query = $"SELECT t.* " +
-                    $"FROM public.\"Table\" t " +
-                    $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\"";
-
-                NpgsqlCommand cmd2 = new NpgsqlCommand(query, conn);
-                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd2);
-                DataTable dt = new DataTable("Project");
-                dataAdp.Fill(dt);
-                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
-                conn.Close();
+                myWindow.ShowDialog();
+                myWindow.RefreshItems();
             }
-            
+            catch (Exception e)
+            {
+                MessageBox.Show("Не верное наименование модели!" + $"\n{e.Message}");
+            }
 
-            //try
-            //{
-            //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
-            //    {
-            //        conn.Open();  // Открываем соединение
-            //        string query = "SELECT * FROM public.\"Table\"";
-            //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-            //        // Получаем данные    
-            //        NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
-            //        DataTable dt = new DataTable("Table");
-            //        dataAdp.Fill(dt);
-            //        myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
-            //        conn.Close();
-            //    }
-            //}
-            //catch (Exception)
-            //{
-
-                
-            //}
-
-            
-            myWindow.ShowDialog();
-            myWindow.RefreshItems();
             return Result.Succeeded;
         }
-
-        
     }
 }

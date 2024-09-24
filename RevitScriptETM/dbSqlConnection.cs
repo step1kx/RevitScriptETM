@@ -9,9 +9,6 @@ namespace RevitScriptETM
 {
     public class dbSqlConnection
     {
-
-
         public static string connString = "Server=192.168.0.159; Port=5432 ; User Id = User ; Password = 123; Database = postgres";
-
     }
 }

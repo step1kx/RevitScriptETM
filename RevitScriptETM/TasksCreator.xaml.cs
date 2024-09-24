@@ -111,7 +111,7 @@ namespace RevitScriptETM
                     byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
 
                     // Используем NpgsqlCommand для выполнения запроса
-                    NpgsqlCommand keyCommand = new NpgsqlCommand("SELECT \"ProjectNumber\" FROM public.\"Projects\"", conn);
+                    NpgsqlCommand keyCommand = new NpgsqlCommand($"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = '{Function_1.filename}'", conn);
                     int key = Convert.ToInt32(keyCommand.ExecuteScalar());
 
                     NpgsqlCommand createCommand = new NpgsqlCommand(
