@@ -11,6 +11,7 @@ using System.Linq;
 using Npgsql;
 using System;
 using System.Collections;
+using System.Windows.Forms.VisualStyles;
 
 namespace RevitScriptETM
 {
@@ -31,32 +32,67 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
+            string filename = Path.GetFileName(doc.PathName).Substring(0, Path.GetFileName(doc.PathName).IndexOf("-"));
 
-            MainMenu myWindow = new MainMenu();
+            
             
 
+            MessageBox.Show($"Имя: {filename}");
 
+            MainMenu myWindow = new MainMenu();
+
+            
+            
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();  // Открываем соединение
-                string query = "SELECT * FROM public.\"Table\"";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-                // Получаем данные    
-                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable("Table");
-                dataAdp.Fill(dt);
-                myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+                int key = 0;
+                string selectKey = "SELECT ProjectNumber FROM public.\"Projects\"";
+                string queryForDB = $"SELECT \"ProjectName\" FROM public.\"Projects\" WHERE \"ProjectName\"={filename}";
+                NpgsqlCommand cmd = new NpgsqlCommand(queryForDB, conn);
+                int UserCount = Convert.ToString(cmd.ExecuteScalar()).Length;
+                if(UserCount == 0)
+                {
+                    queryForDB = $"INSERT INTO public.\"Projects\" (\"ProjectName\") VALUE ({filename})";
+                    NpgsqlCommand cmd1 = new NpgsqlCommand(queryForDB,conn);
+                }
+                NpgsqlCommand cmd2 = new NpgsqlCommand(selectKey,conn);
+                key = Convert.ToInt32(cmd2.ExecuteReader());
+                string query = $"SELECT * FROM public.\"Table\" WHERE \"PK_ProjectNumber\" = {key}";
+
+                NpgsqlCommand cmd3 = new NpgsqlCommand(query, conn);
+                NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd3);
+                DataTable dt = new DataTable("Project");
+                //dataAdp.Fill(dt);
+                //myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
                 conn.Close();
             }
-
-
-
-
-            myWindow.ShowDialog();
-            //myWindow.RefreshItems();
-
             
 
+            //try
+            //{
+            //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            //    {
+            //        conn.Open();  // Открываем соединение
+            //        string query = "SELECT * FROM public.\"Table\"";
+            //        NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
+            //        // Получаем данные    
+            //        NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
+            //        DataTable dt = new DataTable("Table");
+            //        dataAdp.Fill(dt);
+            //        myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
+            //        conn.Close();
+            //    }
+            //}
+            //catch (Exception)
+            //{
+
+                
+            //}
+
+            
+            myWindow.ShowDialog();
+            myWindow.RefreshItems();
             return Result.Succeeded;
         }
 
