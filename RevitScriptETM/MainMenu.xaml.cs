@@ -93,37 +93,39 @@ namespace RevitScriptETM
 
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
-            string query = "UPDATE public.\"Table\" SET TaskHandler = @TaskHandler, TaskCompleted = @TaskCompleted WHERE TaskNumber = @TaskNumber";
+            
 
-            using (dbSqlConnection.connString)
+            string query = "UPDATE public.\"Table\" SET \"TaskHandler\" = @TaskHandler, \"TaskCompleted\" = @TaskCompleted WHERE \"TaskNumber\" = @TaskNumber";
+
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
-                dbSqlConnection.connString.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, dbSqlConnection.connString))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
                     cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
                     cmd.ExecuteNonQuery();
                 }
-                dbSqlConnection.connString.Close();
+                conn.Close();
             }
         }
 
         private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
         {
-            string query = "UPDATE public.\"Table\" SET WhoApproval = @WhoApproval, TaskApproval = @TaskApproval WHERE TaskNumber = @TaskNumber";
+            string query = "UPDATE public.\"Table\" SET \"WhoApproval\" = @WhoApproval, \"TaskApproval\" = @TaskApproval WHERE \"TaskNumber\" = @TaskNumber";
 
-            using (dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
-                dbSqlConnection.connString.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, dbSqlConnection.connString))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
                     cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
-                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);//!!!!
                     cmd.ExecuteNonQuery();
                 }
-                dbSqlConnection.connString.Close();
+                conn.Close();
             }
         }
 
@@ -137,10 +139,10 @@ namespace RevitScriptETM
         {
             string query = "SELECT * FROM public.\"Table\"";
 
-            using (dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
-                dbSqlConnection.connString.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, dbSqlConnection.connString))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
@@ -155,10 +157,10 @@ namespace RevitScriptETM
         {
             string query = "SELECT * FROM public.\"Table\""; // Загрузка всех данных из таблицы
 
-            using (dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
-                dbSqlConnection.connString.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, dbSqlConnection.connString))
+                conn.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
                     DataTable dataTable = new DataTable();
@@ -166,7 +168,7 @@ namespace RevitScriptETM
                     // Обновляем DataGrid
                     tasksDataGrid.ItemsSource = dataTable.DefaultView;
                 }
-                dbSqlConnection.connString.Close();
+                conn.Close();
             }
         }
 
@@ -193,7 +195,7 @@ namespace RevitScriptETM
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            DialogResult = false;//!!!
             Close();
         }
     }

@@ -90,24 +90,95 @@ namespace RevitScriptETM
             WhoApprovalComboBox.ItemsSource = GetWhoApprovalsFromDatabase();
         }
 
+        //private List<string> GetTaskIssuersFromDatabase()
+        //{
+        //    List<string> issuers = new List<string>();
+
+        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+        //    {
+        //        conn.Open();
+        //        string query = "SELECT DISTINCT TaskIssuer FROM public.\"Table\" WHERE TaskIssuer IS NOT NULL";
+        //        using (var cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    issuers.Add(reader["TaskIssuer"].ToString());
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return issuers;
+        //}
+
+        //private List<string> GetTaskHandlersFromDatabase()
+        //{
+        //    List<string> handlers = new List<string>();
+
+        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+        //    {
+        //        conn.Open();
+        //        string query = "SELECT DISTINCT TaskHandler FROM public.\"Table\" WHERE TaskHandler IS NOT NULL";
+        //        using (var cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    handlers.Add(reader["TaskHandler"].ToString());
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return handlers;
+        //}
+
+        //private List<string> GetWhoApprovalsFromDatabase()
+        //{
+        //    List<string> whoApprovals = new List<string>();
+
+        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+        //    {
+        //        conn.Open();
+        //        string query = "SELECT DISTINCT WhoApproval FROM public.\"Table\" WHERE WhoApproval IS NOT NULL";
+        //        using (var cmd = new NpgsqlCommand(query, conn))
+        //        {
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    whoApprovals.Add(reader["WhoApproval"].ToString());
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return whoApprovals;
+        //}
+
         private List<string> GetTaskIssuersFromDatabase()
         {
             List<string> issuers = new List<string>();
 
-            using (var conn = dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT TaskIssuer FROM public.\"Table\" WHERE TaskIssuer IS NOT NULL";
+                string query = "SELECT DISTINCT \"TaskIssuer\" FROM public.\"Table\" WHERE \"TaskIssuer\" IS NOT NULL;";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        while (reader.Read())
-                        {
-                            issuers.Add(reader["TaskIssuer"].ToString());
-                        }
+                        issuers.Add(row["TaskIssuer"].ToString());
                     }
                 }
+                conn.Close();
             }
 
             return issuers;
@@ -117,20 +188,22 @@ namespace RevitScriptETM
         {
             List<string> handlers = new List<string>();
 
-            using (var conn = dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT TaskHandler FROM public.\"Table\" WHERE TaskHandler IS NOT NULL";
+                string query = "SELECT DISTINCT \"TaskHandler\" FROM public.\"Table\" WHERE \"TaskHandler\" IS NOT NULL";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        while (reader.Read())
-                        {
-                            handlers.Add(reader["TaskHandler"].ToString());
-                        }
+                        handlers.Add(row["TaskHandler"].ToString());
                     }
                 }
+                conn.Close();
             }
 
             return handlers;
@@ -140,20 +213,22 @@ namespace RevitScriptETM
         {
             List<string> whoApprovals = new List<string>();
 
-            using (var conn = dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT WhoApproval FROM public.\"Table\" WHERE WhoApproval IS NOT NULL";
+                string query = "SELECT DISTINCT \"WhoApproval\" FROM public.\"Table\" WHERE \"WhoApproval\" IS NOT NULL";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    dataAdapter.Fill(dataTable);
+
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        while (reader.Read())
-                        {
-                            whoApprovals.Add(reader["WhoApproval"].ToString());
-                        }
+                        whoApprovals.Add(row["WhoApproval"].ToString());
                     }
                 }
+                conn.Close();
             }
 
             return whoApprovals;
@@ -196,7 +271,7 @@ namespace RevitScriptETM
                 query += $" AND \"WhoApproval\" = @WhoApproval";
             }
 
-            using (var conn = dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))

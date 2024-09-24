@@ -36,25 +36,24 @@ namespace RevitScriptETM
             
 
 
-            using (dbSqlConnection.connString)
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
-                dbSqlConnection.connString.Open();  // Открываем соединение
+                conn.Open();  // Открываем соединение
                 string query = "SELECT * FROM public.\"Table\"";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, dbSqlConnection.connString);
+                NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
                 // Получаем данные    
                 NpgsqlDataAdapter dataAdp = new NpgsqlDataAdapter(cmd);
                 DataTable dt = new DataTable("Table");
                 dataAdp.Fill(dt);
-
                 myWindow.tasksDataGrid.ItemsSource = dt.DefaultView;
-                NpgsqlDataReader dr = cmd.ExecuteReader(); myWindow.tasksDataGrid.ItemsSource = dr;
+                conn.Close();
             }
 
 
 
 
             myWindow.ShowDialog();
-            myWindow.RefreshItems();
+            //myWindow.RefreshItems();
 
             return Result.Succeeded;
         }

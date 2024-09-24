@@ -11,8 +11,7 @@ namespace RevitScriptETM
     {
 
 
-        public static string conn = "Server=192.168.0.159; Port=5432 ; User Id = User ; Password = 123; Database = postgres";
+        public static string connString = "Server=192.168.0.159; Port=5432 ; User Id = User ; Password = 123; Database = postgres";
 
-        public static NpgsqlConnection connString = new NpgsqlConnection(conn);
     }
 }
