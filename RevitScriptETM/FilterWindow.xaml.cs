@@ -258,43 +258,43 @@ namespace RevitScriptETM
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
             string query = "SELECT t.* FROM public.\"Table\" t " +
-                           "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
-                          $"WHERE p.\"ProjectName\" = {Function_1.filename}";
+                           "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" ";
+                          
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
             {
-                query += $" AND \"FromSection\" = @FromSection";
+                query += $" AND t.\"FromSection\" = @FromSection";
             }
             if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
             {
-                query += $" AND \"ToSection\" = @ToSection";
+                query += $" AND t.\"ToSection\" = @ToSection";
             }
             if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
             {
-                query += $" AND \"TaskIssuer\" = @TaskIssuer";
+                query += $" AND t.\"TaskIssuer\" = @TaskIssuer";
             }
             if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
             {
-                query += $" AND \"TaskHandler\" = @TaskHandler";
+                query += $" AND t.\"TaskHandler\" = @TaskHandler";
             }
             if (TaskCompletedCheckBox.IsChecked == true)
             {
                 string taskCompletedValue = (TaskCompletedComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 int completed = taskCompletedValue == "Выполнил" ? 1 : 0;
-                query += $" AND \"TaskCompleted\" = {completed}";
+                query += $" AND t.\"TaskCompleted\" = {completed}";
             }
             if (TaskApprovalCheckBox.IsChecked == true)
             {
                 string taskApprovalValue = (TaskApprovalComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
                 int approved = taskApprovalValue == "Согласовал" ? 1 : 0;
-                query += $" AND \"TaskApproval\" = {approved}";
+                query += $" AND t.\"TaskApproval\" = {approved}";
             }
             if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
             {
-                query += $" AND \"WhoApproval\" = @WhoApproval";
+                query += $" AND t.\"WhoApproval\" = @WhoApproval";
             }
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
             {
                 conn.Open();
                 using (var cmd = new NpgsqlCommand(query, conn))

@@ -106,7 +106,7 @@ namespace RevitScriptETM
 
             string query = "UPDATE public.\"Table\" SET \"TaskHandler\" = @TaskHandler, \"TaskCompleted\" = @TaskCompleted WHERE \"TaskNumber\" = @TaskNumber";
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
             {
                 conn.Open();
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
@@ -124,7 +124,7 @@ namespace RevitScriptETM
         {
             string query = "UPDATE public.\"Table\" SET \"WhoApproval\" = @WhoApproval, \"TaskApproval\" = @TaskApproval WHERE \"TaskNumber\" = @TaskNumber";
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
             {
                 conn.Open();
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
@@ -148,7 +148,7 @@ namespace RevitScriptETM
         {
             string query = "SELECT * FROM public.\"Table\"";
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
             {
                 conn.Open();
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
@@ -168,7 +168,7 @@ namespace RevitScriptETM
                     $"FROM public.\"Table\" t " +
                     $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
             {
                 conn.Open();
                 using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))

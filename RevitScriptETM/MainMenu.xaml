@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="800" 
         Width="1900" 
-        Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen" WindowState="Minimized">
+        Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
         <!-- Кнопка стиль -->

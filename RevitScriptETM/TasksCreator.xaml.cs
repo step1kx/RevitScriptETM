@@ -117,7 +117,7 @@ namespace RevitScriptETM
         {
             if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
-                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
                     conn.Open();
                     byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
