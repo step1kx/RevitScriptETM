@@ -33,7 +33,6 @@ namespace RevitScriptETM
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
             MainMenu myWindow = new MainMenu();
-            dbSqlConnection dbSqlConnection = new dbSqlConnection();
 
             try
             {
