@@ -37,6 +37,7 @@ namespace RevitScriptETM
             try
             {
                 filename = Path.GetFileName(doc.PathName).Substring(0, Path.GetFileName(doc.PathName).IndexOf("-"));
+                myWindow.TitleBlock.Text = $"Задание смежным разделам по объекту: {filename}";
 
                 using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {

@@ -10,6 +10,7 @@
             Width="900" 
             Height="450"
             WindowStyle="None"
+            MouseDown="MovingWin"
             AllowsTransparency="True"
             Background="Transparent">
     <Window.Resources>

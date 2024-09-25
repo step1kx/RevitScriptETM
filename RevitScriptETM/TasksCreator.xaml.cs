@@ -12,6 +12,7 @@ using System.Security.Principal;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Npgsql;
+using System.Windows.Input;
 
 
 namespace RevitScriptETM
@@ -26,14 +27,25 @@ namespace RevitScriptETM
         public string ImageName => ImagePath != null ? System.IO.Path.GetFileName(ImagePath) : string.Empty;
         public string ImageExtension => ImagePath != null ? System.IO.Path.GetExtension(ImagePath) : string.Empty;
 
+        private static TasksCreator Window;
+
 
 
         public TasksCreator()
         {
+            Window = this;
             InitializeComponent();
             foreach (View view in Function_1.views)
             {
                 TaskViewComboBox.Items.Add(view.Name);
+            }
+        }
+
+        private void MovingWin(object sender, EventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                TasksCreator.Window.DragMove();
             }
         }
 

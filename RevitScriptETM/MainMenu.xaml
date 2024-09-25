@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="800" 
         Width="1900" 
-        Title="Задания" WindowStyle="None" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
+        Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen" WindowState="Minimized">
     <Window.Resources>
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
         <!-- Кнопка стиль -->
@@ -94,7 +94,7 @@
 
                 <!-- Название окна -->
                 <TextBlock Text="ETM " VerticalAlignment="Center" Margin="10,0,1048,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
-                <TextBlock Text="Выдача заданий смежным разделам" VerticalAlignment="Top" Margin="622,11,436,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
+                <TextBlock x:Name="TitleBlock" Text="Выдача заданий смежным разделам" VerticalAlignment="Top" Margin="622,11,436,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
                 <!--<Button Content="-" Click="MinimizeWindow" 
                 HorizontalAlignment="Left" VerticalAlignment="Center" 
                 FontWeight="Bold" 

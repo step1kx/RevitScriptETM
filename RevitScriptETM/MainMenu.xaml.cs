@@ -16,14 +16,23 @@ namespace RevitScriptETM
     public partial class MainMenu : Window
     {
         public event EventHandler<DataTable> DataUpdated;
+        public static MainMenu Window;
         public MainMenu()
         {
             InitializeComponent();
             tasksDataGrid.CanUserAddRows = false;
-            
+            Window = this;
 
             Properties.Settings.Default.Reset();
             Properties.Settings.Default.Save();
+        }
+
+        private void MovingWin(object sender, EventArgs e)
+        {
+            if(Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                MainMenu.Window.DragMove();
+            }
         }
 
         private void TasksCreator_Click(object sender, RoutedEventArgs e)

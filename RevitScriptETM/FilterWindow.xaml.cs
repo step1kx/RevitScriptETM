@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using Microsoft.Identity.Client;
 using Npgsql;
 
 namespace RevitScriptETM
@@ -13,12 +15,22 @@ namespace RevitScriptETM
     public partial class FilterWindow : Window
     {
         public event EventHandler<DataTable> FilterDone;
+        public static FilterWindow Window;
 
         public FilterWindow()
         {
+            Window = this;
             InitializeComponent();
-            LoadComboBoxData();
+            LoadComboBoxData();  // Передаем параметры projectNumber и projectName
             LoadFilterSettings();
+        }
+
+        private void MovingWin(object sender, EventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                FilterWindow.Window.DragMove();
+            }
         }
 
         private void SaveFilterSettings()
@@ -166,7 +178,10 @@ namespace RevitScriptETM
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT \"TaskIssuer\" FROM public.\"Table\" WHERE \"TaskIssuer\" IS NOT NULL;";
+                string query = "SELECT DISTINCT \"TaskIssuer\" " +
+                               "FROM public.\"Table\" t " +
+                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                               "WHERE \"TaskIssuer\" IS NOT NULL ";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
@@ -191,7 +206,10 @@ namespace RevitScriptETM
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT \"TaskHandler\" FROM public.\"Table\" WHERE \"TaskHandler\" IS NOT NULL";
+                string query = "SELECT DISTINCT \"TaskHandler\" " +
+                               "FROM public.\"Table\" t " +
+                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                               "WHERE \"TaskHandler\" IS NOT NULL ";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
@@ -216,7 +234,10 @@ namespace RevitScriptETM
             using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
             {
                 conn.Open();
-                string query = "SELECT DISTINCT \"WhoApproval\" FROM public.\"Table\" WHERE \"WhoApproval\" IS NOT NULL";
+                string query = "SELECT DISTINCT \"WhoApproval\" " +
+                               "FROM public.\"Table\" t " +
+                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                               "WHERE \"WhoApproval\" IS NOT NULL ";
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
@@ -236,7 +257,9 @@ namespace RevitScriptETM
 
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
-            string query = "SELECT * FROM public.\"Table\" WHERE 1=1";
+            string query = "SELECT t.* FROM public.\"Table\" t " +
+                           "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                          $"WHERE p.\"ProjectName\" = {Function_1.filename}";
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
             {
@@ -277,6 +300,8 @@ namespace RevitScriptETM
                 using (var cmd = new NpgsqlCommand(query, conn))
                 {
                     // Добавляем параметры
+                    
+
                     if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
                     {
                         cmd.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);

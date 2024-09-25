@@ -10,6 +10,7 @@
         Title="Фильтр задания" 
         ResizeMode="NoResize"
         WindowStyle="None"
+        MouseDown="MovingWin"
         AllowsTransparency="True" 
         WindowStartupLocation="CenterScreen"
         Background="Transparent">
