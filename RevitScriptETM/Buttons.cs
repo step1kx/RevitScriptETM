@@ -41,7 +41,7 @@ namespace RevitScriptETM
 
             panel.AddItem(new PushButtonData(nameof(Function_1), "Задания", assemblyLocation, typeof(Function_1).FullName)
             {
-                //LargeImage = GetBitmapImage(Properties.Resources.CheckArhitects),
+                //LargeImage = GetBitmapImage()
                 LongDescription = "Проверка таблицы"
             });
 
