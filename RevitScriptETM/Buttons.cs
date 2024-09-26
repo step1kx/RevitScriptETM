@@ -25,9 +25,6 @@ namespace RevitScriptETM
         public Result OnStartup(UIControlledApplication application)
         {
             RibbonPanel panel;
-
-            
-
             try
             {
                 panel = application.GetRibbonPanels(tabName).First();
@@ -41,7 +38,7 @@ namespace RevitScriptETM
 
             panel.AddItem(new PushButtonData(nameof(Function_1), "Задания", assemblyLocation, typeof(Function_1).FullName)
             {
-                //LargeImage = GetBitmapImage()
+                LargeImage = GetBitmapImage(Properties.Resources.logoForETM),
                 LongDescription = "Проверка таблицы"
             });
 
