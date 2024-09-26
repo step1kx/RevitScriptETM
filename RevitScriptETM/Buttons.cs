@@ -38,8 +38,9 @@ namespace RevitScriptETM
 
             panel.AddItem(new PushButtonData(nameof(Function_1), "Задания", assemblyLocation, typeof(Function_1).FullName)
             {
-                LargeImage = GetBitmapImage(Properties.Resources.logoForETM),
-                LongDescription = "Проверка таблицы"
+                LargeImage = GetBitmapImage(Properties.Resources.Logotype),
+                LongDescription = "Программа для создания задания смежным разделам\n" +
+                                  "Она позволяет просматривать, создавать и фильтровать задания в определенном проекте"
             });
 
             return Result.Succeeded;

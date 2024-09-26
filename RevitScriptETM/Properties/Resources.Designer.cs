@@ -72,9 +72,9 @@ namespace RevitScriptETM.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap logoForETM {
+        internal static System.Drawing.Bitmap Logotype {
             get {
-                object obj = ResourceManager.GetObject("logoForETM", resourceCulture);
+                object obj = ResourceManager.GetObject("Logotype", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -314,6 +314,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logoETM.png" />
+    <None Include="Resources\Logotype.png" />
+    <None Include="Resources\Image1.png" />
+    <None Include="Resources\logoForETM.png" />
     <None Include="Resources\logoForETM.jpg" />
   </ItemGroup>
   <ItemGroup>
