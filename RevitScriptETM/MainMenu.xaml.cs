@@ -102,39 +102,52 @@ namespace RevitScriptETM
 
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
-            
-
             string query = "UPDATE public.\"Table\" SET \"TaskHandler\" = @TaskHandler, \"TaskCompleted\" = @TaskCompleted WHERE \"TaskNumber\" = @TaskNumber";
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+            try
             {
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
-                    cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
-                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
-                    cmd.ExecuteNonQuery();
+
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TaskHandler", taskHandler ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TaskCompleted", taskCompleted);
+                        cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void UpdateDatabaseForApprovals(DataRowView rowView, string whoApproval, int taskApproval)
         {
             string query = "UPDATE public.\"Table\" SET \"WhoApproval\" = @WhoApproval, \"TaskApproval\" = @TaskApproval WHERE \"TaskNumber\" = @TaskNumber";
 
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+            try
             {
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
-                    cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
-                    cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
-                    cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);//!!!!
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@WhoApproval", whoApproval ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TaskApproval", taskApproval);
+                        cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);//!!!!
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
                 }
-                conn.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);    
             }
         }
 
@@ -147,17 +160,24 @@ namespace RevitScriptETM
         private DataTable GetUpdatedDataTable()
         {
             string query = "SELECT * FROM public.\"Table\"";
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+            try
             {
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
-                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-                    return dataTable;
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+                        return dataTable;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
             }
         }
         #endregion
@@ -167,19 +187,25 @@ namespace RevitScriptETM
             string query = $"SELECT t.* " +
                     $"FROM public.\"Table\" t " +
                     $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+            try
             {
-                conn.Open();
-                using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
-                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-                    // Обновляем DataGrid
-                    tasksDataGrid.ItemsSource = dataTable.DefaultView;
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+                        // Обновляем DataGrid
+                        tasksDataGrid.ItemsSource = dataTable.DefaultView;
+                    }
+                    conn.Close();
                 }
-                conn.Close();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

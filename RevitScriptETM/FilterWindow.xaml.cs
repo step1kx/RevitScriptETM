@@ -174,27 +174,34 @@ namespace RevitScriptETM
         private List<string> GetTaskIssuersFromDatabase()
         {
             List<string> issuers = new List<string>();
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            try
             {
-                conn.Open();
-                string query = "SELECT DISTINCT \"TaskIssuer\" " +
-                               "FROM public.\"Table\" t " +
-                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
-                               "WHERE \"TaskIssuer\" IS NOT NULL ";
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {
-                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    foreach (DataRow row in dataTable.Rows)
+                    conn.Open();
+                    string query = "SELECT DISTINCT \"TaskIssuer\" " +
+                                   "FROM public.\"Table\" t " +
+                                   "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                                   "WHERE \"TaskIssuer\" IS NOT NULL ";
+                    using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        issuers.Add(row["TaskIssuer"].ToString());
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            issuers.Add(row["TaskIssuer"].ToString());
+                        }
                     }
+                    conn.Close();
                 }
-                conn.Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
 
             return issuers;
         }
@@ -202,26 +209,32 @@ namespace RevitScriptETM
         private List<string> GetTaskHandlersFromDatabase()
         {
             List<string> handlers = new List<string>();
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            try
             {
-                conn.Open();
-                string query = "SELECT DISTINCT \"TaskHandler\" " +
-                               "FROM public.\"Table\" t " +
-                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
-                               "WHERE \"TaskHandler\" IS NOT NULL ";
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {
-                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    foreach (DataRow row in dataTable.Rows)
+                    conn.Open();
+                    string query = "SELECT DISTINCT \"TaskHandler\" " +
+                                   "FROM public.\"Table\" t " +
+                                   "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                                   "WHERE \"TaskHandler\" IS NOT NULL ";
+                    using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        handlers.Add(row["TaskHandler"].ToString());
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            handlers.Add(row["TaskHandler"].ToString());
+                        }
                     }
+                    conn.Close();
                 }
-                conn.Close();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
             }
 
             return handlers;
@@ -230,26 +243,32 @@ namespace RevitScriptETM
         private List<string> GetWhoApprovalsFromDatabase()
         {
             List<string> whoApprovals = new List<string>();
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            try
             {
-                conn.Open();
-                string query = "SELECT DISTINCT \"WhoApproval\" " +
-                               "FROM public.\"Table\" t " +
-                               "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
-                               "WHERE \"WhoApproval\" IS NOT NULL ";
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {
-                    NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    foreach (DataRow row in dataTable.Rows)
+                    conn.Open();
+                    string query = "SELECT DISTINCT \"WhoApproval\" " +
+                                   "FROM public.\"Table\" t " +
+                                   "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                                   "WHERE \"WhoApproval\" IS NOT NULL ";
+                    using (var cmd = new NpgsqlCommand(query, conn))
                     {
-                        whoApprovals.Add(row["WhoApproval"].ToString());
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            whoApprovals.Add(row["WhoApproval"].ToString());
+                        }
                     }
+                    conn.Close();
                 }
-                conn.Close();
+            }
+            catch(Exception ex) 
+            {
+                MessageBox.Show(ex.Message);
             }
 
             return whoApprovals;
@@ -293,49 +312,55 @@ namespace RevitScriptETM
             {
                 query += $" AND t.\"WhoApproval\" = @WhoApproval";
             }
-
-            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+            try
             {
-                conn.Open();
-                using (var cmd = new NpgsqlCommand(query, conn))
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
                 {
-                    // Добавляем параметры
-                    
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        // Добавляем параметры
+                        
 
-                    if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
-                    {
-                        cmd.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
-                    }
-                    if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
-                    {
-                        cmd.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
-                    }
-                    if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
-                    {
-                        cmd.Parameters.AddWithValue("@TaskIssuer", TaskIssuerComboBox.SelectedItem.ToString());
-                    }
-                    if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
-                    {
-                        cmd.Parameters.AddWithValue("@TaskHandler", TaskHandlerComboBox.SelectedItem.ToString());
-                    }
-                    if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
-                    {
-                        cmd.Parameters.AddWithValue("@WhoApproval", WhoApprovalComboBox.SelectedItem.ToString());
-                    }
+                        if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
+                        {
+                            cmd.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+                        }
+                        if (ToSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(ToSectionTextBox.Text))
+                        {
+                            cmd.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
+                        }
+                        if (TaskIssuerCheckBox.IsChecked == true && TaskIssuerComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@TaskIssuer", TaskIssuerComboBox.SelectedItem.ToString());
+                        }
+                        if (TaskHandlerCheckBox.IsChecked == true && TaskHandlerComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@TaskHandler", TaskHandlerComboBox.SelectedItem.ToString());
+                        }
+                        if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@WhoApproval", WhoApprovalComboBox.SelectedItem.ToString());
+                        }
 
-                    using (var dataAdapter = new NpgsqlDataAdapter(cmd))
-                    {
-                        DataTable resultTable = new DataTable();
-                        dataAdapter.Fill(resultTable);
+                        using (var dataAdapter = new NpgsqlDataAdapter(cmd))
+                        {
+                            DataTable resultTable = new DataTable();
+                            dataAdapter.Fill(resultTable);
 
-                        SaveFilterSettings();
+                            SaveFilterSettings();
 
-                        FilterDone?.Invoke(this, resultTable);
-                        DialogResult = true;
+                            FilterDone?.Invoke(this, resultTable);
+                            DialogResult = true;
 
-                        Close();
+                            Close();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

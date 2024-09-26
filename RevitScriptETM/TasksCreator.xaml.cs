@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Npgsql;
 using System.Windows.Input;
+using System.Linq.Expressions;
 
 
 namespace RevitScriptETM
@@ -117,39 +118,47 @@ namespace RevitScriptETM
         {
             if (FromSectionTextBox.Text != "" && ToSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
             {
-                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+                try
                 {
-                    conn.Open();
-                    byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
+                    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+                    {
+                        conn.Open();
+                        byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
 
-                    // Используем NpgsqlCommand для выполнения запроса
-                    NpgsqlCommand keyCommand = new NpgsqlCommand($"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = '{Function_1.filename}'", conn);
-                    int key = Convert.ToInt32(keyCommand.ExecuteScalar());
+                        // Используем NpgsqlCommand для выполнения запроса
+                        NpgsqlCommand keyCommand = new NpgsqlCommand($"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = '{Function_1.filename}'", conn);
+                        int key = Convert.ToInt32(keyCommand.ExecuteScalar());
 
-                    NpgsqlCommand createCommand = new NpgsqlCommand(
-                        "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
-                        $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
+                        NpgsqlCommand createCommand = new NpgsqlCommand(
+                            "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
+                            $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
 
-                    // Добавляем параметры
-                    createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
-                    createCommand.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
-                    createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
-                    createCommand.Parameters.AddWithValue("@ScreenShot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
-                    createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
-                    createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
-                    createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("yyyy-MM-dd")); // Формат для PostgreSQL
+                        // Добавляем параметры
+                        createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+                        createCommand.Parameters.AddWithValue("@ToSection", ToSectionTextBox.Text);
+                        createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
+                        createCommand.Parameters.AddWithValue("@ScreenShot", imageBytes ?? (object)DBNull.Value); // Передаем байты изображения или NULL
+                        createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
+                        createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
+                        createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("yyyy-MM-dd")); // Формат для PostgreSQL
 
-                    // Выполняем команду
-                    createCommand.ExecuteNonQuery();
+                        // Выполняем команду
+                        createCommand.ExecuteNonQuery();
 
-                    // Оповещаем, что задание создано
-                    DataTable dt = new DataTable("Table");
-                    TaskCreated?.Invoke(this, dt);
-                    DialogResult = true;
+                        // Оповещаем, что задание создано
+                        DataTable dt = new DataTable("Table");
+                        TaskCreated?.Invoke(this, dt);
+                        DialogResult = true;
 
-                    conn.Close();
-                    Close();
+                        conn.Close();
+                        Close();
+                    }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
             }
             else
             {
