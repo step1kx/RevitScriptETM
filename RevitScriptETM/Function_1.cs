@@ -32,8 +32,7 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            ConnectionToDataBase window = new ConnectionToDataBase();
-            window.ShowDialog();
+            
 
 
             MainMenu myWindow = new MainMenu();
