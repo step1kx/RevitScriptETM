@@ -32,9 +32,6 @@ namespace RevitScriptETM
             FilteredElementCollector collector = new FilteredElementCollector(doc);
             views = collector.OfClass(typeof(View)).Cast<View>().ToList();
 
-            
-
-
             MainMenu myWindow = new MainMenu();
 
             try
