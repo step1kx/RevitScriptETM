@@ -208,7 +208,7 @@ namespace RevitScriptETM
             }
         }
 
-        // Открытие картинки в полном размере
+        //Открытие картинки в полном размере
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             var image = sender as Image;
@@ -222,12 +222,18 @@ namespace RevitScriptETM
             }
         }
 
+
+
+
+
         private void ShowImageInNewWindow(BitmapImage imageSource)
         {
             var imageWindow = new ImageFullSize();
             imageWindow.SetImageSource(imageSource);
             imageWindow.ShowDialog();
         }
+
+
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {

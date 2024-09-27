@@ -29,5 +29,13 @@ namespace RevitScriptETM
         {
             DisplayedImage.Source = imageSource;
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;//!!!
+            Close();
+        }
+
+
     }
 }
