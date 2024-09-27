@@ -34,22 +34,26 @@ namespace RevitScriptETM
                 application.CreateRibbonTab(tabName);
             }
 
-            panel = application.CreateRibbonPanel(tabName, "Задания для смежных разделов");
+            panel = application.CreateRibbonPanel(tabName, "Задания");
 
-            panel.AddItem(new PushButtonData(nameof(Function_1), "Задания", assemblyLocation, typeof(Function_1).FullName)
+            panel.AddItem(new PushButtonData(nameof(Function_1), "Задания для\n смежных разделов", assemblyLocation, typeof(Function_1).FullName)
             {
-                LargeImage = GetBitmapImage(Properties.Resources.Logotype),
+                LargeImage = GetBitmapImage(Properties.Resources.ETMLogo, 32, 32),
                 LongDescription = "Программа для создания задания смежным разделам\n" +
                                   "Она позволяет просматривать, создавать и фильтровать задания в определенном проекте"
             });
 
             return Result.Succeeded;
         }
-        BitmapImage GetBitmapImage(Bitmap bitmap)
+
+        BitmapImage GetBitmapImage(Bitmap bitmap, int width, int height)
         {
+            // Создание нового битмапа с заданными размерами
+            var resizedBitmap = new Bitmap(bitmap, new Size(width, height));
+
             using (var memory = new MemoryStream())
             {
-                bitmap.Save(memory, ImageFormat.Png);
+                resizedBitmap.Save(memory, ImageFormat.Png);
                 memory.Position = 0;
 
                 var bitmapImage = new BitmapImage();
@@ -62,5 +66,22 @@ namespace RevitScriptETM
                 return bitmapImage;
             }
         }
+        //BitmapImage GetBitmapImage(Bitmap bitmap)
+        //{
+        //    using (var memory = new MemoryStream())
+        //    {
+        //        bitmap.Save(memory, ImageFormat.Png);
+        //        memory.Position = 0;
+
+        //        var bitmapImage = new BitmapImage();
+        //        bitmapImage.BeginInit();
+        //        bitmapImage.StreamSource = memory;
+        //        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+        //        bitmapImage.EndInit();
+        //        bitmapImage.Freeze();
+
+        //        return bitmapImage;
+        //    }
+        //}
     }
 }

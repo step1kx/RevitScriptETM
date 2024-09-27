@@ -61,20 +61,11 @@ namespace RevitScriptETM.Properties {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на .
-        /// </summary>
-        internal static string imageForScript {
-            get {
-                return ResourceManager.GetString("imageForScript", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Logotype {
+        internal static System.Drawing.Bitmap ETMLogo {
             get {
-                object obj = ResourceManager.GetObject("Logotype", resourceCulture);
+                object obj = ResourceManager.GetObject("ETMLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
