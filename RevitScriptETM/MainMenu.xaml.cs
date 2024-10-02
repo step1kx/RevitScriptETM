@@ -221,11 +221,6 @@ namespace RevitScriptETM
                 }
             }
         }
-
-
-
-
-
         private void ShowImageInNewWindow(BitmapImage imageSource)
         {
             var imageWindow = new ImageFullSize();

@@ -149,7 +149,7 @@
                                     <Image Source="{Binding ScreenShot, Converter={StaticResource ByteArrayToImageConverter}}"
                                    Stretch="Uniform"
                                    MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=DataGridColumnHeader}}"
-                                   MouseLeftButtonUp="Image_MouseLeftButtonUp"/>
+                                   MouseLeftButtonDown="Image_MouseLeftButtonUp"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
