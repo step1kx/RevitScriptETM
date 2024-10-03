@@ -146,7 +146,7 @@ namespace RevitScriptETM
                         createCommand.ExecuteNonQuery();
 
                         // Оповещаем, что задание создано
-                        DataTable dt = new DataTable("Table");
+                        DataTable dt = new DataTable("public.\"Table\"");
                         TaskCreated?.Invoke(this, dt);
                         DialogResult = true;
 
