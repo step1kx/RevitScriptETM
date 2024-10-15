@@ -1,5 +1,5 @@
-![image](https://static-cdn4-2.vigbo.tech/u59604/72467/logo/u-c67d6ee9cedf9623d57c9f690f22f500.png?v=46.574)
-![image](https://github.com/user-attachments/assets/9a4006ce-523d-44ca-9747-9720bd7ac53d)
+![image](Images/ermolchiksite.png)
+
 
 
 
