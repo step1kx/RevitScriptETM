@@ -1,4 +1,4 @@
-![][Images/ermolchiksite.png]
+![описание][Images/ermolchiksite.png]
 
 
 # Pluggin for Revit
