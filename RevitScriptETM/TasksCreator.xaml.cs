@@ -169,6 +169,60 @@ namespace RevitScriptETM
         //    }
         //}
 
+        //private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (FromSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
+        //    {
+        //        try
+        //        {
+        //            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+        //            {
+        //                conn.Open();
+        //                byte[] imageBytes = ImagePath != null ? ConvertImageToBytes(ImagePath) : null;
+
+        //                NpgsqlCommand keyCommand = new NpgsqlCommand($"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = '{Function_1.filename}'", conn);
+        //                int key = Convert.ToInt32(keyCommand.ExecuteScalar());
+
+        //                List<CheckBox> checkBoxes = new List<CheckBox> { CheckBoxAR, CheckBoxVK, CheckBoxOV, CheckBoxSS };
+        //                foreach (var checkBox in checkBoxes)
+        //                {
+        //                    if (checkBox.IsChecked == true)
+        //                    {
+        //                        NpgsqlCommand createCommand = new NpgsqlCommand(
+        //                            "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
+        //                            $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
+
+        //                        createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+        //                        createCommand.Parameters.AddWithValue("@ToSection", checkBox.Content.ToString());
+        //                        createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
+        //                        createCommand.Parameters.AddWithValue("@ScreenShot", imageBytes ?? (object)DBNull.Value);
+        //                        createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
+        //                        createCommand.Parameters.AddWithValue("@TaskView", TaskViewComboBox.SelectedItem.ToString());
+        //                        createCommand.Parameters.AddWithValue("@TaskDate", DateTime.Now.ToString("yyyy-MM-dd"));
+
+        //                        createCommand.ExecuteNonQuery();
+        //                    }
+        //                }
+
+        //                DataTable dt = new DataTable("public.\"Table\"");
+        //                TaskCreated?.Invoke(this, dt);
+        //                DialogResult = true;
+
+        //                conn.Close();
+        //                Close();
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show(ex.Message);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("Вы не заполнили одно/несколько следующих полей:\nРаздел от кого\nРаздел кому\nИзображение\nВид");
+        //    }
+        //}
+
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
             if (FromSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
