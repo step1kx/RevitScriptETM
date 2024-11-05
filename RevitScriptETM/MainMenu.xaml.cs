@@ -99,6 +99,8 @@ namespace RevitScriptETM
             }
         }
 
+        
+
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
             string query = "UPDATE public.\"Table\" SET \"TaskHandler\" = @TaskHandler, \"TaskCompleted\" = @TaskCompleted WHERE \"TaskNumber\" = @TaskNumber";

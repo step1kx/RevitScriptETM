@@ -112,8 +112,16 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn  IsReadOnly="True" Header="№" Binding="{Binding Path=TaskNumber}" Width="40"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Раздел от" Binding="{Binding  FromSection}" Width="80"/>
-                        <DataGridTextColumn  IsReadOnly="True" Header="Раздел кому" Binding="{Binding  ToSection}" Width="80"/>
-                        <DataGridTextColumn  IsReadOnly="True" Header="Кто выдал" Binding="{Binding  TaskIssuer}" Width="120"/>
+                        <DataGridTextColumn  IsReadOnly="True" Header="Раздел кому" Binding="{Binding  ToSection}" Width="90"/>
+                        <DataGridTextColumn  IsReadOnly="True" Header="Кто выдал" Binding="{Binding  TaskIssuer}" Width="90"/>
+                        <DataGridTemplateColumn IsReadOnly="False" Header="Принял"  Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding TaskTaken}"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn IsReadOnly="False" Header="Готово"  Width="60">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -136,13 +144,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn  IsReadOnly="False" Header="Кто согласовал" Binding="{Binding  WhoApproval}" Width="150"/>
-                        <!--<DataGridTemplateColumn Header="Скриншот экрана" Width="SizeToCells" IsReadOnly="True" MaxWidth="250">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding ScreenShot}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>-->
+                        
                         <DataGridTemplateColumn Header="Скриншот экрана"  IsReadOnly="True" Width="150">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -155,7 +157,8 @@
                         </DataGridTemplateColumn>
 
                         <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="290"/>
-                        <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding TaskDate}" Width="110"/>
+                        <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding TaskDate}" Width="105"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Почему не принял"  Width="130"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
