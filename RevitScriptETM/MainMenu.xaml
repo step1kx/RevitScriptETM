@@ -158,7 +158,7 @@
 
                         <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="290"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding TaskDate}" Width="105"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Почему не принял"  Width="130"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Почему не принял" Binding="{Binding TaskExplanation}" Width="130"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
