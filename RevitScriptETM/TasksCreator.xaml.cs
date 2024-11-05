@@ -118,7 +118,7 @@ namespace RevitScriptETM
 
         private void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (FromSectionTextBox.Text != "" && TaskViewComboBox.SelectedItem != null)
+            if (!string.IsNullOrEmpty(FromSectionComboBox.Text) && TaskViewComboBox.SelectedItem != null)
             {
                 try
                 {
@@ -130,7 +130,8 @@ namespace RevitScriptETM
                         NpgsqlCommand keyCommand = new NpgsqlCommand($"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = '{Function_1.filename}'", conn);
                         int key = Convert.ToInt32(keyCommand.ExecuteScalar());
 
-                        List<CheckBox> checkBoxes = new List<CheckBox> { CheckBoxAR, CheckBoxVK, CheckBoxOV, CheckBoxSS };
+                        List<CheckBox> checkBoxes = new List<CheckBox> { CheckBoxAR, CheckBoxVK, CheckBoxOV, CheckBoxSS, CheckBoxES };
+                        
                         foreach (var checkBox in checkBoxes)
                         {
                             if (checkBox.IsChecked == true)
@@ -139,7 +140,7 @@ namespace RevitScriptETM
                                     "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
                                     $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
 
-                                createCommand.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
+                                createCommand.Parameters.AddWithValue("@FromSection", FromSectionComboBox.SelectedItem.ToString());
                                 createCommand.Parameters.AddWithValue("@ToSection", checkBox.Content.ToString());
                                 createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
                                 createCommand.Parameters.AddWithValue("@ScreenShot", imageBytes ?? (object)DBNull.Value);

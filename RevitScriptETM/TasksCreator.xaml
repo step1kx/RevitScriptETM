@@ -174,7 +174,19 @@
 
                 <!-- Раздел от кого -->
                 <TextBlock Text="Раздел от кого:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="1" Width="550" Height="25" />
+                <!--<TextBox x:Name="FromSectionTextBox" Grid.Row="0" Grid.Column="1" Width="550" Height="25" />-->
+                <ComboBox x:Name="FromSectionComboBox"
+          Grid.Row="0"
+          Grid.Column="1"
+          Width="550"
+          Height="25"
+          IsEditable="True">
+                    <ComboBoxItem>АР</ComboBoxItem>
+                    <ComboBoxItem>ВК</ComboBoxItem>
+                    <ComboBoxItem>ЕС</ComboBoxItem>
+                    <ComboBoxItem>ОВ</ComboBoxItem>
+                    <ComboBoxItem>СС</ComboBoxItem>
+                </ComboBox>
 
 
                 <!-- Раздел кому -->
@@ -184,7 +196,8 @@
                 <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxVK" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="156,0,0,0">ВК</CheckBox>
                 <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxOV" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="206,0,0,0">ОВ</CheckBox>
 
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxSS" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="261,0,0,0">СС</CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxSS" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="255,0,0,0">СС</CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxES" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="302,0,0,0">EC</CheckBox>
 
                 <!-- Скриншот -->
                 <TextBlock Text="Скриншот:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
