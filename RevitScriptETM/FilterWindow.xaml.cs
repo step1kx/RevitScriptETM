@@ -16,7 +16,7 @@ namespace RevitScriptETM
     {
         public event EventHandler<DataTable> FilterDone;
         public static FilterWindow Window;
-
+        private int _currentProjectNumber;
         public FilterWindow()
         {
             Window = this;
@@ -264,8 +264,22 @@ namespace RevitScriptETM
 
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
         {
-            string query = "SELECT t.* FROM public.\"Table\" t " +
-                           "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" ";
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            {
+                conn.Open();
+                string projectQuery = $"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = @ProjectName";
+                using (var projectCmd = new NpgsqlCommand(projectQuery, conn))
+                {
+                    projectCmd.Parameters.AddWithValue("@ProjectName", Function_1.filename);
+                    _currentProjectNumber = Convert.ToInt32(projectCmd.ExecuteScalar());
+                }
+                conn.Close();
+            }
+
+            string query = "SELECT t.*" +
+                           " FROM public.\"Table\" t " +
+                           "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                           "WHERE t.\"PK_ProjectNumber\" = @ProjectNumber";
                           
 
             if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
@@ -317,6 +331,7 @@ namespace RevitScriptETM
                     conn.Open();
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("@ProjectNumber", _currentProjectNumber);
                         // Добавляем параметры
                         if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
                         {
@@ -338,14 +353,15 @@ namespace RevitScriptETM
                         {
                             cmd.Parameters.AddWithValue("@WhoApproval", WhoApprovalComboBox.SelectedItem.ToString());
                         }
+                        if (WhoTakenCheckBox.IsChecked == true && WhoTakenComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@WhoTaken", WhoTakenComboBox.SelectedItem.ToString());
+                        }
                         if (TaskTakenCheckBox.IsChecked == true && TaskTakenComboBox.SelectedItem != null)
                         {
                             cmd.Parameters.AddWithValue("@TaskTaken", TaskApprovalComboBox.SelectedItem.ToString());
                         }
-                        if (WhoTakenCheckBox.IsChecked == true && WhoTakenComboBox.SelectedItem != null)
-                        {
-                            cmd.Parameters.AddWithValue("@WhoTaken", WhoApprovalComboBox.SelectedItem.ToString());
-                        }
+                        
 
                         using (var dataAdapter = new NpgsqlDataAdapter(cmd))
                         {
@@ -364,7 +380,7 @@ namespace RevitScriptETM
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("ПВАПВП" + ex.Message);
             }
         }
 
@@ -396,6 +412,8 @@ namespace RevitScriptETM
 
             TaskTakenCheckBox.IsChecked = false;
             TaskTakenComboBox.SelectedItem = null;
+
+            ApplyButton_ClickFilter(null, null);
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
