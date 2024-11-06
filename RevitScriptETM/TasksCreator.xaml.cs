@@ -131,18 +131,20 @@ namespace RevitScriptETM
                         int key = Convert.ToInt32(keyCommand.ExecuteScalar());
 
                         List<CheckBox> checkBoxes = new List<CheckBox> { CheckBoxAR, CheckBoxVK, CheckBoxOV, CheckBoxSS, CheckBoxES };
-                        
+
+                        string fromSection = ((ComboBoxItem)FromSectionComboBox.SelectedItem).Content.ToString();
+
                         foreach (var checkBox in checkBoxes)
                         {
                             if (checkBox.IsChecked == true)
                             {
                                 NpgsqlCommand createCommand = new NpgsqlCommand(
                                     "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\"" +
-                                    ", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\" , \"TaskTaken\", \"TaskExplanation\") " +
-                                    $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key}, 0, NULL)", conn);
+                                    ", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\" , \"TaskTaken\", \"TaskExplanation\", \"WhoTaken\") " +
+                                    $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key}, 0, NULL, NULL)", conn);
 
-                                createCommand.Parameters.AddWithValue("@FromSection", FromSectionComboBox.SelectedItem.ToString());
-                                createCommand.Parameters.AddWithValue("@ToSection", checkBox.Content.ToString());
+                                createCommand.Parameters.AddWithValue("@FromSection", fromSection);
+                                createCommand.Parameters.AddWithValue("@ToSection", checkBox.Tag.ToString());
                                 createCommand.Parameters.AddWithValue("@TaskIssuer", Function_1.username);
                                 createCommand.Parameters.AddWithValue("@ScreenShot", imageBytes ?? (object)DBNull.Value);
                                 createCommand.Parameters.AddWithValue("@TaskDescription", DescriptionTextBox.Text);
@@ -153,7 +155,19 @@ namespace RevitScriptETM
                             }
                         }
 
+                        NpgsqlCommand selectCommand = new NpgsqlCommand(
+                        $"SELECT t.* " +
+                    $"FROM public.\"Table\" t " +
+                    $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\"", conn);
+                        selectCommand.Parameters.AddWithValue("@ProjectNumber", key);
+
                         DataTable dt = new DataTable("public.\"Table\"");
+                        using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(selectCommand))
+                        {
+                            adapter.Fill(dt);
+                        }
+
+                        // Триггерим событие TaskCreated с данными только для текущего проекта
                         TaskCreated?.Invoke(this, dt);
                         DialogResult = true;
 

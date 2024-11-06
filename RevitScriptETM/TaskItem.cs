@@ -21,10 +21,11 @@ namespace RevitScriptETM
         public string TaskDescription { get; set; }
         public string TaskExplanation { get; set; }
         public string TaskView { get; set; }
+        public string WhoTaken { get; set; }
        
         public TaskItems(int taskNumber, string fromSection, string toSection,
                          string taskIssuer, int taskCompleted, string taskHandler,
-                         int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView, int taskTaken, string taskExplanation)
+                         int taskApproval, string whoApproval, string screenShot, string taskDescription, string taskView, int taskTaken, string taskExplanation, string whoTaken)
         {
             TaskNumber = taskNumber;
             FromSection = fromSection;
@@ -39,6 +40,7 @@ namespace RevitScriptETM
             TaskDescription = taskDescription;
             TaskView = taskView;
             TaskExplanation = taskExplanation;
+            WhoTaken = whoTaken;
         }
     }
 }

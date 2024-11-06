@@ -181,23 +181,23 @@
           Width="550"
           Height="25"
           IsEditable="False">
-                    <ComboBoxItem>АР</ComboBoxItem>
-                    <ComboBoxItem>ВК</ComboBoxItem>
-                    <ComboBoxItem>ЕС</ComboBoxItem>
-                    <ComboBoxItem>ОВ</ComboBoxItem>
-                    <ComboBoxItem>СС</ComboBoxItem>
+                    <ComboBoxItem Content="АР"></ComboBoxItem>
+                    <ComboBoxItem Content="ВК"></ComboBoxItem>
+                    <ComboBoxItem Content="ЕС"></ComboBoxItem>
+                    <ComboBoxItem Content="ОВ"></ComboBoxItem>
+                    <ComboBoxItem Content="СС"></ComboBoxItem>
                 </ComboBox>
 
 
                 <!-- Раздел кому -->
                 <TextBlock Text="Раздел кому:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <!--<TextBox x:Name="ToSectionTextBox" Grid.Row="1" Grid.Column="1" Width="550" Height="25"/>-->
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxAR" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="104,0,0,0">АР</CheckBox>
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxVK" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="156,0,0,0">ВК</CheckBox>
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxOV" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="206,0,0,0">ОВ</CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxAR" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="104,0,0,0" Tag="АР" Content="АР"></CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxVK" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="156,0,0,0" Tag="ВК" Content="ВК"></CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxOV" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="206,0,0,0" Tag="ОВ" Content="ОВ"></CheckBox>
 
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxSS" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="255,0,0,0">СС</CheckBox>
-                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxES" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="302,0,0,0">EC</CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxSS" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="255,0,0,0" Tag="СС" Content="СС"></CheckBox>
+                <CheckBox Grid.Row="1" Grid.Column="1" x:Name="CheckBoxES" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="302,0,0,0" Tag="EC" Content="EC"></CheckBox>
 
                 <!-- Скриншот -->
                 <TextBlock Text="Скриншот:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,5,0"/>

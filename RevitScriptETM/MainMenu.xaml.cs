@@ -104,8 +104,8 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
             {
-                rowView["TaskTaken"] = 1; // Обновляем значение в модели
-                UpdateDatabaseForTaskTakens(rowView, 1); // Обновляем значение в базе данных
+                rowView["WhoTaken"] = Function_1.username; // Обновляем значение в модели
+                UpdateDatabaseForTaskTakens(rowView, Function_1.username, 1); // Обновляем значение в базе данных
                 RefreshItems_CheckBox(); // Обновляем в базе данных
             }
         }
@@ -114,8 +114,8 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
             {
-                rowView["TaskTaken"] =  0; // Обновляем значение в модели
-                UpdateDatabaseForTaskTakens(rowView, 1); // Обновляем значение в базе данных
+                rowView["WhoTaken"] = DBNull.Value; // Обновляем значение в модели
+                UpdateDatabaseForTaskTakens(rowView, null, 0); // Обновляем значение в базе данных
                 RefreshItems_CheckBox();
             }
         }
@@ -171,9 +171,9 @@ namespace RevitScriptETM
             }
         }
 
-        private void UpdateDatabaseForTaskTakens(DataRowView rowView, int taskTaken)
+        private void UpdateDatabaseForTaskTakens(DataRowView rowView,string whoTaken, int taskTaken)
         {
-            string query = "UPDATE public.\"Table\" SET \"TaskTaken\" = @TaskTaken WHERE \"TaskNumber\" = @TaskNumber";
+            string query = "UPDATE public.\"Table\" SET \"WhoTaken\" = @WhoTaken, \"TaskTaken\" = @TaskTaken WHERE \"TaskNumber\" = @TaskNumber";
 
             try
             {
@@ -182,6 +182,7 @@ namespace RevitScriptETM
                     conn.Open();
                     using(NpgsqlCommand cmd = new NpgsqlCommand(query,conn))
                     {
+                        cmd.Parameters.AddWithValue("@WhoTaken", whoTaken ?? (object)DBNull.Value);
                         cmd.Parameters.AddWithValue("@TaskTaken", taskTaken);
                         cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
                         cmd.ExecuteNonQuery();
@@ -197,6 +198,43 @@ namespace RevitScriptETM
             RefreshItems_CheckBox();
         }
 
+        private void TaskExplanationTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.TextBox textBox && textBox.DataContext is DataRowView rowView)
+            {
+                // Обновляем значение в модели
+                rowView["TaskExplanation"] = textBox.Text;
+
+                // Обновляем значение в базе данных
+                UpdateDatabaseForTaskExplanation(rowView);
+            }
+        }
+
+        private void UpdateDatabaseForTaskExplanation(DataRowView rowView)
+        {
+            string query = "UPDATE public.\"Table\" SET \"TaskExplanation\" = @TaskExplanation WHERE \"TaskNumber\" = @TaskNumber";
+
+            try
+            {
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+                {
+                    conn.Open();
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TaskExplanation", rowView["TaskExplanation"] ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при обновлении данных: {ex.Message}");
+            }
+            // Обновляем элементы DataGrid
+            RefreshItems();
+        }
 
         private void RefreshItems_CheckBox()
         {
@@ -229,33 +267,78 @@ namespace RevitScriptETM
         }
         #endregion
 
+        //public void RefreshItems()
+        //{
+        //    string query = $"SELECT t.* " +
+        //            $"FROM public.\"Table\" t " +
+        //            $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
+        //    try
+        //    {
+        //        using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+        //        {
+        //            conn.Open();
+        //            using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+        //            {
+        //                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+        //                DataTable dataTable = new DataTable();
+        //                dataAdapter.Fill(dataTable);
+        //                // Обновляем DataGrid
+        //                tasksDataGrid.ItemsSource = dataTable.DefaultView;
+        //            }
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex) 
+        //    {
+        //        MessageBox.Show(ex.Message);
+        //    }
+        //}
+
         public void RefreshItems()
         {
+            int projectNumber;
+            using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+            {
+                conn.Open();
+                string projectQuery = $"SELECT \"ProjectNumber\" FROM public.\"Projects\" WHERE \"ProjectName\" = @ProjectName";
+                using (var projectCmd = new NpgsqlCommand(projectQuery, conn))
+                {
+                    projectCmd.Parameters.AddWithValue("@ProjectName", Function_1.filename);
+                    projectNumber = Convert.ToInt32(projectCmd.ExecuteScalar());
+                }
+                conn.Close();
+            }
+
+            // Запрос для загрузки всех задач только для текущего проекта
             string query = $"SELECT t.* " +
-                    $"FROM public.\"Table\" t " +
-                    $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
+                           $"FROM public.\"Table\" t " +
+                           $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                           $"WHERE t.\"PK_ProjectNumber\" = @ProjectNumber";
+
             try
             {
-                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
                 {
                     conn.Open();
-                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    using (var cmd = new NpgsqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("@ProjectNumber", projectNumber);
+
                         NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
                         DataTable dataTable = new DataTable();
                         dataAdapter.Fill(dataTable);
+
                         // Обновляем DataGrid
                         tasksDataGrid.ItemsSource = dataTable.DefaultView;
                     }
                     conn.Close();
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
         //Открытие картинки в полном размере
         private void Image_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
