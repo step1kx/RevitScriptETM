@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RevitScriptETM" 
         Height="800" 
         Width="1900" 
-        Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen" >
+        Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
         <!-- Кнопка стиль -->
@@ -95,12 +95,6 @@
                 <!-- Название окна -->
                 <TextBlock Text="ETM " VerticalAlignment="Center" Margin="10,0,1048,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
                 <TextBlock x:Name="TitleBlock" Text="Выдача заданий смежным разделам" VerticalAlignment="Top" Margin="622,11,436,0" Foreground="#000" FontSize="20" FontWeight="Bold" FontFamily="Arial Black"/>
-                <!--<Button Content="-" Click="MinimizeWindow" 
-                HorizontalAlignment="Left" VerticalAlignment="Center" 
-                FontWeight="Bold" 
-                Width="30" Height="30" BorderBrush="Transparent" 
-                FontSize="14" Cursor="Hand" RenderTransformOrigin="-4.667,0.814" Margin="1824,0,0,0"/>-->
-                <!-- Кнопка закрытия -->
                 <Button Content="X" Grid.Column="1" Click="CancelButton_Click" 
                 HorizontalAlignment="Center" VerticalAlignment="Center" 
                 FontWeight="Bold" 
@@ -117,8 +111,12 @@
                         <DataGridTemplateColumn IsReadOnly="False" Header="Принял"  Width="70">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox IsChecked="{Binding TaskTaken}"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <CheckBox 
+                                    IsChecked="{Binding TaskTaken}"
+                                    Checked="TaskTaken_Checked" 
+                                    Unchecked="TaskTaken_Unchecked"
+                                    VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -158,7 +156,7 @@
 
                         <DataGridTextColumn  IsReadOnly="True" Header="Вид" Binding="{Binding TaskView}" Width="290"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Дата создания" Binding="{Binding TaskDate}" Width="105"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Почему не принял" Binding="{Binding TaskExplanation}" Width="130"/>
+                        <DataGridTextColumn IsReadOnly="False" Header="Почему не принял" Binding="{Binding TaskExplanation}" Width="130"/>
                         <DataGridTextColumn  IsReadOnly="True" Header="Описание задания" Binding="{Binding  TaskDescription}" Width="*">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">

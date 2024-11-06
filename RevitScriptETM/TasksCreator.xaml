@@ -180,7 +180,7 @@
           Grid.Column="1"
           Width="550"
           Height="25"
-          IsEditable="True">
+          IsEditable="False">
                     <ComboBoxItem>АР</ComboBoxItem>
                     <ComboBoxItem>ВК</ComboBoxItem>
                     <ComboBoxItem>ЕС</ComboBoxItem>

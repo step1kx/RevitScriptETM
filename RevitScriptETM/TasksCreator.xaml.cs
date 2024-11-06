@@ -137,8 +137,9 @@ namespace RevitScriptETM
                             if (checkBox.IsChecked == true)
                             {
                                 NpgsqlCommand createCommand = new NpgsqlCommand(
-                                    "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\") " +
-                                    $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key} )", conn);
+                                    "INSERT INTO public.\"Table\" (\"FromSection\", \"ToSection\", \"TaskIssuer\", \"ScreenShot\", \"TaskDescription\"" +
+                                    ", \"TaskView\", \"TaskCompleted\", \"TaskApproval\", \"TaskHandler\", \"WhoApproval\", \"TaskDate\", \"PK_ProjectNumber\" , \"TaskTaken\", \"TaskExplanation\") " +
+                                    $"VALUES (@FromSection, @ToSection, @TaskIssuer, @ScreenShot, @TaskDescription, @TaskView, 0, 0, NULL, NULL, @TaskDate, {key}, 0, NULL)", conn);
 
                                 createCommand.Parameters.AddWithValue("@FromSection", FromSectionComboBox.SelectedItem.ToString());
                                 createCommand.Parameters.AddWithValue("@ToSection", checkBox.Content.ToString());

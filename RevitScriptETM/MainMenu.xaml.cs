@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Npgsql;
+using Mysqlx.Crud;
 
 namespace RevitScriptETM
 {
@@ -99,7 +100,25 @@ namespace RevitScriptETM
             }
         }
 
-        
+        private void TaskTaken_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
+            {
+                rowView["TaskTaken"] = 1; // Обновляем значение в модели
+                UpdateDatabaseForTaskTakens(rowView, 1); // Обновляем значение в базе данных
+                RefreshItems_CheckBox(); // Обновляем в базе данных
+            }
+        }
+
+        private void TaskTaken_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
+            {
+                rowView["TaskTaken"] =  0; // Обновляем значение в модели
+                UpdateDatabaseForTaskTakens(rowView, 1); // Обновляем значение в базе данных
+                RefreshItems_CheckBox();
+            }
+        }
 
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
@@ -151,6 +170,33 @@ namespace RevitScriptETM
                 MessageBox.Show(ex.Message);    
             }
         }
+
+        private void UpdateDatabaseForTaskTakens(DataRowView rowView, int taskTaken)
+        {
+            string query = "UPDATE public.\"Table\" SET \"TaskTaken\" = @TaskTaken WHERE \"TaskNumber\" = @TaskNumber";
+
+            try
+            {
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+                {
+                    conn.Open();
+                    using(NpgsqlCommand cmd = new NpgsqlCommand(query,conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TaskTaken", taskTaken);
+                        cmd.Parameters.AddWithValue("@TaskNumber", rowView["TaskNumber"]);
+                        cmd.ExecuteNonQuery();
+                    }
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            RefreshItems_CheckBox();
+        }
+
 
         private void RefreshItems_CheckBox()
         {
