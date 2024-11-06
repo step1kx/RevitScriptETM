@@ -190,5 +190,53 @@ namespace RevitScriptETM.Properties {
                 this["TaskHandlerComboBox"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TaskTakenCheckBox {
+            get {
+                return ((bool)(this["TaskTakenCheckBox"]));
+            }
+            set {
+                this["TaskTakenCheckBox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TaskTakenComboBox {
+            get {
+                return ((string)(this["TaskTakenComboBox"]));
+            }
+            set {
+                this["TaskTakenComboBox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool WhoTakenCheckBox {
+            get {
+                return ((bool)(this["WhoTakenCheckBox"]));
+            }
+            set {
+                this["WhoTakenCheckBox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string WhoTakenComboBox {
+            get {
+                return ((string)(this["WhoTakenComboBox"]));
+            }
+            set {
+                this["WhoTakenComboBox"] = value;
+            }
+        }
     }
 }

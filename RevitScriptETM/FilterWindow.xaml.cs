@@ -56,6 +56,12 @@ namespace RevitScriptETM
             Properties.Settings.Default.TaskHandlerCheckBox = TaskHandlerCheckBox.IsChecked ?? false;
             Properties.Settings.Default.TaskHandlerComboBox = TaskHandlerComboBox.SelectedItem?.ToString();
 
+            Properties.Settings.Default.WhoTakenCheckBox = WhoTakenCheckBox.IsChecked ?? false;
+            Properties.Settings.Default.WhoTakenComboBox = WhoTakenComboBox.SelectedItem?.ToString();
+
+            Properties.Settings.Default.TaskTakenCheckBox = TaskTakenCheckBox.IsChecked ?? false;
+            Properties.Settings.Default.TaskTakenComboBox = TaskTakenComboBox.SelectedItem?.ToString();
+
             Properties.Settings.Default.Save();
         }
 
@@ -93,6 +99,19 @@ namespace RevitScriptETM
             {
                 TaskHandlerComboBox.SelectedItem = Properties.Settings.Default.TaskHandlerComboBox;
             }
+
+            WhoTakenCheckBox.IsChecked = Properties.Settings.Default.WhoTakenCheckBox;
+            if (Properties.Settings.Default.WhoTakenComboBox != null)
+            {
+                WhoTakenComboBox.SelectedItem = Properties.Settings.Default.WhoTakenComboBox;
+            }
+
+            TaskTakenCheckBox.IsChecked = Properties.Settings.Default.TaskTakenCheckBox;
+            if (Properties.Settings.Default.TaskTakenComboBox != null)
+            {
+                TaskTakenComboBox.SelectedItem = Properties.Settings.Default.TaskTakenComboBox;
+            }
+
         }
 
         private void LoadComboBoxData()
@@ -100,76 +119,8 @@ namespace RevitScriptETM
             TaskIssuerComboBox.ItemsSource = GetTaskIssuersFromDatabase();
             TaskHandlerComboBox.ItemsSource = GetTaskHandlersFromDatabase();
             WhoApprovalComboBox.ItemsSource = GetWhoApprovalsFromDatabase();
+            WhoTakenComboBox.ItemsSource = GetWhoTakenFromDatabase();
         }
-
-        //private List<string> GetTaskIssuersFromDatabase()
-        //{
-        //    List<string> issuers = new List<string>();
-
-        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
-        //    {
-        //        conn.Open();
-        //        string query = "SELECT DISTINCT TaskIssuer FROM public.\"Table\" WHERE TaskIssuer IS NOT NULL";
-        //        using (var cmd = new NpgsqlCommand(query, conn))
-        //        {
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    issuers.Add(reader["TaskIssuer"].ToString());
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return issuers;
-        //}
-
-        //private List<string> GetTaskHandlersFromDatabase()
-        //{
-        //    List<string> handlers = new List<string>();
-
-        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
-        //    {
-        //        conn.Open();
-        //        string query = "SELECT DISTINCT TaskHandler FROM public.\"Table\" WHERE TaskHandler IS NOT NULL";
-        //        using (var cmd = new NpgsqlCommand(query, conn))
-        //        {
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    handlers.Add(reader["TaskHandler"].ToString());
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return handlers;
-        //}
-
-        //private List<string> GetWhoApprovalsFromDatabase()
-        //{
-        //    List<string> whoApprovals = new List<string>();
-
-        //    using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
-        //    {
-        //        conn.Open();
-        //        string query = "SELECT DISTINCT WhoApproval FROM public.\"Table\" WHERE WhoApproval IS NOT NULL";
-        //        using (var cmd = new NpgsqlCommand(query, conn))
-        //        {
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    whoApprovals.Add(reader["WhoApproval"].ToString());
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return whoApprovals;
-        //}
 
         private List<string> GetTaskIssuersFromDatabase()
         {
@@ -240,6 +191,8 @@ namespace RevitScriptETM
             return handlers;
         }
 
+        
+
         private List<string> GetWhoApprovalsFromDatabase()
         {
             List<string> whoApprovals = new List<string>();
@@ -272,6 +225,41 @@ namespace RevitScriptETM
             }
 
             return whoApprovals;
+        }
+
+        private List<string> GetWhoTakenFromDatabase()
+        {
+            List<string> whoTaken = new List<string>();
+            try
+            {
+                using (var conn = new NpgsqlConnection(dbSqlConnection.connString))
+                {
+                    conn.Open();
+                    string query = "SELECT DISTINCT \"WhoTaken\" " +
+                                   "FROM public.\"Table\" t " +
+                                   "JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\" " +
+                                   "WHERE \"WhoTaken\" IS NOT NULL ";
+                    using (var cmd = new NpgsqlCommand(query, conn))
+                    {
+                        NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            whoTaken.Add(row["WhoTaken"].ToString());
+                        }
+                    }
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            return whoTaken;
+
         }
 
         private void ApplyButton_ClickFilter(object sender, RoutedEventArgs e)
@@ -312,6 +300,16 @@ namespace RevitScriptETM
             {
                 query += $" AND t.\"WhoApproval\" = @WhoApproval";
             }
+            if(WhoTakenCheckBox.IsChecked == true && WhoTakenComboBox.SelectedItem != null)
+            {
+                query += $" AND t.\"WhoTaken\" = @WhoTaken";
+            }
+            if (TaskTakenCheckBox.IsChecked == true)
+            {
+                string taskTakenValue = (TaskTakenComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+                int approved = taskTakenValue == "Принял" ? 1 : 0;
+                query += $" AND t.\"TaskTaken\" = {approved}";
+            }
             try
             {
                 using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
@@ -320,8 +318,6 @@ namespace RevitScriptETM
                     using (var cmd = new NpgsqlCommand(query, conn))
                     {
                         // Добавляем параметры
-                        
-
                         if (FromSectionCheckBox.IsChecked == true && !string.IsNullOrEmpty(FromSectionTextBox.Text))
                         {
                             cmd.Parameters.AddWithValue("@FromSection", FromSectionTextBox.Text);
@@ -341,6 +337,14 @@ namespace RevitScriptETM
                         if (WhoApprovalCheckBox.IsChecked == true && WhoApprovalComboBox.SelectedItem != null)
                         {
                             cmd.Parameters.AddWithValue("@WhoApproval", WhoApprovalComboBox.SelectedItem.ToString());
+                        }
+                        if (TaskTakenCheckBox.IsChecked == true && TaskTakenComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@TaskTaken", TaskApprovalComboBox.SelectedItem.ToString());
+                        }
+                        if (WhoTakenCheckBox.IsChecked == true && WhoTakenComboBox.SelectedItem != null)
+                        {
+                            cmd.Parameters.AddWithValue("@WhoTaken", WhoApprovalComboBox.SelectedItem.ToString());
                         }
 
                         using (var dataAdapter = new NpgsqlDataAdapter(cmd))
@@ -386,6 +390,12 @@ namespace RevitScriptETM
 
             WhoApprovalCheckBox.IsChecked = false;
             WhoApprovalComboBox.SelectedItem = null;
+
+            WhoTakenCheckBox.IsChecked = false;
+            WhoTakenComboBox.SelectedItem = null;
+
+            TaskTakenCheckBox.IsChecked = false;
+            TaskTakenComboBox.SelectedItem = null;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
