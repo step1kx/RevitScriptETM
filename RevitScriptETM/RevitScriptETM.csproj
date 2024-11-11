@@ -270,6 +270,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoolToNullableIntConverter.cs" />
     <Compile Include="Buttons.cs" />
     <Compile Include="ByteArrayToImageConverter.cs" />
     <Compile Include="ConnectionToDataBase.xaml.cs">

@@ -132,7 +132,7 @@ namespace RevitScriptETM
             if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
             {
                 rowView["WhoTaken"] = DBNull.Value;
-                UpdateDatabaseForTaskTakens(rowView, null, 0);
+                UpdateDatabaseForTaskTakens(rowView, null, 2);
                 RefreshItems_CheckBox();
             }
         }

@@ -9,6 +9,7 @@
         Title="Задания" WindowStyle="None" MouseDown="MovingWin" AllowsTransparency="True" Background="Transparent" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <local:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+        <local:BoolToNullableIntConverter x:Key="BoolToNullableIntConverter"/>
         <!-- Кнопка стиль -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="#fff"/>
@@ -112,7 +113,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <CheckBox 
-                                    IsChecked="{Binding TaskTaken}"
+                                    IsChecked="{Binding TaskTaken, Converter ={StaticResource BoolToNullableIntConverter}}"
                                     Checked="TaskTaken_Checked" 
                                     Unchecked="TaskTaken_Unchecked"
                                     VerticalAlignment="Center" 
