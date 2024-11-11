@@ -44,8 +44,6 @@ namespace RevitScriptETM
             };
             inputWindow.ShowDialog();
         }
-
-        // Обработчик нажатия кнопки фильтра
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             FilterWindow filterWindow = new FilterWindow();
@@ -55,7 +53,7 @@ namespace RevitScriptETM
 
         private void FilterRefresh(object sender, DataTable e)
         {
-            // Обновите DataGrid или другой элемент управления данными
+            
             tasksDataGrid.ItemsSource = e.DefaultView;
         }
 
@@ -64,9 +62,12 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
-                rowView["TaskHandler"] = Function_1.username;
-                UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
-                RefreshItems_CheckBox();
+                if (rowView["TaskHandler"] == DBNull.Value || string.IsNullOrEmpty(rowView["TaskHandler"].ToString()))
+                {
+                    rowView["TaskHandler"] = Function_1.username;
+                    UpdateDatabaseForHandlers(rowView, Function_1.username, 1);
+                    RefreshItems_CheckBox();
+                }
             }
         }
 
@@ -84,9 +85,12 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkbox && checkbox.DataContext is DataRowView rowView)
             {
-                rowView["WhoApproval"] = Function_1.username;
-                UpdateDatabaseForApprovals(rowView, Function_1.username, 1);
-                RefreshItems_CheckBox();
+                if (rowView["WhoApproval"] == DBNull.Value || string.IsNullOrEmpty(rowView["WhoApproval"].ToString()))
+                {
+                    rowView["WhoApproval"] = Function_1.username;
+                    UpdateDatabaseForApprovals(rowView, Function_1.username, 1);
+                    RefreshItems_CheckBox();
+                }
             }
         }
 
@@ -104,9 +108,12 @@ namespace RevitScriptETM
         {
             if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
             {
-                rowView["WhoTaken"] = Function_1.username; // Обновляем значение в модели
-                UpdateDatabaseForTaskTakens(rowView, Function_1.username, 1); // Обновляем значение в базе данных
-                RefreshItems_CheckBox(); // Обновляем в базе данных
+                if (rowView["WhoTaken"] == DBNull.Value || string.IsNullOrEmpty(rowView["WhoTaken"].ToString()))
+                {
+                    rowView["WhoTaken"] = Function_1.username; 
+                    UpdateDatabaseForTaskTakens(rowView, Function_1.username, 1); 
+                    RefreshItems_CheckBox(); 
+                }
             }
         }
 
@@ -267,32 +274,6 @@ namespace RevitScriptETM
         }
         #endregion
 
-        //public void RefreshItems()
-        //{
-        //    string query = $"SELECT t.* " +
-        //            $"FROM public.\"Table\" t " +
-        //            $"JOIN public.\"Projects\" p ON t.\"PK_ProjectNumber\" = p.\"ProjectNumber\""; // Загрузка всех данных из таблицы
-        //    try
-        //    {
-        //        using (var conn = new NpgsqlConnection(dbSqlConnection.connString))// try..catch
-        //        {
-        //            conn.Open();
-        //            using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
-        //            {
-        //                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(cmd);
-        //                DataTable dataTable = new DataTable();
-        //                dataAdapter.Fill(dataTable);
-        //                // Обновляем DataGrid
-        //                tasksDataGrid.ItemsSource = dataTable.DefaultView;
-        //            }
-        //            conn.Close();
-        //        }
-        //    }
-        //    catch (Exception ex) 
-        //    {
-        //        MessageBox.Show(ex.Message);
-        //    }
-        //}
 
         public void RefreshItems()
         {

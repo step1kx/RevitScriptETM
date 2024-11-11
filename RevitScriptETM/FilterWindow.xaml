@@ -241,7 +241,6 @@
                 <Button Name="ResetFiltersButton" Content="Сброс всех фильтров" Click="ResetFiltersButton_Click" Grid.Column="2" Grid.Row="10" Height="30" Margin="10,15,140,6" Grid.RowSpan="2"/>
                 <Button Content="Применить" Click="ApplyButton_ClickFilter" Margin="244,15,0,0" Grid.Row="10" Height="30" Grid.Column="2" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top" Cursor="Hand" Grid.RowSpan="2"/>
 
-
             </Grid>
         </Grid>
     </Border>
