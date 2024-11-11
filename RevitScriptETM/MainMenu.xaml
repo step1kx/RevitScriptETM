@@ -116,7 +116,9 @@
                                     Checked="TaskTaken_Checked" 
                                     Unchecked="TaskTaken_Unchecked"
                                     VerticalAlignment="Center" 
-                                    HorizontalAlignment="Center"/>
+                                    HorizontalAlignment="Center" 
+                                    Indeterminate="CheckBoxTaken_Indeterminate"     
+                                    IsThreeState="True"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -178,6 +180,9 @@
                 <Button Content="Фильтр заданий" Click="FilterButton_Click" HorizontalAlignment="Left" Margin="30,0,0,15" Width="200" 
         FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"  />
                 <Button Content="Создать задание" Click="TasksCreator_Click" HorizontalAlignment="Right" Margin="0,0,30,15" Width="200" FontFamily="Arial Black" FontSize="20" Height="40" VerticalAlignment="Bottom"/>
+                <TextBlock Width="269" HorizontalAlignment="Left" 
+           Margin="419,743,0,10" TextWrapping="Wrap" Text="🔳 - не принял задание
+                    ☑ - принял задание"  Foreground="#000" FontSize="19" FontWeight="Bold" FontFamily="Arial Black"/>
             </Grid>
         </Grid>
     </Border>

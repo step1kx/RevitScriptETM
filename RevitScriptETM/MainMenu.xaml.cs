@@ -127,6 +127,16 @@ namespace RevitScriptETM
             }
         }
 
+        public void CheckBoxTaken_Indeterminate(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox && checkBox.DataContext is DataRowView rowView)
+            {
+                rowView["WhoTaken"] = DBNull.Value;
+                UpdateDatabaseForTaskTakens(rowView, null, 0);
+                RefreshItems_CheckBox();
+            }
+        }
+
         private void UpdateDatabaseForHandlers(DataRowView rowView, string taskHandler, int taskCompleted)
         {
             string query = "UPDATE public.\"Table\" SET \"TaskHandler\" = @TaskHandler, \"TaskCompleted\" = @TaskCompleted WHERE \"TaskNumber\" = @TaskNumber";
